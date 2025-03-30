@@ -1,0 +1,161 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+import ProductGrid from "@components/product/ProductGrid";
+import Button from "@components/ui/Button";
+import { productApi } from "@api/products";
+
+// Fetch products
+let products = [];
+try {
+  products = await productApi.getAllProducts();
+} catch (error) {
+  console.error('Failed to fetch products:', error);
+  // We'll use an empty array as a fallback
+}
+---
+
+<MainLayout
+  title="Shop All Products | ShopAstro"
+  description="Browse our complete collection of products."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">Products</h1>
+        <p class="mt-2 text-sm text-gray-500">
+          Browse our collection of high-quality products
+        </p>
+      </div>
+
+      <!-- Could be a sorting or filtering component -->
+      <div class="mt-4 md:mt-0 flex items-center">
+        <span class="text-sm text-gray-700 mr-2">Sort by:</span>
+        <select class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+          <option>Most Popular</option>
+          <option>Newest</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Filters and product grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
+      <!-- Filters - Could be a React component for interactivity -->
+      <div class="hidden lg:block">
+        <div class="space-y-8">
+          <!-- Category filter -->
+          <div>
+            <h3 class="text-lg font-medium text-gray-900">Categories</h3>
+            <ul class="mt-4 space-y-3">
+              <li class="flex items-center">
+                <input
+                  id="category-all"
+                  name="category"
+                  value="all"
+                  type="radio"
+                  checked
+                  class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label for="category-all" class="ml-3 text-sm text-gray-600">All Categories</label>
+              </li>
+              <li class="flex items-center">
+                <input
+                  id="category-electronics"
+                  name="category"
+                  value="electronics"
+                  type="radio"
+                  class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label for="category-electronics" class="ml-3 text-sm text-gray-600">Electronics</label>
+              </li>
+              <li class="flex items-center">
+                <input
+                  id="category-clothing"
+                  name="category"
+                  value="clothing"
+                  type="radio"
+                  class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label for="category-clothing" class="ml-3 text-sm text-gray-600">Clothing</label>
+              </li>
+              <li class="flex items-center">
+                <input
+                  id="category-home"
+                  name="category"
+                  value="home"
+                  type="radio"
+                  class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label for="category-home" class="ml-3 text-sm text-gray-600">Home & Garden</label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Price filter -->
+          <div>
+            <h3 class="text-lg font-medium text-gray-900">Price</h3>
+            <div class="mt-4 space-y-4">
+              <div class="flex items-center">
+                <input
+                  id="price-any"
+                  name="price"
+                  value="any"
+                  type="radio"
+                  checked
+                  class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label for="price-any" class="ml-3 text-sm text-gray-600">Any Price</label>
+              </div>
+              <div class="flex items-center">
+                <input
+                  id="price-under-25"
+                  name="price"
+                  value="under-25"
+                  type="radio"
+                  class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label for="price-under-25" class="ml-3 text-sm text-gray-600">Under $25</label>
+              </div>
+              <div class="flex items-center">
+                <input
+                  id="price-25-50"
+                  name="price"
+                  value="25-50"
+                  type="radio"
+                  class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label for="price-25-50" class="ml-3 text-sm text-gray-600">$25 to $50</label>
+              </div>
+              <div class="flex items-center">
+                <input
+                  id="price-50-100"
+                  name="price"
+                  value="50-100"
+                  type="radio"
+                  class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label for="price-50-100" class="ml-3 text-sm text-gray-600">$50 to $100</label>
+              </div>
+              <div class="flex items-center">
+                <input
+                  id="price-over-100"
+                  name="price"
+                  value="over-100"
+                  type="radio"
+                  class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label for="price-over-100" class="ml-3 text-sm text-gray-600">Over $100</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="lg:col-span-3">
+        <ProductGrid products={products} client:load />
+      </div>
+    </div>
+  </div>
+</MainLayout>
