@@ -6,7 +6,7 @@ export default function FloatingWhatsAppButton() {
       href="https://wa.me/628123456789"
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-marine-darkBlue px-4 py-2 text-white shadow-lg hover:bg-marine-blue"
+      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white shadow-lg hover:bg-green-700 transition-colors duration-200"
     >
       <span className="font-mono">Hubungi kami</span>
       <svg
