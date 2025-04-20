@@ -64,7 +64,9 @@ export const marineProjects = [
     type: "Ship",
     description:
       "Pengecatan ulang kapal nelayan tradisional di Pelabuhan Muara Baru.",
-    image: "/images/projects/project_1.png",
+    // image: "/images/projects/project_1.png",
+    image:
+      "https://ashdaq.com/wp-content/uploads/2025/02/PHOTO-2024-09-05-17-28-35.jpg",
     date: "2023-10-15",
   },
   {
@@ -73,7 +75,8 @@ export const marineProjects = [
     type: "Cargo Ship",
     description:
       "Pelapisan anti-karat pada kapal kargo di Pelabuhan Tanjung Priok.",
-    image: "/images/projects/project_2.png",
+    image:
+      "https://ashdaq.com/wp-content/uploads/2025/02/PHOTO-2024-10-02-13-18-14.jpg",
     date: "2023-09-20",
   },
   {
@@ -82,7 +85,8 @@ export const marineProjects = [
     type: "Fishing Boat",
     description:
       "Renovasi dan pengecatan total kapal nelayan di Pelabuhan Muara Angke.",
-    image: "/images/projects/project_3.png",
+    image:
+      "https://ashdaq.com/wp-content/uploads/2025/02/6bb12010-7371-46c9-8ef3-8dba815a34c4.webp",
     date: "2023-08-05",
   },
   {
@@ -91,7 +95,8 @@ export const marineProjects = [
     type: "Ferry",
     description:
       "Pengecatan dan perbaikan kapal feri penumpang di Pelabuhan Merak.",
-    image: "/images/projects/project_4.png",
+    image:
+      "https://ashdaq.com/wp-content/uploads/2025/02/PHOTO-2024-11-05-15-08-57-3-2048x1536.jpg",
     date: "2023-07-12",
   },
 ];
@@ -105,7 +110,7 @@ export const marineArticles = [
       "Pelajari cara merawat cat kapal anda agar tidak mudah terkelupas dan tahan lama meski terkena air laut...",
     content:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus massa, ut blandit odio. Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus tortor.",
-    image: "/images/articles/article_1.png",
+    image: "https://ashdaq.com/wp-content/uploads/2025/02/cat-industrial.webp",
     readTime: "3 mins reading",
     publishedAt: "1 month ago",
     author: "Ahmad Santoso",
@@ -117,7 +122,7 @@ export const marineArticles = [
       "Panduan lengkap memilih cat yang tepat untuk kapal nelayan tradisional dengan budget terbatas...",
     content:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus massa, ut blandit odio. Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus tortor.",
-    image: "/images/articles/article_2.png",
+    image: "https://ashdaq.com/wp-content/uploads/2025/02/cat-industrial.webp",
     readTime: "3 mins reading",
     publishedAt: "1 month ago",
     author: "Budi Setiawan",
@@ -129,7 +134,7 @@ export const marineArticles = [
       "Pelajari teknik aplikasi cat anti-fouling yang benar untuk mencegah pertumbuhan organisme laut...",
     content:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus massa, ut blandit odio. Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus tortor.",
-    image: "/images/articles/article_3.png",
+    image: "https://ashdaq.com/wp-content/uploads/2025/02/cat-industrial.webp",
     readTime: "4 mins reading",
     publishedAt: "2 months ago",
     author: "Citra Dewi",
