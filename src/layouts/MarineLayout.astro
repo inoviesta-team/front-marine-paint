@@ -1,0 +1,112 @@
+---
+import { AuthProvider } from "@context/AuthContext";
+import { CartProvider } from "@context/CartContext";
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+
+// Add Roboto Mono font for design consistency with Figma
+
+// SEO Props
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = "Marine Paint - Solutions for Marine Applications",
+  description = "Marine Paint provides high-quality marine paint solutions for all types of vessels.",
+  image = "/images/og-image.jpg",
+} = Astro.props;
+
+// Generate canonical URL
+let canonicalURL;
+try {
+  canonicalURL = new URL(Astro.url.pathname, Astro.site || 'http://localhost:4321');
+} catch (error) {
+  // Fallback to just using the pathname
+  canonicalURL = new URL('http://localhost:4321' + Astro.url.pathname);
+}
+
+// Process image URLs
+let ogImageUrl = image;
+let twitterImageUrl = image;
+try {
+  if (image.startsWith('/')) {
+    ogImageUrl = new URL(image, canonicalURL).toString();
+    twitterImageUrl = ogImageUrl;
+  }
+} catch (error) {
+  // Fallback to just using the image path directly
+  console.error('Error processing image URL:', error);
+}
+---
+
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <ClientRouter />
+    
+    <!-- SEO -->
+    <title transition:animate="fade">{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL.toString()} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL.toString()} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL.toString()} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={twitterImageUrl} />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    
+    <!-- Google Fonts - Roboto Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Navigation Scripting -->
+    <script>
+      // This script adds event listeners for the Astro view transitions lifecycle events
+      document.addEventListener('astro:page-load', () => {
+        console.log('Page loaded completely');
+      });
+
+      document.addEventListener('astro:after-swap', () => {
+        console.log('New page content swapped in');
+      });
+
+      // This allows us to scroll to the top when navigating to a new page
+      document.addEventListener('astro:before-swap', () => {
+        window.scrollTo(0, 0);
+      });
+    </script>
+
+    <style>
+      /* Add custom styles for the marine paint website */
+      body {
+        font-family: 'Roboto Mono', monospace;
+      }
+    </style>
+  </head>
+  <body class="flex flex-col min-h-screen bg-white">
+    <AuthProvider client:load>
+      <CartProvider client:load>
+        <main class="flex-grow">
+          <slot />
+        </main>
+      </CartProvider>
+    </AuthProvider>
+  </body>
+</html>

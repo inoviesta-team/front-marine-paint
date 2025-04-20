@@ -1,0 +1,98 @@
+import React, { useState } from "react";
+import { useAuth } from "@hooks/useAuth";
+
+export default function MarineHeader() {
+  const [isClient, setIsClient] = useState(false);
+  
+  // Default values before client-side hydration
+  let user = null;
+  let isAuthenticated = false;
+  let logout = () => {};
+
+  // Only try to access the contexts on the client side
+  try {
+    const auth = useAuth();
+
+    // Extract what we need from the contexts
+    user = auth.user;
+    isAuthenticated = auth.isAuthenticated;
+    logout = auth.logout;
+
+    // If we get here, we're on the client side
+    if (!isClient) setIsClient(true);
+  } catch (error) {
+    // We're being rendered on the server or outside the Providers
+    // Use the default values defined above
+  }
+
+  return (
+    <header className="bg-white py-4 border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <a href="/" className="flex items-center">
+              <div className="w-24 h-10 border border-gray-300 flex items-center justify-center">
+                <span className="sr-only">Marine Paint</span>
+                {/* Placeholder for logo */}
+                <span className="text-sm text-gray-500">Logo</span>
+              </div>
+            </a>
+          </div>
+
+          {/* Main Navigation */}
+          <nav className="hidden md:flex space-x-10">
+            <a href="/" className="font-mono font-bold text-black">
+              Home
+            </a>
+            <a href="/about-us" className="font-mono font-bold text-black">
+              About Us
+            </a>
+            <a href="/products" className="font-mono font-bold text-black">
+              Products
+            </a>
+            <a href="/projects" className="font-mono font-bold text-black">
+              Projects
+            </a>
+            <a href="/articles" className="font-mono font-bold text-black">
+              Articles
+            </a>
+            <a href="/contact-us" className="font-mono font-bold text-black">
+              Contact Us
+            </a>
+            <a href="/cart" className="font-mono font-bold text-black">
+              (2)
+            </a>
+          </nav>
+
+          {/* Search and Login */}
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Cari Produk"
+                className="bg-gray-200 rounded px-4 py-1 text-sm font-mono w-40"
+              />
+            </div>
+            
+            {isClient && isAuthenticated ? (
+              <button 
+                onClick={logout}
+                className="border border-gray-600 rounded px-4 py-1 text-sm font-mono font-bold text-blue-600"
+              >
+                Log out
+              </button>
+            ) : (
+              <a
+                href="/account/login"
+                className="border border-gray-600 rounded px-4 py-1 text-sm font-mono font-bold text-blue-600"
+              >
+                Log in
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}

@@ -1,137 +1,203 @@
 ---
-import MainLayout from "@layouts/MainLayout.astro";
-import ProductGrid from "@components/product/ProductGrid";
+import MarineLayout from "@layouts/MarineLayout.astro";
+import MarineHeader from "@components/layout/MarineHeader";
+import MarineFooter from "@components/layout/MarineFooter";
+import MarineButton from "@components/ui/MarineButton";
+import MarineProductCard from "@components/product/MarineProductCard";
+import MarineProjectCard from "@components/project/MarineProjectCard";
+import MarineArticleCard from "@components/article/MarineArticleCard";
+import MarineValueCard from "@components/value/MarineValueCard";
+import MarineTestimonialCard from "@components/testimonial/MarineTestimonialCard";
+import MarineContactForm from "@components/contact/MarineContactForm";
 import { productApi } from "@api/products";
 
 // Fetch featured products
 let featuredProducts = [];
 try {
-  featuredProducts = await productApi.getAllProducts({ limit: 8 });
+  featuredProducts = await productApi.getAllProducts({ limit: 5 });
 } catch (error) {
   console.error('Failed to fetch products:', error);
   // We'll use an empty array as a fallback
 }
+
+// Map products to have the right naming 
+const marineProducts = featuredProducts.map(product => ({
+  ...product,
+  name: `Anti-fouling AF-300`,
+  price: 110000
+}));
 ---
 
-<MainLayout
-  title="ShopAstro - Modern E-commerce Store"
-  description="Shop the latest products at ShopAstro - your modern e-commerce store built with Astro and React."
+<MarineLayout
+  title="Marine Paint - Marine Paint Solutions"
+  description="Marine Paint provides high-quality marine paint solutions for all types of vessels."
 >
+  <MarineHeader client:load />
+  
   <!-- Hero Section -->
-  <section class="relative" transition:animate="fade">
-    <div class="w-full h-96 bg-gradient-to-r from-blue-600 to-indigo-700 flex items-center">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">
-        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
-          <span class="block">Modern Shopping</span>
-          <span class="block text-indigo-200">For Modern People</span>
-        </h1>
-        <p class="mt-3 text-base text-white sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-          Find the best products at the best prices. Shipped directly to your door.
-        </p>
-        <div class="mt-8 flex flex-col sm:flex-row justify-center sm:justify-start gap-4">
-          <a
-            href="/products"
-            class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-700 hover:bg-blue-800"
-          >
-            Shop Now
-          </a>
-          <a
-            href="/about"
-            class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-white hover:bg-gray-50"
-          >
-            About our store
-          </a>
+  <section class="bg-gray-100 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="space-y-8">
+          <div class="h-12 w-48 bg-black"></div>
+          <h1 class="font-mono font-bold text-black text-3xl md:text-4xl lg:text-5xl w-4/5">
+            <div class="h-4 bg-black w-full mb-4"></div>
+            <div class="h-4 bg-black w-3/4 mb-4"></div>
+          </h1>
+          
+          <div class="flex flex-wrap gap-4">
+            <MarineButton
+              as="a" 
+              href="/products" 
+              variant="primary"
+            >
+              Belanja Sekarang
+            </MarineButton>
+            
+            <MarineButton
+              as="a" 
+              href="/contact-us" 
+              variant="secondary"
+              className="flex items-center gap-2"
+            >
+              <span>Hubungi kami</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="currentColor"/>
+              </svg>
+            </MarineButton>
+          </div>
+        </div>
+        
+        <div class="border border-gray-300 h-48 md:h-64 lg:h-80 flex items-center justify-center">
+          <span class="text-gray-400">Hero Image</span>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Featured Products Section -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" transition:animate="fade">
-    <div class="sm:flex sm:items-center sm:justify-between">
-      <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Featured Products</h2>
-      <a href="/products" class="hidden sm:block text-sm font-semibold text-blue-600 hover:text-blue-500">
-        Browse all products<span aria-hidden="true"> &rarr;</span>
-      </a>
-    </div>
-    
-    <div class="mt-8">
-      <ProductGrid products={featuredProducts} client:load />
-    </div>
-    
-    <div class="mt-8 sm:hidden text-center">
-      <a href="/products" class="text-sm font-semibold text-blue-600 hover:text-blue-500">
-        Browse all products<span aria-hidden="true"> &rarr;</span>
-      </a>
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Featured Products</h2>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        {marineProducts.map((product) => (
+          <MarineProductCard product={product} />
+        ))}
+      </div>
+      
+      <div class="flex justify-center mt-8">
+        <MarineButton as="a" href="/products" variant="secondary">
+          Lihat Semua
+        </MarineButton>
+      </div>
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="bg-white">
-    <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-24 lg:px-8">
-      <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-3xl font-extrabold text-gray-900">Why Shop With Us</h2>
-        <p class="mt-4 text-lg text-gray-500">
-          We're committed to providing the best shopping experience possible.
-        </p>
+  <!-- Value Proposition Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Value Proposition</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <MarineValueCard title="Produk Berkualitas" />
+        <MarineValueCard title="Pengiriman Cepat" />
+        <MarineValueCard title="Konsultasi Gratis" />
+        <MarineValueCard title="Dukungan Teknis" />
       </div>
-      <div class="mt-12">
-        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          <div class="pt-6">
-            <div class="flow-root bg-gray-50 rounded-lg px-6 pb-8">
-              <div class="-mt-6">
-                <div>
-                  <span class="inline-flex items-center justify-center p-3 bg-blue-600 rounded-md shadow-lg">
-                    <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-                    </svg>
-                  </span>
-                </div>
-                <h3 class="mt-8 text-lg font-medium text-gray-900 tracking-tight">Free Shipping</h3>
-                <p class="mt-5 text-base text-gray-500">
-                  Free shipping on all orders over $50. No minimum purchase required.
-                </p>
-              </div>
-            </div>
-          </div>
+    </div>
+  </section>
 
-          <div class="pt-6">
-            <div class="flow-root bg-gray-50 rounded-lg px-6 pb-8">
-              <div class="-mt-6">
-                <div>
-                  <span class="inline-flex items-center justify-center p-3 bg-blue-600 rounded-md shadow-lg">
-                    <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                    </svg>
-                  </span>
-                </div>
-                <h3 class="mt-8 text-lg font-medium text-gray-900 tracking-tight">Secure Payments</h3>
-                <p class="mt-5 text-base text-gray-500">
-                  All transactions are secure and encrypted. We never store your credit card information.
-                </p>
-              </div>
-            </div>
-          </div>
+  <!-- Projects Section -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Projects</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {Array(4).fill(0).map((_, i) => (
+          <MarineProjectCard />
+        ))}
+      </div>
+      
+      <div class="flex justify-center mt-8">
+        <MarineButton as="a" href="/projects" variant="secondary">
+          Lihat Semua
+        </MarineButton>
+      </div>
+    </div>
+  </section>
 
-          <div class="pt-6">
-            <div class="flow-root bg-gray-50 rounded-lg px-6 pb-8">
-              <div class="-mt-6">
-                <div>
-                  <span class="inline-flex items-center justify-center p-3 bg-blue-600 rounded-md shadow-lg">
-                    <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                    </svg>
-                  </span>
-                </div>
-                <h3 class="mt-8 text-lg font-medium text-gray-900 tracking-tight">Satisfaction Guaranteed</h3>
-                <p class="mt-5 text-base text-gray-500">
-                  Not satisfied with your purchase? Return it within 30 days for a full refund.
-                </p>
-              </div>
-            </div>
+  <!-- Testimonials Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Testimonials</h2>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {Array(3).fill(0).map((_, i) => (
+          <MarineTestimonialCard />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Company Partners Section -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Company Partners</h2>
+      
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+        {Array(6).fill(0).map((_, i) => (
+          <div class="border border-gray-300 h-20 flex items-center justify-center">
+            <span class="text-gray-400">Partner Logo</span>
           </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Articles Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Related Articles</h2>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {Array(3).fill(0).map((_, i) => (
+          <MarineArticleCard
+            article={{
+              title: i % 2 === 0 ? 
+                "Tips Perawatan Cat Marine agar lebih Awet dan Tahan Lama" : 
+                "Tips Memilih Cat Kapal untuk Nelayan Tradisional",
+              excerpt: "Lorem ipsum dolor sit amet...",
+              readTime: "3 mins reading",
+              publishedAt: "1 month ago"
+            }}
+          />
+        ))}
+      </div>
+      
+      <div class="flex justify-center mt-8">
+        <MarineButton as="a" href="/articles" variant="secondary">
+          Lihat Semua
+        </MarineButton>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Hubungi kami</h2>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <MarineContactForm client:load />
+        
+        <div class="border border-gray-300 rounded-full h-full flex items-center justify-center">
+          <span class="text-gray-400">Map or Contact Information</span>
         </div>
       </div>
     </div>
   </section>
-</MainLayout>
+
+  <!-- Footer -->
+  <MarineFooter client:visible />
+</MarineLayout>
