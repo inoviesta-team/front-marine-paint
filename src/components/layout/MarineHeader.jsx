@@ -3,7 +3,7 @@ import { useAuth } from "@hooks/useAuth";
 
 export default function MarineHeader() {
   const [isClient, setIsClient] = useState(false);
-  
+
   // Default values before client-side hydration
   let user = null;
   let isAuthenticated = false;
@@ -26,48 +26,71 @@ export default function MarineHeader() {
   }
 
   return (
-    <header className="bg-white py-4 border-b border-gray-200">
+    <header className="bg-white py-4 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex-shrink-0">
             <a href="/" className="flex items-center">
-              <img src="/images/logo.svg" alt="Marine Paint" className="h-10" />
+              <span className="text-2xl font-bold text-marine-blue">
+                Toko Koko Lie
+              </span>
             </a>
           </div>
 
           {/* Main Navigation */}
           <nav className="hidden md:flex space-x-10">
-            <a href="/" className="font-mono font-bold text-black">
+            <a
+              href="/"
+              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
+            >
               Home
             </a>
-            <a href="/about-us" className="font-mono font-bold text-black">
+            <a
+              href="/about-us"
+              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
+            >
               About Us
             </a>
-            <a href="/products" className="font-mono font-bold text-black">
+            <a
+              href="/products"
+              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
+            >
               Products
             </a>
-            <a href="/projects" className="font-mono font-bold text-black">
+            <a
+              href="/projects"
+              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
+            >
               Projects
             </a>
-            <a href="/articles" className="font-mono font-bold text-black">
+            <a
+              href="/articles"
+              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
+            >
               Articles
             </a>
-            <a href="/contact-us" className="font-mono font-bold text-black">
+            <a
+              href="/contact-us"
+              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
+            >
               Contact Us
             </a>
-            <a href="/cart" className="font-mono font-bold text-black flex items-center">
-              <svg 
-                className="w-6 h-6 mr-1" 
-                xmlns="http://www.w3.org/2000/svg" 
-                fill="none" 
-                viewBox="0 0 24 24" 
+            <a
+              href="/cart"
+              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue flex items-center"
+            >
+              <svg
+                className="w-6 h-6 mr-1"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={1.5} 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
                   d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                 />
               </svg>
@@ -81,21 +104,21 @@ export default function MarineHeader() {
               <input
                 type="text"
                 placeholder="Cari Produk"
-                className="bg-gray-200 rounded px-4 py-1 text-sm font-mono w-40"
+                className="bg-gray-100 border border-marine-blue rounded px-4 py-1 text-sm font-mono w-40"
               />
             </div>
-            
+
             {isClient && isAuthenticated ? (
-              <button 
+              <button
                 onClick={logout}
-                className="border border-black rounded px-4 py-1 text-sm font-mono font-bold"
+                className="border border-marine-blue bg-marine-blue text-white rounded px-4 py-1 text-sm font-mono font-bold hover:bg-marine-darkBlue"
               >
                 Log out
               </button>
             ) : (
               <a
                 href="/account/login"
-                className="border border-black rounded px-4 py-1 text-sm font-mono font-bold"
+                className="border border-marine-blue bg-marine-blue text-white rounded px-4 py-1 text-sm font-mono font-bold hover:bg-marine-darkBlue"
               >
                 Log in
               </a>

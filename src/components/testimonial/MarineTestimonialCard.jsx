@@ -8,12 +8,13 @@ export default function MarineTestimonialCard({
   }
 }) {
   return (
-    <div className="border border-black rounded-lg p-6">
-      <p className="font-mono text-black mb-6">
+    <div className="marine-card p-6 relative">
+      <div className="absolute top-4 left-4 text-4xl font-serif text-marine-lightBlue opacity-20">"</div>
+      <p className="font-mono text-gray-700 mb-6 relative z-10">
         {testimonial.quote}
       </p>
       <div className="flex items-center">
-        <div className="w-12 h-12 border border-gray-300 flex items-center justify-center mr-4 overflow-hidden">
+        <div className="w-12 h-12 bg-marine-blue/10 rounded-full flex items-center justify-center mr-4 overflow-hidden">
           {testimonial.avatar ? (
             <img
               src={testimonial.avatar}
@@ -25,7 +26,7 @@ export default function MarineTestimonialCard({
           )}
         </div>
         <div>
-          <h4 className="font-mono font-bold text-black">{testimonial.author}</h4>
+          <h4 className="font-mono font-bold text-marine-darkBlue">{testimonial.author}</h4>
           <p className="font-mono text-gray-600 text-sm">{testimonial.company}</p>
         </div>
       </div>

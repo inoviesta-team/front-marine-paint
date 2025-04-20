@@ -5,8 +5,18 @@
 
 /* Custom base styles */
 @layer base {
+  :root {
+    --marine-dark-blue: #0a1b2d;
+    --marine-blue: #15486b;
+    --marine-light-blue: #1e83b1;
+    --marine-accent: #155da2;
+    --marine-bg-light: #e8f1f8;
+    --marine-bg-gradient: linear-gradient(135deg, #0a1b2d 0%, #15486b 100%);
+  }
+
   body {
     @apply text-gray-900 antialiased;
+    background-color: var(--marine-bg-light);
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -25,11 +35,35 @@
   }
   
   .btn-primary {
-    @apply btn bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+    @apply btn bg-[#15486b] text-white hover:bg-[#0a1b2d] focus:ring-[#1e83b1];
   }
   
   .btn-secondary {
-    @apply btn bg-white text-gray-700 hover:bg-gray-50 border-gray-300 focus:ring-blue-500;
+    @apply btn bg-white text-[#15486b] hover:bg-gray-50 border-[#15486b] focus:ring-[#1e83b1];
+  }
+
+  .marine-bg-dark {
+    background-color: var(--marine-dark-blue);
+  }
+
+  .marine-bg-primary {
+    background-color: var(--marine-blue);
+  }
+
+  .marine-bg-light {
+    background-color: var(--marine-light-blue);
+  }
+
+  .marine-bg-gradient {
+    background: var(--marine-bg-gradient);
+  }
+  
+  .marine-card {
+    @apply bg-white rounded-lg shadow-md border border-gray-200 transition-all hover:shadow-lg;
+  }
+
+  .marine-text-blue {
+    color: var(--marine-blue);
   }
 }
 

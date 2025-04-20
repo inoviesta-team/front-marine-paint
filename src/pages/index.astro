@@ -40,22 +40,24 @@ try {
 ---
 
 <MarineLayout
-  title="Marine Paint - Marine Paint Solutions"
-  description="Marine Paint provides high-quality marine paint solutions for all types of vessels."
+  title="Toko Koko Lie - Marine Paint Solutions"
+  description="Toko Koko Lie menyediakan cat marine terpercaya untuk ketahanan maksimal. Official partner of Ashdaq Paint."
 >
   <MarineHeader client:load />
   
   <!-- Hero Section -->
-  <section class="bg-gray-100 py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section class="py-20 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[url('/images/ocean-pattern.svg')] opacity-10 z-0"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-marine-darkBlue/80 to-marine-blue/70 z-0"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div class="space-y-8">
-          <h3 class="font-mono font-bold text-black text-xl">PT MARINE PAINT INDONESIA</h3>
+          <h3 class="font-mono font-bold text-white text-xl border-l-4 border-marine-lightBlue pl-3">TOKO KOKO LIE</h3>
           <div class="space-y-4">
-            <h1 class="font-mono font-bold text-black text-3xl md:text-4xl lg:text-5xl">
+            <h1 class="font-mono font-bold text-white text-3xl md:text-4xl lg:text-5xl drop-shadow-md">
               Solusi Terbaik untuk Kebutuhan Cat Kapal Anda
             </h1>
-            <p class="font-mono text-black text-lg">
+            <p class="font-mono text-gray-100 text-lg">
               Kami menyediakan berbagai jenis cat marine berkualitas tinggi untuk semua jenis kapal dan aplikasi maritim.
             </p>
           </div>
@@ -92,8 +94,11 @@ try {
 
   <!-- Featured Products Section -->
   <section class="py-16 bg-white">
+    <div class="relative overflow-hidden">
+      <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-marine-lightBlue opacity-10"></div>
+      <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-marine-blue opacity-10"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Featured Products</h2>
+      <h2 class="font-mono font-bold text-marine-blue text-3xl text-center mb-12">Featured Products</h2>
       
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {products.map((product) => (
@@ -110,9 +115,11 @@ try {
   </section>
 
   <!-- Value Proposition Section -->
-  <section class="py-16 bg-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Value Proposition</h2>
+  <section class="py-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[url('/images/wave-pattern.svg')] opacity-5 z-0"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-marine-blue/10 to-marine-lightBlue/5 z-0"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-mono font-bold text-marine-blue text-3xl text-center mb-12">Value Proposition</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <MarineValueCard title="Produk Berkualitas" iconNumber={1} />
@@ -124,9 +131,10 @@ try {
   </section>
 
   <!-- Projects Section -->
-  <section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Projects</h2>
+  <section class="py-16 bg-white relative overflow-hidden">
+    <div class="absolute -top-20 -left-20 w-40 h-40 rounded-full bg-marine-accent opacity-5"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <h2 class="font-mono font-bold text-marine-blue text-3xl text-center mb-12">Projects</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {projects.map((project) => (
@@ -143,9 +151,10 @@ try {
   </section>
 
   <!-- Testimonials Section -->
-  <section class="py-16 bg-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Testimonials</h2>
+  <section class="py-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-marine-bg-gradient opacity-10 z-0"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-mono font-bold text-marine-blue text-3xl text-center mb-12">Testimonials</h2>
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {testimonials.map((testimonial) => (
@@ -158,7 +167,7 @@ try {
   <!-- Company Partners Section -->
   <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Company Partners</h2>
+      <h2 class="font-mono font-bold text-marine-blue text-3xl text-center mb-12">Company Partners</h2>
       
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
         {partners.map((partner, index) => (
@@ -175,9 +184,11 @@ try {
   </section>
 
   <!-- Related Articles Section -->
-  <section class="py-16 bg-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Related Articles</h2>
+  <section class="py-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gray-100 z-0"></div>
+    <div class="absolute inset-0 bg-[url('/images/ship-pattern.svg')] opacity-5 z-0"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-mono font-bold text-marine-blue text-3xl text-center mb-12">Related Articles</h2>
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {articles.map((article) => (
@@ -196,13 +207,13 @@ try {
   <!-- Contact Section -->
   <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Hubungi kami</h2>
+      <h2 class="font-mono font-bold text-marine-blue text-3xl text-center mb-12">Hubungi kami</h2>
       
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div>
           <!-- Contact text -->
-          <h3 class="font-mono font-bold text-black text-xl mb-4">Butuh Bantuan?</h3>
-          <p class="font-mono text-black mb-8">
+          <h3 class="font-mono font-bold text-marine-darkBlue text-xl mb-4">Butuh Bantuan?</h3>
+          <p class="font-mono text-gray-700 mb-8">
             Kami siap membantu anda dengan segala pertanyaan tentang produk kami. Silakan isi formulir di bawah ini dan tim kami akan segera menghubungi Anda.
           </p>
           
