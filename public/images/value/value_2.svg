@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" fill="#f0f0f0"/>
+  <text x="60" y="60" font-family="Arial" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#333333">Value Icon 2</text>
+  <rect x="2" y="2" width="116" height="116" stroke="#cccccc" stroke-width="2" fill="none"/>
+</svg>

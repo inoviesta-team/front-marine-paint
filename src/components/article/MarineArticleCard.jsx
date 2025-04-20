@@ -11,7 +11,7 @@ export default function MarineArticleCard({
 }) {
   return (
     <div className="border border-black rounded-lg overflow-hidden">
-      <div className="border-b border-gray-300 h-48 flex items-center justify-center">
+      <div className="border-b border-gray-300 h-48 flex items-center justify-center overflow-hidden">
         {article.image ? (
           <img
             src={article.image}
@@ -31,7 +31,7 @@ export default function MarineArticleCard({
           {article.title}
         </h3>
         <p className="font-mono text-gray-500 mb-4">{article.excerpt}</p>
-        <MarineButton as="a" href={article.url || "#"} variant="secondary" size="sm">
+        <MarineButton as="a" href={`/articles/${article.id}`} variant="secondary" size="sm">
           Baca Selengkapnya
         </MarineButton>
       </div>

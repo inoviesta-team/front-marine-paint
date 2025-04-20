@@ -10,23 +10,33 @@ import MarineValueCard from "@components/value/MarineValueCard";
 import MarineTestimonialCard from "@components/testimonial/MarineTestimonialCard";
 import MarineContactForm from "@components/contact/MarineContactForm";
 import FloatingWhatsAppButton from "@components/ui/FloatingWhatsAppButton";
-import { productApi } from "@api/products";
+import { marineApi } from "@api/marineApi";
 
-// Fetch featured products
-let featuredProducts = [];
+// Fetch data for the page
+let products = [];
+let projects = [];
+let articles = [];
+let testimonials = [];
+let partners = [];
+
 try {
-  featuredProducts = await productApi.getAllProducts({ limit: 5 });
+  // Fetch products
+  products = await marineApi.getProducts({ limit: 5 });
+  
+  // Fetch projects
+  projects = await marineApi.getProjects({ limit: 4 });
+  
+  // Fetch articles
+  articles = await marineApi.getArticles({ limit: 3 });
+  
+  // Fetch testimonials
+  testimonials = await marineApi.getTestimonials();
+  
+  // Fetch partners
+  partners = await marineApi.getPartners();
 } catch (error) {
-  console.error('Failed to fetch products:', error);
-  // We'll use an empty array as a fallback
+  console.error('Failed to fetch data:', error);
 }
-
-// Map products to have the right naming 
-const marineProducts = featuredProducts.map(product => ({
-  ...product,
-  name: `Anti-fouling AF-300`,
-  price: 110000
-}));
 ---
 
 <MarineLayout
@@ -73,8 +83,8 @@ const marineProducts = featuredProducts.map(product => ({
           </div>
         </div>
         
-        <div class="border border-gray-300 h-48 md:h-64 lg:h-80 flex items-center justify-center">
-          <span class="text-gray-400">Hero Image</span>
+        <div class="h-48 md:h-64 lg:h-80 flex items-center justify-center">
+          <img src="/images/dummy_hero.svg" alt="Hero Image" class="w-full h-full object-cover" />
         </div>
       </div>
     </div>
@@ -86,7 +96,7 @@ const marineProducts = featuredProducts.map(product => ({
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Featured Products</h2>
       
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        {marineProducts.map((product) => (
+        {products.map((product) => (
           <MarineProductCard product={product} />
         ))}
       </div>
@@ -105,10 +115,10 @@ const marineProducts = featuredProducts.map(product => ({
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Value Proposition</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <MarineValueCard title="Produk Berkualitas" />
-        <MarineValueCard title="Pengiriman Cepat" />
-        <MarineValueCard title="Konsultasi Gratis" />
-        <MarineValueCard title="Dukungan Teknis" />
+        <MarineValueCard title="Produk Berkualitas" iconNumber={1} />
+        <MarineValueCard title="Pengiriman Cepat" iconNumber={2} />
+        <MarineValueCard title="Konsultasi Gratis" iconNumber={3} />
+        <MarineValueCard title="Dukungan Teknis" iconNumber={4} />
       </div>
     </div>
   </section>
@@ -119,8 +129,8 @@ const marineProducts = featuredProducts.map(product => ({
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Projects</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {Array(4).fill(0).map((_, i) => (
-          <MarineProjectCard />
+        {projects.map((project) => (
+          <MarineProjectCard project={project} />
         ))}
       </div>
       
@@ -138,8 +148,8 @@ const marineProducts = featuredProducts.map(product => ({
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Testimonials</h2>
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {Array(3).fill(0).map((_, i) => (
-          <MarineTestimonialCard />
+        {testimonials.map((testimonial) => (
+          <MarineTestimonialCard testimonial={testimonial} />
         ))}
       </div>
     </div>
@@ -151,9 +161,13 @@ const marineProducts = featuredProducts.map(product => ({
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Company Partners</h2>
       
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-        {Array(6).fill(0).map((_, i) => (
-          <div class="border border-gray-300 h-20 flex items-center justify-center">
-            <span class="text-gray-400">Partner Logo</span>
+        {partners.map((partner, index) => (
+          <div class="h-20 flex items-center justify-center">
+            <img 
+              src={`/images/partners/partner_${index + 1}.svg`} 
+              alt={partner.name}
+              class="max-h-full max-w-full"
+            />
           </div>
         ))}
       </div>
@@ -166,17 +180,8 @@ const marineProducts = featuredProducts.map(product => ({
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Related Articles</h2>
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {Array(3).fill(0).map((_, i) => (
-          <MarineArticleCard
-            article={{
-              title: i % 2 === 0 ? 
-                "Tips Perawatan Cat Marine agar lebih Awet dan Tahan Lama" : 
-                "Tips Memilih Cat Kapal untuk Nelayan Tradisional",
-              excerpt: "Lorem ipsum dolor sit amet...",
-              readTime: "3 mins reading",
-              publishedAt: "1 month ago"
-            }}
-          />
+        {articles.map((article) => (
+          <MarineArticleCard article={article} />
         ))}
       </div>
       
@@ -204,8 +209,8 @@ const marineProducts = featuredProducts.map(product => ({
           <MarineContactForm client:load />
         </div>
         
-        <div class="border border-gray-300 rounded-full h-full flex items-center justify-center">
-          <span class="text-gray-400">Map or Contact Information</span>
+        <div class="rounded-full h-full flex items-center justify-center overflow-hidden">
+          <img src="/images/map.svg" alt="Map" class="w-full h-full object-cover" />
         </div>
       </div>
     </div>

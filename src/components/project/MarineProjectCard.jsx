@@ -3,7 +3,7 @@ import React from 'react';
 export default function MarineProjectCard({ project = { name: 'KM BUANA', type: 'Ship' } }) {
   return (
     <div className="border border-black rounded-lg overflow-hidden">
-      <div className="border-b border-gray-300 h-48 flex items-center justify-center">
+      <div className="border-b border-gray-300 h-48 flex items-center justify-center overflow-hidden">
         {project.image ? (
           <img
             src={project.image}

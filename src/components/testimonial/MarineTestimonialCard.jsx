@@ -13,7 +13,7 @@ export default function MarineTestimonialCard({
         {testimonial.quote}
       </p>
       <div className="flex items-center">
-        <div className="w-12 h-12 border border-gray-300 flex items-center justify-center mr-4">
+        <div className="w-12 h-12 border border-gray-300 flex items-center justify-center mr-4 overflow-hidden">
           {testimonial.avatar ? (
             <img
               src={testimonial.avatar}

@@ -3,7 +3,7 @@ import React from 'react';
 export default function MarineProductCard({ product }) {
   return (
     <div className="border border-black rounded-lg p-4 flex flex-col">
-      <div className="border border-gray-300 h-40 flex items-center justify-center mb-4">
+      <div className="border border-gray-300 h-40 flex items-center justify-center mb-4 overflow-hidden">
         {product.image ? (
           <img
             src={product.image}

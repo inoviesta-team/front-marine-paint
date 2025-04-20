@@ -8,9 +8,7 @@ export default function MarineFooter() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div>
-            <div className="w-24 h-10 border border-gray-300 flex items-center justify-center mb-4">
-              <span className="text-sm text-gray-500">Logo</span>
-            </div>
+            <img src="/images/logo.svg" alt="Marine Paint" className="h-10 mb-4" />
             <h3 className="font-mono font-bold text-black text-2xl mb-4">PT Lorem Ipsum</h3>
             <p className="font-mono text-black mb-4">
               Lorem ipsum street 26, South Jakarta<br />

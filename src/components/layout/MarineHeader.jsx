@@ -32,11 +32,7 @@ export default function MarineHeader() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <a href="/" className="flex items-center">
-              <div className="w-24 h-10 border border-gray-300 flex items-center justify-center">
-                <span className="sr-only">Marine Paint</span>
-                {/* Placeholder for logo */}
-                <span className="text-sm text-gray-500">Logo</span>
-              </div>
+              <img src="/images/logo.svg" alt="Marine Paint" className="h-10" />
             </a>
           </div>
 
