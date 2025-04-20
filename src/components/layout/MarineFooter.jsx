@@ -8,6 +8,9 @@ export default function MarineFooter() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div>
+            <div className="w-24 h-10 border border-gray-300 flex items-center justify-center mb-4">
+              <span className="text-sm text-gray-500">Logo</span>
+            </div>
             <h3 className="font-mono font-bold text-black text-2xl mb-4">PT Lorem Ipsum</h3>
             <p className="font-mono text-black mb-4">
               Lorem ipsum street 26, South Jakarta<br />
@@ -33,32 +36,51 @@ export default function MarineFooter() {
                   <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="currentColor"/>
                 </svg>
               </a>
+              <a href="#" className="w-8 h-8 border border-black rounded-md flex items-center justify-center">
+                <span className="sr-only">Facebook</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" fill="currentColor"/>
+                </svg>
+              </a>
+              <a href="#" className="w-8 h-8 border border-black rounded-md flex items-center justify-center">
+                <span className="sr-only">TikTok</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" fill="currentColor"/>
+                </svg>
+              </a>
             </div>
           </div>
           
           <div className="flex flex-col md:items-end">
             <div className="mb-4 flex items-center">
-              <div className="w-8 h-8 border border-gray-300 flex items-center justify-center mr-2">
-                <span className="text-gray-400">Icon</span>
+              <div className="w-8 h-8 border border-black rounded-md flex items-center justify-center mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4.7l-8 5.334L4 8.7V6.297l8 5.333 8-5.333V8.7z" />
+                </svg>
+              </div>
+              <span className="font-mono font-bold text-black">admin@gmail.com</span>
+            </div>
+            
+            <div className="mb-4 flex items-center">
+              <div className="w-8 h-8 border border-black rounded-md flex items-center justify-center mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 10.999h2C22 5.869 18.127 2 12.99 2v2C17.052 4 20 6.943 20 10.999z" />
+                  <path d="M13 8c2.103 0 3 .897 3 3h2c0-3.225-1.775-5-5-5v2zm3.422 5.443a1.001 1.001 0 00-1.391.043l-2.393 2.461c-.576-.11-1.734-.471-2.926-1.66-1.192-1.193-1.553-2.354-1.66-2.926l2.459-2.394a1 1 0 00.043-1.391L6.859 3.513a1 1 0 00-1.391-.087l-2.17 1.861a1 1 0 00-.29.649c-.015.25-.301 6.172 4.291 10.766C11.305 20.707 16.323 21 17.705 21c.202 0 .326-.006.359-.008a.992.992 0 00.648-.291l1.86-2.171a1 1 0 00-.086-1.391l-4.064-3.696z" />
+                </svg>
               </div>
               <span className="font-mono font-bold text-black">+628123456789</span>
             </div>
             
-            <div className="mb-4 flex items-center">
+            <div className="mb-4">
               <span className="font-mono font-bold text-black mr-2">Online Shop</span>
-              <div className="w-8 h-8 border border-gray-300 flex items-center justify-center mr-1">
-                <span className="text-gray-400">S</span>
+              <div className="flex items-center mt-2">
+                <a href="#" className="w-8 h-8 border border-black rounded-md flex items-center justify-center mr-2">
+                  <span className="font-mono font-bold">S</span>
+                </a>
+                <a href="#" className="w-8 h-8 border border-black rounded-md flex items-center justify-center">
+                  <span className="font-mono font-bold">T</span>
+                </a>
               </div>
-              <div className="w-8 h-8 border border-gray-300 flex items-center justify-center">
-                <span className="text-gray-400">T</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center">
-              <div className="w-8 h-8 border border-gray-300 flex items-center justify-center mr-2">
-                <span className="text-gray-400">@</span>
-              </div>
-              <span className="font-mono font-bold text-black">admin@gmail.com</span>
             </div>
           </div>
         </div>

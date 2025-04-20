@@ -9,6 +9,7 @@ import MarineArticleCard from "@components/article/MarineArticleCard";
 import MarineValueCard from "@components/value/MarineValueCard";
 import MarineTestimonialCard from "@components/testimonial/MarineTestimonialCard";
 import MarineContactForm from "@components/contact/MarineContactForm";
+import FloatingWhatsAppButton from "@components/ui/FloatingWhatsAppButton";
 import { productApi } from "@api/products";
 
 // Fetch featured products
@@ -39,11 +40,15 @@ const marineProducts = featuredProducts.map(product => ({
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div class="space-y-8">
-          <div class="h-12 w-48 bg-black"></div>
-          <h1 class="font-mono font-bold text-black text-3xl md:text-4xl lg:text-5xl w-4/5">
-            <div class="h-4 bg-black w-full mb-4"></div>
-            <div class="h-4 bg-black w-3/4 mb-4"></div>
-          </h1>
+          <h3 class="font-mono font-bold text-black text-xl">PT MARINE PAINT INDONESIA</h3>
+          <div class="space-y-4">
+            <h1 class="font-mono font-bold text-black text-3xl md:text-4xl lg:text-5xl">
+              Solusi Terbaik untuk Kebutuhan Cat Kapal Anda
+            </h1>
+            <p class="font-mono text-black text-lg">
+              Kami menyediakan berbagai jenis cat marine berkualitas tinggi untuk semua jenis kapal dan aplikasi maritim.
+            </p>
+          </div>
           
           <div class="flex flex-wrap gap-4">
             <MarineButton
@@ -76,7 +81,7 @@ const marineProducts = featuredProducts.map(product => ({
   </section>
 
   <!-- Featured Products Section -->
-  <section class="py-16">
+  <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Featured Products</h2>
       
@@ -95,7 +100,7 @@ const marineProducts = featuredProducts.map(product => ({
   </section>
 
   <!-- Value Proposition Section -->
-  <section class="py-16 bg-white">
+  <section class="py-16 bg-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Value Proposition</h2>
       
@@ -109,7 +114,7 @@ const marineProducts = featuredProducts.map(product => ({
   </section>
 
   <!-- Projects Section -->
-  <section class="py-16">
+  <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Projects</h2>
       
@@ -128,7 +133,7 @@ const marineProducts = featuredProducts.map(product => ({
   </section>
 
   <!-- Testimonials Section -->
-  <section class="py-16 bg-white">
+  <section class="py-16 bg-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Testimonials</h2>
       
@@ -141,7 +146,7 @@ const marineProducts = featuredProducts.map(product => ({
   </section>
 
   <!-- Company Partners Section -->
-  <section class="py-16">
+  <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Company Partners</h2>
       
@@ -156,7 +161,7 @@ const marineProducts = featuredProducts.map(product => ({
   </section>
 
   <!-- Related Articles Section -->
-  <section class="py-16 bg-white">
+  <section class="py-16 bg-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Related Articles</h2>
       
@@ -184,12 +189,20 @@ const marineProducts = featuredProducts.map(product => ({
   </section>
 
   <!-- Contact Section -->
-  <section class="py-16">
+  <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="font-mono font-bold text-black text-3xl text-center mb-12">Hubungi kami</h2>
       
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <MarineContactForm client:load />
+        <div>
+          <!-- Contact text -->
+          <h3 class="font-mono font-bold text-black text-xl mb-4">Butuh Bantuan?</h3>
+          <p class="font-mono text-black mb-8">
+            Kami siap membantu anda dengan segala pertanyaan tentang produk kami. Silakan isi formulir di bawah ini dan tim kami akan segera menghubungi Anda.
+          </p>
+          
+          <MarineContactForm client:load />
+        </div>
         
         <div class="border border-gray-300 rounded-full h-full flex items-center justify-center">
           <span class="text-gray-400">Map or Contact Information</span>
@@ -197,6 +210,9 @@ const marineProducts = featuredProducts.map(product => ({
       </div>
     </div>
   </section>
+
+  <!-- Floating WhatsApp Button -->
+  <FloatingWhatsAppButton client:load />
 
   <!-- Footer -->
   <MarineFooter client:visible />

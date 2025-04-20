@@ -23,14 +23,14 @@ export default function MarineArticleCard({
         )}
       </div>
       <div className="p-6">
-        <h3 className="font-mono font-bold text-black text-xl mb-2">
-          {article.title}
-        </h3>
-        <p className="font-mono text-gray-500 mb-3">{article.excerpt}</p>
-        <div className="flex justify-between text-gray-500 text-sm mb-4">
+        <div className="flex justify-between text-gray-500 text-sm mb-2">
           <span>{article.readTime}</span>
           <span>{article.publishedAt}</span>
         </div>
+        <h3 className="font-mono font-bold text-black text-xl mb-2">
+          {article.title}
+        </h3>
+        <p className="font-mono text-gray-500 mb-4">{article.excerpt}</p>
         <MarineButton as="a" href={article.url || "#"} variant="secondary" size="sm">
           Baca Selengkapnya
         </MarineButton>
