@@ -1,6 +1,6 @@
 ---
-import Header from "@components/layout/Header";
 import Footer from "@components/layout/Footer";
+import Header from "@components/layout/Header";
 import { AuthProvider } from "@context/AuthContext";
 import { CartProvider } from "@context/CartContext";
 import { ClientRouter } from "astro:transitions";
@@ -91,12 +91,12 @@ try {
       });
     </script>
   </head>
-  <body class="flex flex-col min-h-screen bg-gray-50">
+  <body class="">
     <AuthProvider client:load>
       <CartProvider client:load>
         <Header client:load transition:persist />
         
-        <main class="flex-grow" transition:animate="fade">
+        <main class="flex-grow mt-16" transition:animate="fade">
           <slot />
         </main>
         
