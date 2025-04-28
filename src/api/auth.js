@@ -8,7 +8,7 @@ import { mockAuthResponses, mockUsers } from './mockData';
 const isBrowser = typeof window !== 'undefined';
 
 // Flag to use mock data or real API
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 export const authApi = {
   /**

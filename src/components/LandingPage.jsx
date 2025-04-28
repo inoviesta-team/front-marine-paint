@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Search, ChevronRight, ArrowRight, ChevronDown, Globe, Mail, Phone, MapPin, Shield, Droplet, Wind, Briefcase, Award, Users, Star, ShoppingCart, Filter } from 'lucide-react';
+import useAuthStore from '@features/auth/zustand/useAuthStore';
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -101,6 +102,13 @@ export default function LandingPage() {
     };
   }, []);
   
+
+  const { logout } = useAuthStore()
+
+  const handleLogout = () => {
+    logout()
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -221,7 +229,7 @@ export default function LandingPage() {
                 Discover our advanced coating solutions that extend vessel life and improve performance in the harshest marine environments.
               </p>
               <div className="flex flex-wrap gap-4">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 transition-all">
+                <button onClick={handleLogout} className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 transition-all">
                   <span>Shop Now</span>
                   <ArrowRight size={20} />
                 </button>

@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { authApi } from '@api/auth';
 
+// Inisialisasi context dengan null atau default value
 export const AuthContext = createContext(null);
 
 // Check if code is running in browser environment
@@ -62,6 +63,8 @@ export function AuthProvider({ children }) {
 
     try {
       const data = await authApi.register(userData);
+      console.log("register: ", data);
+      
       setUser(data.user);
       return data;
     } catch (err) {

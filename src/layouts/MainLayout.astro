@@ -1,7 +1,7 @@
 ---
 import Footer from "@components/layout/Footer";
 import Header from "@components/layout/Header";
-import { AuthProvider } from "@context/AuthContext";
+import AuthProvider from "@features/auth/AuthProvider";
 import { CartProvider } from "@context/CartContext";
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
@@ -92,9 +92,10 @@ try {
     </script>
   </head>
   <body class="">
-    <AuthProvider client:load>
-      <CartProvider client:load>
-        <Header client:load transition:persist />
+    
+    <AuthProvider client:only="react">
+      <CartProvider client:only="react">
+        <Header client:only="react" transition:persist />
         
         <main class="flex-grow mt-16" transition:animate="fade">
           <slot />

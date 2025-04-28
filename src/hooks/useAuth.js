@@ -8,7 +8,7 @@ const defaultAuth = {
   login: () => {},
   logout: () => {},
   register: () => {},
-  loading: true,
+  loading: false,
   error: null
 };
 
@@ -19,11 +19,12 @@ export function useAuth() {
   // Get the actual context if available
   const context = useContext(AuthContext);
   
+  
   // During SSR or if context is missing in browser, handle gracefully
   if (!context) {
     // Only throw error in browser environment
     if (isBrowser) {
-      console.warn('useAuth must be used within an AuthProvider');
+      // console.warn('useAuth must be used within an AuthProvider');
     }
     // Return mock data during SSR
     return defaultAuth;
