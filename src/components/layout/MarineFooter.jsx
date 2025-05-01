@@ -5,7 +5,7 @@ export default function MarineFooter() {
   
   return (
     <footer className="bg-marine-darkBlue text-white pt-12 pb-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto py-8 px-4 md:px-14">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div>
             <h3 className="font-mono font-bold text-white text-2xl mb-4">Toko Koko Lie</h3>

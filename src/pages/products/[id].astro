@@ -1,13 +1,15 @@
 ---
-import MainLayout from "@layouts/MainLayout.astro";
-import Button from "@components/ui/Button";
-import AddToCartForm from "@components/product/AddToCartForm";
-import { productApi } from "@api/products";
+import MarineLayout from "@layouts/MarineLayout.astro";
+import MarineHeader from "@components/layout/MarineHeader";
+import MarineFooter from "@components/layout/MarineFooter";
+import MarineButton from "@components/ui/MarineButton";
+import FloatingWhatsAppButton from "@components/ui/FloatingWhatsAppButton";
+import { marineApi } from "@api/marineApi";
 
 // Define the static paths for all products
 export async function getStaticPaths() {
   // Fetch all products
-  const products = await productApi.getAllProducts();
+  const products = await marineApi.getProducts();
   
   // Return the paths for each product
   return products.map(product => ({
@@ -19,205 +21,404 @@ export async function getStaticPaths() {
 // Get the product from props
 const { product } = Astro.props;
 
-// Fetch related products
+// Or provide fallback data for development 
+const productData =  {
+  id: "1",
+  name: "Anti-fouling 300",
+  description: "Lorem ipsum dolor sit amet consectetur. Nulla nunc nunc nec congue. Adipiscing amet selesai adipiscing sed facilisi faucibus. In natum risus elit adipiscing. Ac ac nulla facilisis et condimentum lectus molestie risus mattis.",
+  price: 126000,
+  originalPrice: 210000,
+  savings: "40%",
+  image: "https://down-id.img.susercontent.com/file/id-11134207-7r98y-lvobtdwybblw56",
+  category: "anti-fouling",
+  rating: 4.9,
+  ratingCount: 50
+};
+
+// Product tabs
+const tabs = [
+  { id: "details", label: "Details" },
+  { id: "specification", label: "Specification" },
+  { id: "application", label: "Application" },
+  { id: "reviews", label: "Reviews" }
+];
+
+// Related products
 let relatedProducts = [];
 try {
-  relatedProducts = await productApi.getAllProducts({ limit: 4 });
-  // Optionally filter out the current product from related products
-  relatedProducts = relatedProducts.filter(p => p.id !== product.id);
+  relatedProducts = await marineApi.getProducts({ limit: 4, category: productData.category });
+  // Filter out the current product
+  relatedProducts = relatedProducts.filter(p => p.id !== productData.id);
 } catch (error) {
   console.error('Failed to fetch related products:', error);
-  // Continue with empty related products
 }
 ---
 
-<MainLayout
-  title={`${product.name} | ShopAstro`}
-  description={product.description}
-  image={product.image}
+<MarineLayout
+  title={`${productData.name} | Toko Koko Lie`}
+  description={productData.description}
+  image={productData.image}
 >
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Breadcrumbs -->
-    <nav class="flex mb-8" aria-label="Breadcrumb">
-      <ol class="flex items-center space-x-2">
-        <li>
-          <a href="/" class="text-gray-400 hover:text-gray-500">Home</a>
-        </li>
-        <li class="flex items-center">
-          <svg class="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-          <a href="/products" class="ml-2 text-gray-400 hover:text-gray-500">Products</a>
-        </li>
-        <li class="flex items-center">
-          <svg class="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-          <span class="ml-2 text-gray-600" aria-current="page">
-            {product.name}
-          </span>
-        </li>
-      </ol>
-    </nav>
-
-    <!-- Product -->
-    <div class="lg:grid lg:grid-cols-2 lg:gap-x-8">
-      <!-- Product images -->
-      <div class="lg:max-w-lg lg:self-end">
-        <div class="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden" transition:name={`product-image-${product.id}`}>
-          {product.image ? (
-            <img 
-              src={product.image} 
-              alt={product.name} 
-              class="w-full h-full object-center object-cover"
-            />
-          ) : (
-            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-              <span class="text-gray-400">No image available</span>
-            </div>
-          )}
-        </div>
+  <MarineHeader client:load />
+  
+  <main>
+    <!-- Breadcrumb -->
+    <div class="bg-gray-50 py-3">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="flex" aria-label="Breadcrumb">
+          <ol class="flex items-center space-x-1 text-sm font-mono">
+            <li>
+              <a href="/" class="text-marine-blue hover:text-marine-darkBlue">Home</a>
+            </li>
+            <li class="flex items-center">
+              <span class="text-gray-500 mx-1">/</span>
+              <a href="/products" class="text-marine-blue hover:text-marine-darkBlue">Products</a>
+            </li>
+            <li class="flex items-center">
+              <span class="text-gray-500 mx-1">/</span>
+              <a href={`/products?category=${productData.category}`} class="text-marine-blue hover:text-marine-darkBlue capitalize">
+                {productData.category}
+              </a>
+            </li>
+            <li class="flex items-center">
+              <span class="text-gray-500 mx-1">/</span>
+              <span class="text-gray-600" aria-current="page">
+                {productData.name}
+              </span>
+            </li>
+          </ol>
+        </nav>
       </div>
-
-      <!-- Product details -->
-      <div class="max-w-2xl mx-auto mt-10 lg:mt-0 lg:max-w-none">
-        <div class="mt-4">
-          <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl" transition:name={`product-title-${product.id}`}>
-            {product.name}
-          </h1>
-        </div>
-
-        <div class="mt-4">
-          <div class="flex items-center">
-            <div class="flex items-center">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <svg 
-                  class={`h-5 w-5 ${i < 4 ? 'text-yellow-400' : 'text-gray-300'}`} 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 20 20" 
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
+    </div>
+    
+    <!-- Product Detail Section -->
+    <section class="py-12 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Product Images -->
+          <div>
+            <!-- Main Image -->
+            <div class="mb-4 border border-gray-200 rounded-lg overflow-hidden h-[400px] flex items-center justify-center">
+              <img 
+                src={productData.image} 
+                alt={productData.name} 
+                class="w-full h-full object-contain"
+              />
+            </div>
+            
+            <!-- Thumbnail Gallery -->
+            <div class="grid grid-cols-4 gap-2">
+              <div class="border border-marine-blue rounded-lg overflow-hidden h-24 cursor-pointer">
+                <img 
+                  src={productData.image} 
+                  alt={`${productData.name} view 1`} 
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div class="border border-gray-200 rounded-lg overflow-hidden h-24 cursor-pointer bg-gray-50">
+                  <img 
+                    src={`${index === 0 ? productData.image : ""}`}
+                    alt={`${productData.name} view ${index + 2}`} 
+                    class="w-full h-full object-cover opacity-50"
+                  />
+                </div>
               ))}
             </div>
-            <a href="#reviews" class="ml-2 text-sm text-blue-600 hover:text-blue-500">
-              {/* This would be dynamic in a real app */}
-              42 reviews
-            </a>
           </div>
-        </div>
-
-        <div class="mt-6">
-          <h2 class="sr-only">Product information</h2>
-          <p class="text-3xl text-gray-900">${(product.price || 0).toFixed(2)}</p>
-          <p class="mt-2 text-sm text-gray-500">Free shipping on orders over $50</p>
-        </div>
-
-        <div class="mt-6">
-          <h3 class="sr-only">Description</h3>
-          <div class="text-base text-gray-700 space-y-6">
-            <p>{product.description}</p>
-          </div>
-        </div>
-
-        <!-- Product form -->
-        <div class="mt-8">
-          <div class="flex mt-6">
-            <AddToCartForm product={product} client:load />
-          </div>
-        </div>
-
-        <!-- Features and details -->
-        <div class="mt-10">
-          <h2 class="text-lg font-medium text-gray-900">Details</h2>
-          <div class="mt-4 space-y-6">
-            <p class="text-base text-gray-600">
-              This is where additional product details would go. For a real product, this would include features, specifications, materials, etc.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Related products -->
-    <div class="mt-16 lg:mt-24">
-      <h2 class="text-xl font-bold text-gray-900 mb-6">Customers also bought</h2>
-      <div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-        {relatedProducts.map((relatedProduct) => (
-          <div key={relatedProduct.id} class="group relative">
-            <div class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75">
-              {relatedProduct.image ? (
-                <img
-                  src={relatedProduct.image}
-                  alt={relatedProduct.name}
-                  class="w-full h-full object-center object-cover"
-                />
-              ) : (
-                <div class="w-full h-full flex items-center justify-center">
-                  <span class="text-gray-400">No image</span>
-                </div>
-              )}
-            </div>
-            <div class="mt-4 flex justify-between">
-              <div>
-                <h3 class="text-sm text-gray-700">
-                  <a href={`/products/${relatedProduct.id}`}>
-                    <span aria-hidden="true" class="absolute inset-0"></span>
-                    {relatedProduct.name}
-                  </a>
-                </h3>
+          
+          <!-- Product Info -->
+          <div>
+            <h1 class="font-sans font-bold text-marine-darkBlue text-3xl mb-3">
+              {productData.name}
+            </h1>
+            
+            <!-- Ratings -->
+            <div class="flex items-center mb-4">
+              <div class="flex text-yellow-400">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill={i < Math.floor(productData.rating) ? "currentColor" : "none"}
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="mr-1"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                ))}
               </div>
-              <p class="text-sm font-medium text-gray-900">${(relatedProduct.price || 0).toFixed(2)}</p>
+              <span class="ml-2 text-sm text-gray-600">
+                {productData.rating} ({productData.rating} Rating)
+              </span>
+            </div>
+            
+            <!-- Price -->
+            <div class="mb-4">
+              <div class="flex items-end gap-2">
+                <span class="font-sans font-bold text-2xl text-marine-darkBlue">
+                  Rp{productData.price.toLocaleString()}
+                </span>
+                
+                {productData.originalPrice && (
+                  <span class="font-sans text-gray-500 line-through text-sm">
+                    Rp{productData.originalPrice.toLocaleString()}
+                  </span>
+                )}
+                
+                {productData.savings && (
+                  <span class="font-sans text-green-600 text-sm font-medium">
+                    Save {productData.savings}
+                  </span>
+                )}
+              </div>
+            </div>
+            
+            <!-- Description -->
+            <div class="mb-6">
+              <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-2">Description</h3>
+              <p class="font-sans text-gray-600">
+                {productData.description}
+              </p>
+            </div>
+            
+            <!-- Quantity -->
+            <div class="mb-6">
+              <label for="quantity" class="block font-sans font-medium text-marine-darkBlue mb-2">
+                Quantity
+              </label>
+              <div class="flex items-center">
+                <button class="w-10 h-10 bg-gray-100 rounded-l-lg flex items-center justify-center border border-gray-200">
+                  <span class="text-xl font-bold text-marine-darkBlue">-</span>
+                </button>
+                <input 
+                  type="number" 
+                  id="quantity" 
+                  value="1" 
+                  min="1"
+                  class="w-16 h-10 border-t border-b border-gray-200 text-center font-sans" 
+                />
+                <button class="w-10 h-10 bg-gray-100 rounded-r-lg flex items-center justify-center border border-gray-200">
+                  <span class="text-xl font-bold text-marine-darkBlue">+</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Buttons -->
+            <div class="flex gap-4">
+              <MarineButton
+                variant="primary"
+                size="md"
+                className="flex-1 justify-center shadow-md hover:shadow-lg"
+                client:load
+              >
+                Add to Cart
+              </MarineButton>
+              
+              <MarineButton
+                variant="secondary"
+                size="md"
+                className="flex items-center justify-center gap-2 bg-white text-green-600 border-2 border-marine-blue hover:bg-green-50 shadow-md hover:shadow-lg"
+                client:load
+              >
+                <span class="text-marine-blue">Konsultasi via WhatsApp</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+              </MarineButton>
             </div>
           </div>
-        ))}
+        </div>
       </div>
-    </div>
-  </div>
-</MainLayout>
+    </section>
+    
+    <!-- Product Tabs -->
+    <section class="py-8 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Tabs Navigation -->
+        <div class="flex border-b border-gray-200 mb-8">
+          {tabs.map((tab) => (
+            <button
+              class={`py-3 px-6 font-mono font-bold text-marine-darkBlue border-b-2 ${tab.id === 'details' ? 'border-marine-blue text-marine-blue' : 'border-transparent'} hover:text-marine-blue focus:outline-none`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        
+        <!-- Tab Content - Only showing "Details" tab by default -->
+        <div class="marine-card p-8" id="detail-product" data-tab="detail-product">
+          <p class="font-sans text-gray-700">
+            Lorem ipsum dolor sit amet consectetur. Amet eu metus vitae aliquam. Lacinia magna amet mauris nunc eget duis viverra lectus molestie. In inversa
+            facilisis elementesque. Neque et sapien ets sapien eu malesuada qugue inculi. Tellus elementum sagien nsi faucibus eget non viverra locus. Sed given
+            aliquet manu mi. Vitil erat facilisi sed montes. Pulvinar sed adipiscing nulls Tincidunt suspendisse ultricies pharetra sit potentis. Habitant non turimentum egestas diam
+            odio at matris erat convaluat. Vitae ornare curs cursus faucibus lectus. Nam vel sed eget egat sed id.
+          </p>
+        </div>
+
+        <div class="marine-card p-8 hidden" id="specification-product">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th class="font-sans text-gray-700 text-left">Specification</th>
+                <th class="font-sans text-gray-700 text-left">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-sans text-gray-700">Weight</td>
+                <td class="font-sans text-gray-700">100 gram</td>
+              </tr>
+              <tr>
+                <td class="font-sans text-gray-700">Color</td>
+                <td class="font-sans text-gray-700">White</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="marine-card p-8 hidden" id="application-product" data-tab="application-product">
+          <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-4">Application</h3>
+          <p class="font-sans text-gray-700">
+            Lorem ipsum dolor sit amet consectetur. Amet eu metus vitae aliquam. Lacinia magna amet mauris nunc eget duis viverra lectus molestie. In inversa
+            facilisis elementesque. Neque et sapien ets sapien eu malesuada qugue inculi. Tellus elementum sagien nsi faucibus eget non viverra locus. Sed given
+            aliquet manu mi. Vitil erat facilisi sed montes. Pulvinar sed adipiscing nulls Tincidunt suspendisse ultricies pharetra sit potentis. Habitant non turimentum egestas diam
+            odio at matris erat convaluat. Vitae ornare curs cursus faucibus lectus. Nam vel sed eget egat sed id.
+          </p>
+        </div>
+        
+        <div class="marine-card p-8 hidden" id="reviews-product" data-tab="reviews-product">
+          <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-4">Reviews</h3>
+          <ul class="list-disc pl-4">
+            <li class="font-sans text-gray-700">Lorem ipsum dolor sit amet consectetur</li>
+            <li class="font-sans text-gray-700">Amet eu metus vitae aliquam</li>
+            <li class="font-sans text-gray-700">Lacinia magna amet mauris nunc eget duis viverra lectus molestie</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+    
+    <!-- Related Products -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="font-sans font-bold text-marine-darkBlue text-2xl mb-8">Related Products</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {relatedProducts.map((product) => (
+            <a href={`/products/${product.id}`} class="group">
+              <div class="marine-card p-5 flex flex-col hover:border-marine-blue shadow-sm hover:shadow-md transition-all duration-300 rounded-xl overflow-hidden h-full">
+                {/* Enhanced image container with scaling effect */}
+                <div class="h-48 rounded-lg overflow-hidden mb-4 relative">
+                  <div class="absolute inset-0 bg-gradient-to-t from-marine-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                  
+                  {product.image ? (
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      class="h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-700"
+                    />
+                  ) : (
+                    <div class="h-full w-full bg-marine-blue/10 flex items-center justify-center">
+                      <span class="text-marine-blue/60 font-sans">Product Image</span>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Category tag */}
+                {product.category && (
+                  <div class="mb-2">
+                    <span class="inline-block px-2 py-1 bg-marine-blue/10 rounded-full text-marine-blue text-xs font-sans">
+                      {product.category}
+                    </span>
+                  </div>
+                )}
+                
+                {/* Enhanced product title */}
+                <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-1 group-hover:text-marine-blue transition-colors duration-300">
+                  {product.name}
+                </h3>
+                
+                {/* Short description if available */}
+                {product.description && (
+                  <p class="font-sans text-gray-600 text-sm mb-3 line-clamp-2">
+                    {product.description}
+                  </p>
+                )}
+                
+                {/* Price with better styling */}
+                <div class="mt-auto">
+                  <p class="font-sans font-bold text-lg text-marine-blue">
+                    {typeof product.price === 'number' 
+                      ? `Rp${product.price.toLocaleString()}`
+                      : product.price}
+                  </p>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <!-- Floating WhatsApp Button -->
+    <FloatingWhatsAppButton client:load />
+  </main>
+  
+  <MarineFooter client:visible />
+</MarineLayout>
 
 <script>
-  // This component could be implemented as a React component for more interactivity
-  class AddToCartForm extends HTMLElement {
-    constructor() {
-      super();
-
-      const form = this.querySelector('form');
-      const quantityInput = this.querySelector('input[name="quantity"]');
-      const minusButton = this.querySelector('.minus-button');
-      const plusButton = this.querySelector('.plus-button');
-      const addToCartButton = this.querySelector('button[type="submit"]');
-
-      // Quantity adjustment
-      minusButton.addEventListener('click', () => {
+  // Simple script to handle quantity changes
+  document.addEventListener('DOMContentLoaded', () => {
+    const quantityInput = document.getElementById('quantity');
+    const decrementBtn = quantityInput?.previousElementSibling;
+    const incrementBtn = quantityInput?.nextElementSibling;
+    
+    if (quantityInput && decrementBtn && incrementBtn) {
+      decrementBtn.addEventListener('click', () => {
         const currentValue = parseInt(quantityInput.value, 10);
         if (currentValue > 1) {
           quantityInput.value = currentValue - 1;
         }
       });
-
-      plusButton.addEventListener('click', () => {
+      
+      incrementBtn.addEventListener('click', () => {
         const currentValue = parseInt(quantityInput.value, 10);
         quantityInput.value = currentValue + 1;
       });
-
-      // Form submission
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const quantity = parseInt(quantityInput.value, 10);
-        // Logic to add to cart would go here in a real app
-        console.log(`Added ${quantity} items to cart`);
-        
-        // Provide feedback to user
-        addToCartButton.textContent = 'Added to Cart!';
-        setTimeout(() => {
-          addToCartButton.textContent = 'Add to Cart';
-        }, 2000);
+      
+      // Prevent manual entry of invalid values
+      quantityInput.addEventListener('change', () => {
+        const value = parseInt(quantityInput.value, 10);
+        if (isNaN(value) || value < 1) {
+          quantityInput.value = 1;
+        }
       });
     }
-  }
+    
 
-  customElements.define('add-to-cart-form', AddToCartForm);
+    const tabButtons = document.querySelectorAll('[class*="border-b-2"]');
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Remove active class from all tabs
+        tabButtons.forEach(btn => {
+          btn.classList.remove('border-marine-blue', 'text-marine-blue');
+          btn.classList.add('border-transparent');
+        });
+        
+        // Add active class to clicked tab
+        button.classList.remove('border-transparent');
+        button.classList.add('border-marine-blue', 'text-marine-blue');
+        
+        // In a real implementation, you would also switch tab content here
+      });
+    });
+  });
 </script>

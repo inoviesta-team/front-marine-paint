@@ -25,6 +25,7 @@ export default defineConfig({
     },
     resolve: {
       alias: {
+        '@features': path.resolve('./src/features'),
         '@components': path.resolve('./src/components'),
         '@layouts': path.resolve('./src/layouts'),
         '@utils': path.resolve('./src/utils'),
@@ -37,4 +38,3 @@ export default defineConfig({
     }
   }
 });
-

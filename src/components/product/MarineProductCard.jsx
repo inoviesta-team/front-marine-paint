@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function MarineProductCard({ product }) {
   return (
-    <div className="group">
-      <div className="marine-card p-5 flex flex-col hover:border-marine-blue shadow-sm hover:shadow-md transition-all duration-300 rounded-xl overflow-hidden h-full">
+    <a href={`/products/${product?.id}`} className="group">
+      <div className="marine-card p-3 flex flex-col hover:border-marine-blue shadow-sm hover:shadow-md transition-all duration-300 rounded-xl overflow-hidden h-full">
         {/* Enhanced image container with scaling effect */}
         <div className="h-48 rounded-lg overflow-hidden mb-4 relative">
           <div className="absolute inset-0 bg-gradient-to-t from-marine-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
@@ -51,6 +51,6 @@ export default function MarineProductCard({ product }) {
           </p>
         </div>
       </div>
-    </div>
+    </a>
   );
 }

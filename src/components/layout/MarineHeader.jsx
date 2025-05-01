@@ -26,8 +26,8 @@ export default function MarineHeader() {
   }
 
   return (
-    <header className="bg-white py-4 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="bg-white py-6 shadow-md">
+      <div className="mx-auto px-4 sm:px-6 lg:px-16">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -100,14 +100,6 @@ export default function MarineHeader() {
 
           {/* Search and Login */}
           <div className="flex items-center space-x-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Cari Produk"
-                className="bg-gray-100 border border-marine-blue rounded px-4 py-1 text-sm font-mono w-40"
-              />
-            </div>
-
             {isClient && isAuthenticated ? (
               <button
                 onClick={logout}
