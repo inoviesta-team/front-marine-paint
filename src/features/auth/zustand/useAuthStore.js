@@ -1,7 +1,7 @@
-// src/stores/useAuthStore.js
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { authApi } from '../api/auth';
+import useAddressStore from '@features/account/zustand/useAddressStore';
 
 const useAuthStore = create(
   persist(
@@ -16,6 +16,7 @@ const useAuthStore = create(
         try {
           const res = await authApi.getCurrentUser();
           set({ user: res?.data?.data, isAuthenticated: true, loading: false });
+          useAddressStore.getState().getAddress();
         } catch (err) {
           console.error('Failed to load user:', err);
           authApi.logout();

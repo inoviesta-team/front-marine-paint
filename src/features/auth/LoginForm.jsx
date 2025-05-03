@@ -8,7 +8,7 @@ import {
     UserPlus
   } from "lucide-react";
   import { useState } from "react";
-  import useAuthStore from "./zustand/useAuthStore";
+import useAuthStore from "./zustand/useAuthStore";
   
   export default function LoginForm() {
     const [isClient, setIsClient] = useState(false);

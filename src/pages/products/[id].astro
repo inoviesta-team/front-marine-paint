@@ -4,38 +4,57 @@ import MarineHeader from "@components/layout/MarineHeader";
 import MarineFooter from "@components/layout/MarineFooter";
 import MarineButton from "@components/ui/MarineButton";
 import FloatingWhatsAppButton from "@components/ui/FloatingWhatsAppButton";
-import { marineApi } from "@api/marineApi";
+import TabSection from "./components/TabSection";
+import ProductImageGallery from "./components/ProductImageGallery";
+import QuantitySelector from "./components/QuantitySelector";
+import { getProducts, productApiStatic } from "@features/products/api/productApiStatic";
 
-// Define the static paths for all products
 export async function getStaticPaths() {
-  // Fetch all products
-  const products = await marineApi.getProducts();
-  
-  // Return the paths for each product
-  return products.map(product => ({
-    params: { id: product.id },
-    props: { product },
-  }));
+  try {
+    const response = await getProducts({
+      page: 1,
+      limit: 9999,
+      categoryId: "",
+      brandId: ""
+    });
+
+    console.log("response: ", response);
+    
+    
+    
+    const products = response?.data?.products || [];
+    
+    return products?.map(product => ({
+      params: { id: product.id },
+      props: { product },
+    }));
+  } catch (error) {
+    console.error('Error fetching products for static paths:', error);
+    return []
+  }
 }
 
-// Get the product from props
 const { product } = Astro.props;
+console.log("asasa product: ", product);
 
-// Or provide fallback data for development 
-const productData =  {
-  id: "1",
-  name: "Anti-fouling 300",
-  description: "Lorem ipsum dolor sit amet consectetur. Nulla nunc nunc nec congue. Adipiscing amet selesai adipiscing sed facilisi faucibus. In natum risus elit adipiscing. Ac ac nulla facilisis et condimentum lectus molestie risus mattis.",
-  price: 126000,
-  originalPrice: 210000,
-  savings: "40%",
-  image: "https://down-id.img.susercontent.com/file/id-11134207-7r98y-lvobtdwybblw56",
-  category: "anti-fouling",
-  rating: 4.9,
-  ratingCount: 50
-};
 
-// Product tabs
+
+let relatedProducts = [];
+try {
+  if (product.categoryId) {
+    const relatedResponse = await productApiStatic.getProducts({
+      page: 1,
+      limit: 4,
+      categoryId: "",
+      brandId: ""
+    });
+    relatedProducts = relatedResponse?.data?.products || [];
+    relatedProducts = relatedProducts.filter(p => p.id !== product.id);
+  }
+} catch (error) {
+  console.error('Error fetching related products:', error);
+}
+
 const tabs = [
   { id: "details", label: "Details" },
   { id: "specification", label: "Specification" },
@@ -43,28 +62,29 @@ const tabs = [
   { id: "reviews", label: "Reviews" }
 ];
 
-// Related products
-let relatedProducts = [];
-try {
-  relatedProducts = await marineApi.getProducts({ limit: 4, category: productData.category });
-  // Filter out the current product
-  relatedProducts = relatedProducts.filter(p => p.id !== productData.id);
-} catch (error) {
-  console.error('Failed to fetch related products:', error);
-}
+const productImages = [
+  {
+    src: product.image || '/images/products/placeholder.png',
+    alt: product.name
+  },
+  ...(product.images?.map((img, index) => ({
+    src: img,
+    alt: `${product.name} - View ${index + 2}`
+  })) || [])
+];
 ---
 
 <MarineLayout
-  title={`${productData.name} | Toko Koko Lie`}
-  description={productData.description}
-  image={productData.image}
+  title={`${product.media.length} -  ${product.name} | Toko Koko Lie`}
+  description={product.description}
+  image={product.image}
 >
   <MarineHeader client:load />
   
   <main>
     <!-- Breadcrumb -->
     <div class="bg-gray-50 py-3">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="container mx-auto px-4 md:px-14 relative z-10">
         <nav class="flex" aria-label="Breadcrumb">
           <ol class="flex items-center space-x-1 text-sm font-mono">
             <li>
@@ -76,14 +96,14 @@ try {
             </li>
             <li class="flex items-center">
               <span class="text-gray-500 mx-1">/</span>
-              <a href={`/products?category=${productData.category}`} class="text-marine-blue hover:text-marine-darkBlue capitalize">
-                {productData.category}
+              <a href={`/products?categoryId=${product.categoryId}`} class="text-marine-blue hover:text-marine-darkBlue capitalize">
+                {product.categoryName || 'Category'}
               </a>
             </li>
             <li class="flex items-center">
               <span class="text-gray-500 mx-1">/</span>
               <span class="text-gray-600" aria-current="page">
-                {productData.name}
+                {product.name}
               </span>
             </li>
           </ol>
@@ -93,57 +113,35 @@ try {
     
     <!-- Product Detail Section -->
     <section class="py-12 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <!-- Product Images -->
           <div>
-            <!-- Main Image -->
-            <div class="mb-4 border border-gray-200 rounded-lg overflow-hidden h-[400px] flex items-center justify-center">
-              <img 
-                src={productData.image} 
-                alt={productData.name} 
-                class="w-full h-full object-contain"
-              />
-            </div>
-            
-            <!-- Thumbnail Gallery -->
-            <div class="grid grid-cols-4 gap-2">
-              <div class="border border-marine-blue rounded-lg overflow-hidden h-24 cursor-pointer">
-                <img 
-                  src={productData.image} 
-                  alt={`${productData.name} view 1`} 
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              
-              {Array.from({ length: 3 }).map((_, index) => (
-                <div class="border border-gray-200 rounded-lg overflow-hidden h-24 cursor-pointer bg-gray-50">
-                  <img 
-                    src={`${index === 0 ? productData.image : ""}`}
-                    alt={`${productData.name} view ${index + 2}`} 
-                    class="w-full h-full object-cover opacity-50"
-                  />
-                </div>
-              ))}
-            </div>
+            <ProductImageGallery productId={product?.id} productImages={product.media} client:load />
           </div>
           
           <!-- Product Info -->
           <div>
             <h1 class="font-sans font-bold text-marine-darkBlue text-3xl mb-3">
-              {productData.name}
+              {product.name}
             </h1>
+            
+            <!-- Product Code/SKU if available -->
+            {product.sku && (
+              <p class="text-sm text-gray-500 mb-2">
+                SKU: {product.sku}
+              </p>
+            )}
             
             <!-- Ratings -->
             <div class="flex items-center mb-4">
               <div class="flex text-yellow-400">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
                     viewBox="0 0 24 24"
-                    fill={i < Math.floor(productData.rating) ? "currentColor" : "none"}
+                    fill={i < Math.floor(product.avgRating || 0) ? "currentColor" : "none"}
                     stroke="currentColor"
                     stroke-width="2"
                     stroke-linecap="round"
@@ -155,7 +153,7 @@ try {
                 ))}
               </div>
               <span class="ml-2 text-sm text-gray-600">
-                {productData.rating} ({productData.rating} Rating)
+                {product.avgRating?.toFixed(1) || '0.0'} ({product.ratingCount || 0} {product.ratingCount === 1 ? 'Rating' : 'Ratings'})
               </span>
             </div>
             
@@ -163,72 +161,92 @@ try {
             <div class="mb-4">
               <div class="flex items-end gap-2">
                 <span class="font-sans font-bold text-2xl text-marine-darkBlue">
-                  Rp{productData.price.toLocaleString()}
+                  Rp{product.price?.toLocaleString()}
                 </span>
                 
-                {productData.originalPrice && (
+                {product.originalPrice && product.originalPrice > product.price && (
                   <span class="font-sans text-gray-500 line-through text-sm">
-                    Rp{productData.originalPrice.toLocaleString()}
+                    Rp{product.originalPrice.toLocaleString()}
                   </span>
                 )}
                 
-                {productData.savings && (
+                {product.discount && (
                   <span class="font-sans text-green-600 text-sm font-medium">
-                    Save {productData.savings}
+                    Save {product.discount}%
                   </span>
                 )}
               </div>
             </div>
             
+            <!-- Stock Status -->
+            {product.stockStatus && (
+              <div class="mb-4">
+                <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  product.stockStatus === 'in-stock' ? 'bg-green-100 text-green-800' :
+                  product.stockStatus === 'low-stock' ? 'bg-yellow-100 text-yellow-800' :
+                  'bg-red-100 text-red-800'
+                }`}>
+                  {product.stockStatus === 'in-stock' ? 'In Stock' :
+                   product.stockStatus === 'low-stock' ? 'Low Stock' :
+                   'Out of Stock'}
+                </span>
+              </div>
+            )}
+            
             <!-- Description -->
             <div class="mb-6">
               <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-2">Description</h3>
-              <p class="font-sans text-gray-600">
-                {productData.description}
+              <p class="font-sans text-gray-600 whitespace-pre-line">
+                {product.description}
               </p>
             </div>
+            
+            <!-- Key Features -->
+            {product.features && product.features.length > 0 && (
+              <div class="mb-6">
+                <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-2">Key Features</h3>
+                <ul class="list-disc list-inside font-sans text-gray-600">
+                  {product.features.map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             
             <!-- Quantity -->
             <div class="mb-6">
               <label for="quantity" class="block font-sans font-medium text-marine-darkBlue mb-2">
                 Quantity
               </label>
-              <div class="flex items-center">
-                <button class="w-10 h-10 bg-gray-100 rounded-l-lg flex items-center justify-center border border-gray-200">
-                  <span class="text-xl font-bold text-marine-darkBlue">-</span>
-                </button>
-                <input 
-                  type="number" 
-                  id="quantity" 
-                  value="1" 
-                  min="1"
-                  class="w-16 h-10 border-t border-b border-gray-200 text-center font-sans" 
-                />
-                <button class="w-10 h-10 bg-gray-100 rounded-r-lg flex items-center justify-center border border-gray-200">
-                  <span class="text-xl font-bold text-marine-darkBlue">+</span>
-                </button>
-              </div>
+              <QuantitySelector 
+                client:load
+                initial={1}
+                min={1}
+                max={product.stockQuantity || 99}
+              />
             </div>
             
             <!-- Buttons -->
-            <div class="flex gap-4">
+            <div class="flex flex-col sm:flex-row gap-4">
               <MarineButton
                 variant="primary"
                 size="md"
                 className="flex-1 justify-center shadow-md hover:shadow-lg"
+                disabled={product.stockStatus === 'out-of-stock'}
                 client:load
               >
-                Add to Cart
+                {product.stockStatus === 'out-of-stock' ? 'Out of Stock' : 'Add to Cart'}
               </MarineButton>
               
               <MarineButton
+                as="a"
+                target="_blank"
                 variant="secondary"
                 size="md"
-                className="flex items-center justify-center gap-2 bg-white text-green-600 border-2 border-marine-blue hover:bg-green-50 shadow-md hover:shadow-lg"
+                className="flex-1 items-center justify-center gap-2 bg-white text-green-600 border-2 border-green-600 hover:bg-green-50 shadow-md hover:shadow-lg"
                 client:load
               >
-                <span class="text-marine-blue">Konsultasi via WhatsApp</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <span>Konsultasi via WhatsApp</span>
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                 </svg>
               </MarineButton>
@@ -239,133 +257,161 @@ try {
     </section>
     
     <!-- Product Tabs -->
-    <section class="py-8 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Tabs Navigation -->
-        <div class="flex border-b border-gray-200 mb-8">
-          {tabs.map((tab) => (
-            <button
-              class={`py-3 px-6 font-mono font-bold text-marine-darkBlue border-b-2 ${tab.id === 'details' ? 'border-marine-blue text-marine-blue' : 'border-transparent'} hover:text-marine-blue focus:outline-none`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-        
-        <!-- Tab Content - Only showing "Details" tab by default -->
-        <div class="marine-card p-8" id="detail-product" data-tab="detail-product">
-          <p class="font-sans text-gray-700">
-            Lorem ipsum dolor sit amet consectetur. Amet eu metus vitae aliquam. Lacinia magna amet mauris nunc eget duis viverra lectus molestie. In inversa
-            facilisis elementesque. Neque et sapien ets sapien eu malesuada qugue inculi. Tellus elementum sagien nsi faucibus eget non viverra locus. Sed given
-            aliquet manu mi. Vitil erat facilisi sed montes. Pulvinar sed adipiscing nulls Tincidunt suspendisse ultricies pharetra sit potentis. Habitant non turimentum egestas diam
-            odio at matris erat convaluat. Vitae ornare curs cursus faucibus lectus. Nam vel sed eget egat sed id.
-          </p>
-        </div>
-
-        <div class="marine-card p-8 hidden" id="specification-product">
-          <table class="w-full">
-            <thead>
-              <tr>
-                <th class="font-sans text-gray-700 text-left">Specification</th>
-                <th class="font-sans text-gray-700 text-left">Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="font-sans text-gray-700">Weight</td>
-                <td class="font-sans text-gray-700">100 gram</td>
-              </tr>
-              <tr>
-                <td class="font-sans text-gray-700">Color</td>
-                <td class="font-sans text-gray-700">White</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        
-        <div class="marine-card p-8 hidden" id="application-product" data-tab="application-product">
-          <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-4">Application</h3>
-          <p class="font-sans text-gray-700">
-            Lorem ipsum dolor sit amet consectetur. Amet eu metus vitae aliquam. Lacinia magna amet mauris nunc eget duis viverra lectus molestie. In inversa
-            facilisis elementesque. Neque et sapien ets sapien eu malesuada qugue inculi. Tellus elementum sagien nsi faucibus eget non viverra locus. Sed given
-            aliquet manu mi. Vitil erat facilisi sed montes. Pulvinar sed adipiscing nulls Tincidunt suspendisse ultricies pharetra sit potentis. Habitant non turimentum egestas diam
-            odio at matris erat convaluat. Vitae ornare curs cursus faucibus lectus. Nam vel sed eget egat sed id.
-          </p>
-        </div>
-        
-        <div class="marine-card p-8 hidden" id="reviews-product" data-tab="reviews-product">
-          <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-4">Reviews</h3>
-          <ul class="list-disc pl-4">
-            <li class="font-sans text-gray-700">Lorem ipsum dolor sit amet consectetur</li>
-            <li class="font-sans text-gray-700">Amet eu metus vitae aliquam</li>
-            <li class="font-sans text-gray-700">Lacinia magna amet mauris nunc eget duis viverra lectus molestie</li>
-          </ul>
-        </div>
-
-      </div>
+    <section class="py-8 px-4 md:px-14">
+      <TabSection client:load tabs={tabs}>
+        <Fragment slot="details">
+          <!-- Details Content -->
+          <div>
+            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Product Details</h3>
+            {product.fullDescription ? (
+              <div class="prose prose-sm font-sans text-gray-700">
+                {product.fullDescription}
+              </div>
+            ) : (
+              <p class="font-sans text-gray-700">
+                {product.description}
+              </p>
+            )}
+          </div>
+        </Fragment>
+        <Fragment slot="specification">
+          <!-- Specifications Content -->
+          <div>
+            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Specifications</h3>
+            {product.specifications ? (
+              <table class="w-full border-collapse">
+                <tbody>
+                  {Object.entries(product.specifications).map(([key, value]) => (
+                    <tr class="border-b border-gray-200">
+                      <td class="py-3 font-sans font-medium text-marine-darkBlue w-1/3">{key}</td>
+                      <td class="py-3 font-sans text-gray-700">{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p class="font-sans text-gray-600">No specifications available.</p>
+            )}
+          </div>
+        </Fragment>
+        <Fragment slot="application">
+          <!-- Application Content -->
+          <div>
+            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Application Instructions</h3>
+            {product.applicationInstructions ? (
+              <div class="prose prose-sm font-sans text-gray-700">
+                {product.applicationInstructions}
+              </div>
+            ) : (
+              <p class="font-sans text-gray-600">Application instructions will be provided with the product.</p>
+            )}
+          </div>
+        </Fragment>
+        <Fragment slot="reviews">
+          <!-- Reviews Content -->
+          <div>
+            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Customer Reviews</h3>
+            {product.reviewCount > 0 ? (
+              <div class="space-y-6">
+                {/* Display reviews if available */}
+                {product.reviews?.map((review, index) => (
+                  <div key={index} class="border-b border-gray-200 pb-4">
+                    <div class="flex items-center mb-2">
+                      <div class="flex text-yellow-400">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill={i < review.rating ? "currentColor" : "none"}
+                            stroke={i >= review.rating ? "currentColor" : "none"}
+                            stroke-width="2"
+                            class="mr-1"
+                          >
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                          </svg>
+                        ))}
+                      </div>
+                      <span class="ml-2 font-sans font-medium text-marine-darkBlue">{review.author}</span>
+                      <span class="ml-auto text-sm text-gray-500">{review.date}</span>
+                    </div>
+                    <p class="font-sans text-gray-700">{review.comment}</p>
+                  </div>
+                )) || (
+                  <p class="font-sans text-gray-600">No reviews available yet.</p>
+                )}
+              </div>
+            ) : (
+              <p class="font-sans text-gray-600">Be the first to review this product!</p>
+            )}
+          </div>
+        </Fragment>
+      </TabSection>
     </section>
     
     <!-- Related Products -->
-    <section class="py-16 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="font-sans font-bold text-marine-darkBlue text-2xl mb-8">Related Products</h2>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {relatedProducts.map((product) => (
-            <a href={`/products/${product.id}`} class="group">
-              <div class="marine-card p-5 flex flex-col hover:border-marine-blue shadow-sm hover:shadow-md transition-all duration-300 rounded-xl overflow-hidden h-full">
-                {/* Enhanced image container with scaling effect */}
-                <div class="h-48 rounded-lg overflow-hidden mb-4 relative">
-                  <div class="absolute inset-0 bg-gradient-to-t from-marine-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+    {relatedProducts.length > 0 && (
+      <section class="py-16 bg-white">
+        <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
+          <h2 class="font-sans font-bold text-marine-darkBlue text-2xl mb-8">Related Products</h2>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {relatedProducts.map((relatedProduct) => (
+              <a href={`/products/${relatedProduct.id}`} class="group">
+                <div class="marine-card p-5 flex flex-col hover:border-marine-blue shadow-sm hover:shadow-md transition-all duration-300 rounded-xl overflow-hidden h-full">
+                  {/* Product image */}
+                  <div class="h-48 rounded-lg overflow-hidden mb-4 relative">
+                    <div class="absolute inset-0 bg-gradient-to-t from-marine-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                    
+                    {relatedProduct.image ? (
+                      <img
+                        src={relatedProduct.image}
+                        alt={relatedProduct.name}
+                        class="h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-700"
+                      />
+                    ) : (
+                      <div class="h-full w-full bg-marine-blue/10 flex items-center justify-center">
+                        <span class="text-marine-blue/60 font-sans">Product Image</span>
+                      </div>
+                    )}
+                  </div>
                   
-                  {product.image ? (
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      class="h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-700"
-                    />
-                  ) : (
-                    <div class="h-full w-full bg-marine-blue/10 flex items-center justify-center">
-                      <span class="text-marine-blue/60 font-sans">Product Image</span>
+                  {/* Category tag */}
+                  {relatedProduct.categoryName && (
+                    <div class="mb-2">
+                      <span class="inline-block px-2 py-1 bg-marine-blue/10 rounded-full text-marine-blue text-xs font-sans">
+                        {relatedProduct.categoryName}
+                      </span>
                     </div>
                   )}
-                </div>
-                
-                {/* Category tag */}
-                {product.category && (
-                  <div class="mb-2">
-                    <span class="inline-block px-2 py-1 bg-marine-blue/10 rounded-full text-marine-blue text-xs font-sans">
-                      {product.category}
-                    </span>
+                  
+                  {/* Product title */}
+                  <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-1 group-hover:text-marine-blue transition-colors duration-300">
+                    {relatedProduct.name}
+                  </h3>
+                  
+                  {/* Short description */}
+                  {relatedProduct.description && (
+                    <p class="font-sans text-gray-600 text-sm mb-3 line-clamp-2">
+                      {relatedProduct.description}
+                    </p>
+                  )}
+                  
+                  {/* Price */}
+                  <div class="mt-auto">
+                    <p class="font-sans font-bold text-lg text-marine-blue">
+                      {typeof relatedProduct.price === 'number' 
+                        ? `Rp${relatedProduct.price.toLocaleString()}`
+                        : relatedProduct.price}
+                    </p>
                   </div>
-                )}
-                
-                {/* Enhanced product title */}
-                <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-1 group-hover:text-marine-blue transition-colors duration-300">
-                  {product.name}
-                </h3>
-                
-                {/* Short description if available */}
-                {product.description && (
-                  <p class="font-sans text-gray-600 text-sm mb-3 line-clamp-2">
-                    {product.description}
-                  </p>
-                )}
-                
-                {/* Price with better styling */}
-                <div class="mt-auto">
-                  <p class="font-sans font-bold text-lg text-marine-blue">
-                    {typeof product.price === 'number' 
-                      ? `Rp${product.price.toLocaleString()}`
-                      : product.price}
-                  </p>
                 </div>
-              </div>
-            </a>
-          ))}
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    )}
     
     <!-- Floating WhatsApp Button -->
     <FloatingWhatsAppButton client:load />
@@ -373,52 +419,3 @@ try {
   
   <MarineFooter client:visible />
 </MarineLayout>
-
-<script>
-  // Simple script to handle quantity changes
-  document.addEventListener('DOMContentLoaded', () => {
-    const quantityInput = document.getElementById('quantity');
-    const decrementBtn = quantityInput?.previousElementSibling;
-    const incrementBtn = quantityInput?.nextElementSibling;
-    
-    if (quantityInput && decrementBtn && incrementBtn) {
-      decrementBtn.addEventListener('click', () => {
-        const currentValue = parseInt(quantityInput.value, 10);
-        if (currentValue > 1) {
-          quantityInput.value = currentValue - 1;
-        }
-      });
-      
-      incrementBtn.addEventListener('click', () => {
-        const currentValue = parseInt(quantityInput.value, 10);
-        quantityInput.value = currentValue + 1;
-      });
-      
-      // Prevent manual entry of invalid values
-      quantityInput.addEventListener('change', () => {
-        const value = parseInt(quantityInput.value, 10);
-        if (isNaN(value) || value < 1) {
-          quantityInput.value = 1;
-        }
-      });
-    }
-    
-
-    const tabButtons = document.querySelectorAll('[class*="border-b-2"]');
-    tabButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        // Remove active class from all tabs
-        tabButtons.forEach(btn => {
-          btn.classList.remove('border-marine-blue', 'text-marine-blue');
-          btn.classList.add('border-transparent');
-        });
-        
-        // Add active class to clicked tab
-        button.classList.remove('border-transparent');
-        button.classList.add('border-marine-blue', 'text-marine-blue');
-        
-        // In a real implementation, you would also switch tab content here
-      });
-    });
-  });
-</script>

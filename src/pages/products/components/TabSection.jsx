@@ -14,7 +14,7 @@ export default function TabSection(children) {
   
   return (
     <div className="border-t border-gray-200 pt-6">
-      <div className="flex border-b border-gray-200">
+      <div className="grid grid-cols-2 sm:flex border-b border-gray-200">
         {tabs.map((tab) => (
           <button
             key={tab.id}

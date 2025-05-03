@@ -1,7 +1,7 @@
 import axiosInstance from "@api/axiosInstance";
 
 export const productApi = {
-  getProjects: async (filterRequest = {}) => {
+  getProducts: async (filterRequest = {}) => {
     const categoryId = filterRequest.categoryId;
     const page = filterRequest.page;
     const limit = filterRequest.limit;
@@ -11,4 +11,8 @@ export const productApi = {
 
     return products;
   },
+  getProductById: async (id) => {
+    const product = await axiosInstance.get(`/products/${id}`);
+    return product;
+  }
 };

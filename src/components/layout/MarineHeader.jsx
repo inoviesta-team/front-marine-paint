@@ -1,29 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "@hooks/useAuth";
+import useAuthStore from "@features/auth/zustand/useAuthStore";
+import { History, LogOut, User } from "lucide-react";
 
 export default function MarineHeader() {
   const [isClient, setIsClient] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // for mobile menu toggle
+  const { user, isAuthenticated, logout } = useAuthStore();
 
-  // Default values before client-side hydration
-  let user = null;
-  let isAuthenticated = false;
-  let logout = () => {};
-
-  // Only try to access the contexts on the client side
   try {
-    const auth = useAuth();
-
-    // Extract what we need from the contexts
-    user = auth.user;
-    isAuthenticated = auth.isAuthenticated;
-    logout = auth.logout;
-
-    // If we get here, we're on the client side
     if (!isClient) setIsClient(true);
-  } catch (error) {
-    // We're being rendered on the server or outside the Providers
-    // Use the default values defined above
-  }
+  } catch (error) {}
+
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/about-us", label: "About Us" },
+    { href: "/products", label: "Products" },
+    { href: "/projects", label: "Projects" },
+    { href: "/articles", label: "Articles" },
+    { href: "/contact-us", label: "Contact Us" },
+    { href: "/cart", label: "Cart", isCart: true },
+  ];
 
   return (
     <header className="bg-white py-6 shadow-md">
@@ -38,75 +35,78 @@ export default function MarineHeader() {
             </a>
           </div>
 
-          {/* Main Navigation */}
-          <nav className="hidden md:flex space-x-10">
-            <a
-              href="/"
-              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
-            >
-              Home
-            </a>
-            <a
-              href="/about-us"
-              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
-            >
-              About Us
-            </a>
-            <a
-              href="/products"
-              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
-            >
-              Products
-            </a>
-            <a
-              href="/projects"
-              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
-            >
-              Projects
-            </a>
-            <a
-              href="/articles"
-              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
-            >
-              Articles
-            </a>
-            <a
-              href="/contact-us"
-              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
-            >
-              Contact Us
-            </a>
-            <a
-              href="/cart"
-              className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue flex items-center"
+          {/* Hamburger Button (mobile only) */}
+          <div className="lg:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-marine-blue focus:outline-none"
             >
               <svg
-                className="w-6 h-6 mr-1"
-                xmlns="http://www.w3.org/2000/svg"
+                className="w-6 h-6"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                />
+                {isOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
               </svg>
-              (2)
-            </a>
+            </button>
+          </div>
+
+          {/* Navigation - Desktop */}
+          <nav className="hidden lg:flex space-x-8">
+            {navLinks.map((link, index) =>
+              link.isCart ? (
+                <a
+                  key={index}
+                  href={link.href}
+                  className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue flex items-center"
+                >
+                  <svg
+                    className="w-6 h-6 mr-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                    />
+                  </svg>
+                  (2)
+                </a>
+              ) : (
+                <a
+                  key={index}
+                  href={link.href}
+                  className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
+                >
+                  {link.label}
+                </a>
+              )
+            )}
           </nav>
 
-          {/* Search and Login */}
-          <div className="flex items-center space-x-4">
+          {/* Login Button */}
+          <div className="hidden lg:flex items-center space-x-4">
             {isClient && isAuthenticated ? (
-              <button
-                onClick={logout}
-                className="border border-marine-blue bg-marine-blue text-white rounded px-4 py-1 text-sm font-mono font-bold hover:bg-marine-darkBlue"
-              >
-                Log out
-              </button>
+              <UserDropdown />
             ) : (
               <a
                 href="/account/login"
@@ -117,7 +117,155 @@ export default function MarineHeader() {
             )}
           </div>
         </div>
+
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <div className="lg:hidden mt-4 space-y-2">
+            {navLinks.map((link, index) =>
+              link.isCart ? (
+                <a
+                  key={index}
+                  href={link.href}
+                  className="block font-mono font-bold text-marine-blue hover:text-marine-darkBlue flex items-center"
+                >
+                  <svg
+                    className="w-6 h-6 mr-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                    />
+                  </svg>
+                  (2)
+                </a>
+              ) : (
+                <a
+                  key={index}
+                  href={link.href}
+                  className="block font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
+                >
+                  {link.label}
+                </a>
+              )
+            )}
+
+            {/* Mobile login/logout */}
+            {isClient && isAuthenticated ? (
+              <UserDropdown />
+            ) : (
+              <a
+                href="/account/login"
+                className="block border border-marine-blue bg-marine-blue text-white rounded px-4 py-1 text-sm font-mono font-bold hover:bg-marine-darkBlue"
+              >
+                Log in
+              </a>
+            )}
+          </div>
+        )}
       </div>
     </header>
+  );
+}
+
+function UserDropdown() {
+  const { user, logout } = useAuthStore();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownButtonRef = useRef(null);
+  const dropdownMenuRef = useRef(null);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleClickOutside = (event) => {
+    if (
+      dropdownButtonRef.current &&
+      !dropdownButtonRef.current.contains(event.target) &&
+      dropdownMenuRef.current &&
+      !dropdownMenuRef.current.contains(event.target)
+    ) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("click", handleClickOutside);
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div className="">
+      <div className="w-full sm:w-auto relative inline-block text-left">
+        <button
+          ref={dropdownButtonRef}
+          onClick={toggleDropdown}
+          className="w-full sm:w-auto inline-flex justify-start gap-x-1.5 rounded-full bg-white pl-3 pr-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300"
+        >
+          <div className="flex justify-start items-center">
+            <img
+              src="https://i.pravatar.cc/150"
+              alt="User avatar"
+              className="w-10 h-10 rounded-full mr-2"
+            />
+            <div className="text-start">
+              <p className="font-mono text-sm font-bold text-marine-blue">
+                {user.name}
+              </p>
+              <p className="font-mono text-xs font-normal text-marine-blue">
+                {user.email}
+              </p>
+            </div>
+          </div>
+        </button>
+        <div
+          ref={dropdownMenuRef}
+          className={`z-50 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-xl bg-white ring-1 ring-black ring-opacity-5 ${
+            isDropdownOpen ? "" : "hidden"
+          }`}
+        >
+          <div
+            className="py-2 p-2"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="dropdown-button"
+          >
+            <a
+              href="/account"
+              className="flex w-full rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer"
+              role="menuitem"
+            >
+              <User size={18} className="mr-2" />
+              Profile
+            </a>
+            
+            <a
+              href="/account"
+              className="flex w-full rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer"
+              role="menuitem"
+            >
+              <History size={18} className="mr-2" />
+              Histori Transaksi
+            </a>
+
+            <button
+              onClick={logout}
+              className="flex w-full rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer"
+              role="menuitem"
+            >
+              <LogOut size={18} className="mr-2" />
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

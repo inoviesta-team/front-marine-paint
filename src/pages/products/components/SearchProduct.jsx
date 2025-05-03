@@ -20,7 +20,7 @@ export default function SearchProduct() {
     
       const fetchProducts = async () => {
         try {
-          const res = await productApi.getProjects(filters);
+          const res = await productApi.getProducts(filters);
           const { products, pagination: paginationData } = res?.data?.data || {};
           console.log(paginationData);
           
