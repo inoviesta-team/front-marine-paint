@@ -3,8 +3,6 @@ import axiosInstance from "@api/axiosInstance";
 export const authApi = {
   login: async (request) => {
     try {
-      console.log("asasa");
-      
       const res = axiosInstance.post("/auth/login", request);
       console.log("res: ", res.data);
       return res;
@@ -32,5 +30,17 @@ export const authApi = {
       console.log("GET USER ERR: ", error);
     }
   },
+
+  editProfile: async (data) => {
+    try {
+      const res = axiosInstance.put("/auth/me", data);
+      console.log("res: ", res.data);
+
+      return res;
+    } catch (error) {
+      console.log("LOGIN ERR: ", error);
+    }
+  },
+
   logout: async () => {},
 };

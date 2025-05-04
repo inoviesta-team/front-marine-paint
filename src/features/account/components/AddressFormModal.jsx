@@ -5,12 +5,14 @@ import { dataWilayahIndonesiaApi } from "../api/dataWilayahIndonesiaApi";
 import indonesiaCities from "../../../../public/json/indonesiaCities.json";
 import indonesiaProvinces from "../../../../public/json/indonesiaProvinces.json";
 import useAddressStore from "../zustand/useAddressStore";
+import useAuthStore from "@features/auth/zustand/useAuthStore";
 
-export default function AddressFormModal({ showModal, handleCloseModal }) {
-  const [isDefault, setIsDefault] = useState(false);
-  const { createAddress } = useAddressStore();
+export default function AddressFormModal({ addressObj = {}, showModal, handleCloseModal }) {
+  const [isDefault, setIsDefault] = useState(addressObj?.id ? addressObj.isDefault : false);
+  const { createAddress, updateAddress } = useAddressStore();
+  const { user } = useAuthStore()
 
-  const provincesData = Object.entries(indonesiaProvinces).map(
+  let provincesData = Object.entries(indonesiaProvinces).map(
     ([id, province]) => ({
       id,
       province: province
@@ -21,26 +23,59 @@ export default function AddressFormModal({ showModal, handleCloseModal }) {
     })
   );
 
+  // SELECTED DATA
+  const selectedProvinceData = addressObj?.province && provincesData.filter((data, _) => data.province === addressObj?.province)[0].id || ""
+  const selectedProvinceNameData = addressObj?.province || ""
+  const selectedRegencyData = addressObj?.city || ""
+  const selectedPostalCodeData = addressObj?.postalCode || ""
+  const selectedDistrictData = addressObj?.id ?
+    indonesiaCities.filter((data, _) => data.postal_code === selectedPostalCodeData)[0]?.sub_district : ""
+
+  // DATA JSON
+  const regencyAddrObj = addressObj?.id ? [
+    ...new Set(
+      indonesiaCities
+        .filter((data, _) => data.province_code === selectedProvinceData)
+        .map((data, _) => data.city)
+    ),
+  ].sort() : []
+
+  const districtAddrObj = addressObj?.id ? [
+    ...new Set(
+      indonesiaCities
+        .filter((data, _) => data.city === selectedRegencyData)
+        .map((data, _) => data.sub_district)
+    ),
+  ].sort() : []
+
+  const postalAddrObj = addressObj?.id ? [
+    ...new Set(
+      indonesiaCities
+        .filter((data, _) => data.sub_district === selectedDistrictData)
+        .map((data, _) => data.postal_code)
+    ),
+  ].sort() : []
+
+  const [selectedProvince, setSelectedProvince] = useState(selectedProvinceData);
+  const [selectedProvinceName, setSelectedProvinceName] = useState(selectedProvinceNameData);
+  const [selectedRegency, setSelectedRegency] = useState(selectedRegencyData);
+  const [selectedDistrict, setSelectedDistrict] = useState(selectedDistrictData);
+  const [selectedPostalCode, setSelectedPostalCode] = useState(selectedPostalCodeData);
+
   const [provinces, setProvinces] = useState(provincesData);
   // console.log("provinces: ", provinces);
 
   // Kabupaten / Kota
-  const [regencies, setRegencies] = useState([]);
+  const [regencies, setRegencies] = useState(regencyAddrObj);
   // console.log("regencies: ", regencies);
 
   // Kecamatan
-  const [districts, setDistricts] = useState([]);
+  const [districts, setDistricts] = useState(districtAddrObj);
   // console.log("districts: ", districts);
 
   // KODE POS
-  const [postalCodes, setPostalCodes] = useState([]);
+  const [postalCodes, setPostalCodes] = useState(postalAddrObj);
   // console.log("postalCodes: ", postalCodes);
-
-  const [selectedProvince, setSelectedProvince] = useState("");
-  const [selectedProvinceName, setSelectedProvinceName] = useState("");
-  const [selectedRegency, setSelectedRegency] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
-  const [selectedPostalCode, setSelectedPostalCode] = useState("");
 
   const handleSelectedProvince = (e) => {
     setSelectedProvince(e.target.value);
@@ -107,10 +142,10 @@ export default function AddressFormModal({ showModal, handleCloseModal }) {
   const [inputAddress, setInputAddress] = useState({
     addressType: "SHIPPING",
     country: "Indonesia",
-    recipientName: "",
-    phone: "",
-    address: "",
-    notes: "",
+    recipientName: addressObj?.id ? addressObj.recipientName  : user.name,
+    phone: addressObj?.phone || "",
+    address: addressObj?.address || "",
+    notes: addressObj?.notes || "",
   });
 
   const handleInputAddressChange = (e) => {
@@ -140,7 +175,12 @@ export default function AddressFormModal({ showModal, handleCloseModal }) {
 
     console.log("requestData: ", requestData);
 
-    await createAddress(requestData)
+    if(addressObj?.id) {
+      await updateAddress(addressObj.id, requestData)
+    } else {
+      await createAddress(requestData)
+    }
+
     setInputAddress({
       addressType: "SHIPPING",
       country: "Indonesia",
@@ -157,6 +197,7 @@ export default function AddressFormModal({ showModal, handleCloseModal }) {
     setIsDefault(false)
     handleCloseModal()
   }
+  
 
   return (
     <>
@@ -165,7 +206,7 @@ export default function AddressFormModal({ showModal, handleCloseModal }) {
           <form onSubmit={handleSubmit} className="bg-white rounded-xl p-5 sm:p-6 w-full h-auto sm:h-auto max-w-3xl shadow-xl">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold text-slate-700">
-                Tambah Alamat Baru
+                {addressObj?.id ? "Ubah Alamat" : "Tambah Alamat Baru"}
               </h3>
               <button
                 type="button"
@@ -252,6 +293,7 @@ export default function AddressFormModal({ showModal, handleCloseModal }) {
                     name="province"
                     className="w-full p-2 border rounded text-sm"
                     onChange={handleSelectedProvince}
+                    defaultValue={selectedProvince}
                   >
                     <option value="">-- Pilih Provinsi --</option>
                     {provinces.map((province) => (
@@ -269,6 +311,7 @@ export default function AddressFormModal({ showModal, handleCloseModal }) {
                     name="city"
                     className="w-full p-2 border rounded text-sm"
                     onChange={handleSelectedRegency}
+                    defaultValue={selectedRegency}
                     disabled={selectedProvince === ""}
                   >
                     <option value="">-- Pilih Kota --</option>
@@ -284,12 +327,13 @@ export default function AddressFormModal({ showModal, handleCloseModal }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-slate-600 mb-1">
-                    Kelurahan
+                    Kecamatan
                   </label>
                   <select
                     name="district"
                     className="w-full p-2 border rounded text-sm"
                     onChange={handleSelectedDistrict}
+                    defaultValue={selectedDistrict}
                     disabled={selectedRegency === ""}
                   >
                     <option value="">-- Pilih Kecamatan --</option>
@@ -308,6 +352,7 @@ export default function AddressFormModal({ showModal, handleCloseModal }) {
                     name="postalCode"
                     className="w-full p-2 border rounded text-sm"
                     onChange={handleSelectedPostalCode}
+                    defaultValue={selectedPostalCode}
                     disabled={selectedDistrict === ""}
                   >
                     <option value="">-- Pilih Kode Pos --</option>

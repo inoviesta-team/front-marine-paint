@@ -34,19 +34,29 @@ const dummyAddresses = [
 ];
 
 export default function UserAddress() {
-  const [showModal, setShowModal] = useState(false);
-  const handleOpenModal = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
-
   const { address = [] } = useAddressStore()
+  const [showModal, setShowModal] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState({});
 
-  console.log("address: ", address);
+  const handleOpenModal = () => setShowModal(true);
+
+  const handleCloseModal = () => {
+    setSelectedAddress({});
+    setShowModal(false)
+  };
+
+  const handleEditAddressFormModal = (address) => {
+    setSelectedAddress(address);
+    handleOpenModal();
+  }
+
+  // console.log("address: ", address);
   
 
   return (
     <>
       <div className="bg-white rounded-xl p-6 w-full shadow-md">
-        <div className="flex flex-wrap justify-between items-center mb-4">
+        <div className="flex flex-wrap justify-between items-start mb-4">
           <h2 className="text-2xl font-semibold text-slate-700">
             Daftar Alamat
           </h2>
@@ -55,12 +65,13 @@ export default function UserAddress() {
 
         <div className="space-y-4">
           {address.map((addr) => (
-            <div
+            <button
+              onClick={() => handleEditAddressFormModal(addr)}
               key={addr.id}
-              className={`p-4 border rounded-lg ${
+              className={`w-full text-left p-4 border rounded-lg ${
                 addr.isDefault
-                  ? "border-blue-500 bg-blue-50 cursor-default"
-                  : "border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer"
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-slate-200 bg-slate-50 hover:bg-slate-200"
               }`}
             >
               <div className="flex justify-between items-center mb-2">
@@ -91,13 +102,19 @@ export default function UserAddress() {
                   </p>
                 )}
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>
 
       {/* Modal */}
-      <AddressFormModal showModal={showModal} handleCloseModal={handleCloseModal}/>
+      {showModal && (
+        <AddressFormModal
+          addressObj={selectedAddress}
+          showModal={showModal}
+          handleCloseModal={handleCloseModal}
+        />
+      )}
     </>
   );
 }

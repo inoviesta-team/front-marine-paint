@@ -31,7 +31,7 @@ const useAuthStore = create(
           await localStorage.setItem("jwtToken", res?.data?.data?.token);
           useAuthStore.getState().checkAuth();
         } catch (err) {
-          set({ error: err.message || 'Login failed', loading: false });
+          set({ error: err || 'Login failed', loading: false });
           throw err;
         }
       },
@@ -40,13 +40,23 @@ const useAuthStore = create(
         set({ loading: true, error: null });
         try {
           const res = await authApi.register(userData);
-          console.log("NGENTODD: ", res);
           
           set({ user: res?.data?.data?.user, isAuthenticated: true, loading: false });
           await localStorage.setItem("jwtToken", res?.data?.data?.token);
           return res;
         } catch (err) {
-          set({ error: err.message || 'Registration failed', loading: false });
+          set({ error: err || 'Registration failed', loading: false });
+          throw err;
+        }
+      },
+
+      editProfile: async (data) => {
+        set({ loading: true, error: null });
+        try {
+          const res = await authApi.editProfile(data);
+          useAuthStore.getState().checkAuth();
+        } catch (err) {
+          set({ error: err || 'Edit profile failed', loading: false });
           throw err;
         }
       },

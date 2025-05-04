@@ -15,11 +15,12 @@ const useAddressStore = create(
                 try {
                     const res = await addressApi.getAddress();
 
-                    const address = res?.data?.data?.addresses
+                    const addressData = res?.data?.data?.addresses
+                    const sortAddressData = addressData?.sort((a, b) => (a.isDefault === b.isDefault) ? 0 : a.isDefault ? -1 : 1)
                     
-                    const mainAddress = address.filter(address => address.isDefault)[0]
+                    const mainAddress = sortAddressData.filter(address => address.isDefault)[0]
 
-                    set({ address, mainAddress, loading: false });
+                    set({ address: sortAddressData, mainAddress, loading: false });
                 } catch (err) {
                     console.error('Failed to load addresses:', err);
                     set({ addresses: [], mainAddress: {}, loading: false });

@@ -1,5 +1,3 @@
-import { AuthContext } from "@context/AuthContext";
-import { useAuth } from "@hooks/useAuth";
 import {
   ArrowRight,
   Eye,
@@ -8,20 +6,18 @@ import {
   LogIn,
   Mail,
   User,
-  UserPlus
+  UserPlus,
 } from "lucide-react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import useAuthStore from "./zustand/useAuthStore";
+import ValidationMessage from "@components/ui/ValidationMessage";
 
 export default function RegisterForm() {
-  const [isClient, setIsClient] = useState(false);;
+  const [isClient, setIsClient] = useState(false);
 
-  let auth = useAuth()
   try {
-  
     if (!isClient) setIsClient(true);
-  } catch (error) {
-  }
+  } catch (error) {}
 
   const [showPassword, setShowPassword] = useState(false);
   const [registerName, setRegisterName] = useState("");
@@ -32,7 +28,9 @@ export default function RegisterForm() {
     setShowPassword(!showPassword);
   };
 
-  const { register, user, isAuthenticated } = useAuthStore()
+  const { register, user, isAuthenticated, error } = useAuthStore();
+
+  console.log("errorrr: ", error);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,22 +42,19 @@ export default function RegisterForm() {
     const reqData = {
       name: registerName,
       email: registerEmail,
-      password: registerPassword
-    }
+      password: registerPassword,
+    };
 
     console.log(reqData);
-    
 
     try {
-      
-      const data = await register(reqData)
+      const data = await register(reqData);
       console.log("la data: ", data);
       console.log("la user: ", user);
       // Redirect to previous page or dashboard
       // window.location.href = "/account";
     } catch (err) {
       console.log("ERR: ", err);
-      
     }
   };
 
@@ -78,7 +73,7 @@ export default function RegisterForm() {
               className={`flex-1 py-3 px-6 rounded-lg font-medium flex justify-center items-center gap-2 text-gray-600 hover:text-gray-800`}
             >
               <LogIn size={18} />
-              <span>Login {isAuthenticated && "AAAA"}</span>
+              <span>Login</span>
             </a>
             <a
               href="/account/register"
@@ -91,12 +86,16 @@ export default function RegisterForm() {
 
           {/* Register Form */}
           <div className="w-full max-w-md">
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Create your account { user?.name }
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8"
+            >
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                Create your account
               </h2>
+              <ValidationMessage error={error} defaultMessage="Register gagal! Silahkan coba kembali" />
 
-              <div className="space-y-5">
+              <div className="space-y-5 mt-3">
                 <div className="space-y-2">
                   <label
                     className="block text-gray-700 font-medium"

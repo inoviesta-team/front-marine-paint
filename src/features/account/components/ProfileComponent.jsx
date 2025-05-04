@@ -1,10 +1,20 @@
 import useAuthStore from "@features/auth/zustand/useAuthStore";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import UserAddress from "./UserAddress";
 import useAddressStore from "../zustand/useAddressStore";
+import UserEditProfile from "./editProfile/UserEditProfile";
+import UserChangePassword from "./changePassword/UserChangePassword";
 
 export default function ProfileComponent() {
   const { user } = useAuthStore();
+
+  const [tab, setTab] = useState("editProfile");
+
+  const tabSection = {
+    address: <UserAddress/>,
+    editProfile: <UserEditProfile/>,
+    changePassword: <UserChangePassword/>
+  }
 
   return (
     <>
@@ -43,9 +53,31 @@ export default function ProfileComponent() {
             </div>
           </div>
 
-          {/* USER ADDRESSES */}
-          <div className="rounded-xl w-full lg:w-3/4 min-h-screen">
-                <UserAddress/>
+          <div className="w-full lg:w-3/4 min-h-screen">
+            <div className="flex justify-around items-center bg-white rounded-xl p-6 w-full shadow-md mb-3">
+              <button
+                className={`font-medium ${tab === 'address' ? 'text-blue-700' : 'text-gray-500'}`}
+                onClick={() => setTab('address')}
+              >
+                Alamat
+              </button>
+              <button
+                className={`font-medium ${tab === 'editProfile' ? 'text-blue-700' : 'text-gray-500'}`}
+                onClick={() => setTab('editProfile')}
+              >
+                Edit Profile
+              </button>
+              <button
+                className={`font-medium ${tab === 'changePassword' ? 'text-blue-700' : 'text-gray-500'}`}
+                onClick={() => setTab('changePassword')}
+              >
+                Ubah Password
+              </button>
+            </div>
+            {/* USER ADDRESSES */}
+            <div className="rounded-xl">
+              {tabSection[tab]}
+            </div>
           </div>
         </div>
       </div>
