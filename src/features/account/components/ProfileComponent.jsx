@@ -18,7 +18,7 @@ export default function ProfileComponent() {
 
   return (
     <>
-      <div className="font-mono min-h-screen bg-gray-50 py-3 container mx-auto px-4 md:px-14 relative z-10">
+      <div className="font-sans min-h-screen bg-gray-50 py-3 container mx-auto px-4 md:px-14 relative z-10">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
           <div className="lg:sticky lg:top-16 w-full lg:w-1/4 relative mx-auto lg:max-w-xl min-w-0 break-words bg-white mb-6 shadow-lg rounded-xl mt-16">
             <div className="p-4">
@@ -56,19 +56,19 @@ export default function ProfileComponent() {
           <div className="w-full lg:w-3/4 min-h-screen">
             <div className="flex justify-around items-center bg-white rounded-xl p-6 w-full shadow-md mb-3">
               <button
-                className={`font-medium ${tab === 'address' ? 'text-blue-700' : 'text-gray-500'}`}
+                className={`${tab === 'address' ? 'text-marine-lightBlue font-semibold' : 'text-gray-500 font-medium'}`}
                 onClick={() => setTab('address')}
               >
                 Alamat
               </button>
               <button
-                className={`font-medium ${tab === 'editProfile' ? 'text-blue-700' : 'text-gray-500'}`}
+                className={`${tab === 'editProfile' ? 'text-marine-lightBlue font-semibold' : 'text-gray-500 font-medium'}`}
                 onClick={() => setTab('editProfile')}
               >
                 Edit Profile
               </button>
               <button
-                className={`font-medium ${tab === 'changePassword' ? 'text-blue-700' : 'text-gray-500'}`}
+                className={`${tab === 'changePassword' ? 'text-marine-lightBlue font-semibold' : 'text-gray-500 font-medium'}`}
                 onClick={() => setTab('changePassword')}
               >
                 Ubah Password

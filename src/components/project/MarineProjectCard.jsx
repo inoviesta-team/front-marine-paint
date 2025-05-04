@@ -19,10 +19,10 @@ export default function MarineProjectCard({ project = { name: 'KM BUANA', type: 
       </div>
       <div className="p-4 flex justify-between items-center">
         <div>
-          <h3 className="font-mono font-bold text-marine-darkBlue text-xl mb-1">{project.name}</h3>
-          <p className="font-mono font-bold text-marine-blue">{project.type}</p>
+          <h3 className="font-sans font-bold text-marine-darkBlue text-xl mb-1">{project.name}</h3>
+          <p className="font-sans font-bold text-marine-blue">{project.type}</p>
         </div>
-        <a href="#" className="font-mono text-marine-lightBlue hover:text-marine-blue transition-colors">Detail</a>
+        <a href="#" className="font-sans text-marine-lightBlue hover:text-marine-blue transition-colors">Detail</a>
       </div>
     </div>
   );

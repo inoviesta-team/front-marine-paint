@@ -8,8 +8,8 @@ export default function MarineFooter() {
       <div className="container mx-auto py-8 px-4 md:px-14">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div>
-            <h3 className="font-mono font-bold text-white text-2xl mb-4">Toko Koko Lie</h3>
-            <p className="font-mono text-white mb-4">
+            <h3 className="font-sans font-bold text-white text-2xl mb-4">Toko Koko Lie</h3>
+            <p className="font-sans text-white mb-4">
               Lorem ipsum street 26, South Jakarta<br />
               Indonesia
             </p>
@@ -55,7 +55,7 @@ export default function MarineFooter() {
                   <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4.7l-8 5.334L4 8.7V6.297l8 5.333 8-5.333V8.7z" />
                 </svg>
               </div>
-              <span className="font-mono font-bold text-white">admin@gmail.com</span>
+              <span className="font-sans font-bold text-white">admin@gmail.com</span>
             </div>
             
             <div className="mb-4 flex items-center">
@@ -65,17 +65,17 @@ export default function MarineFooter() {
                   <path d="M13 8c2.103 0 3 .897 3 3h2c0-3.225-1.775-5-5-5v2zm3.422 5.443a1.001 1.001 0 00-1.391.043l-2.393 2.461c-.576-.11-1.734-.471-2.926-1.66-1.192-1.193-1.553-2.354-1.66-2.926l2.459-2.394a1 1 0 00.043-1.391L6.859 3.513a1 1 0 00-1.391-.087l-2.17 1.861a1 1 0 00-.29.649c-.015.25-.301 6.172 4.291 10.766C11.305 20.707 16.323 21 17.705 21c.202 0 .326-.006.359-.008a.992.992 0 00.648-.291l1.86-2.171a1 1 0 00-.086-1.391l-4.064-3.696z" />
                 </svg>
               </div>
-              <span className="font-mono font-bold text-white">+628123456789</span>
+              <span className="font-sans font-bold text-white">+628123456789</span>
             </div>
             
             <div className="mb-4">
-              <span className="font-mono font-bold text-white mr-2">Online Shop</span>
+              <span className="font-sans font-bold text-white mr-2">Online Shop</span>
               <div className="flex items-center mt-2">
                 <a href="#" className="w-8 h-8 border border-white rounded-md flex items-center justify-center mr-2 text-white hover:bg-marine-blue">
-                  <span className="font-mono font-bold">S</span>
+                  <span className="font-sans font-bold">S</span>
                 </a>
                 <a href="#" className="w-8 h-8 border border-white rounded-md flex items-center justify-center text-white hover:bg-marine-blue">
-                  <span className="font-mono font-bold">T</span>
+                  <span className="font-sans font-bold">T</span>
                 </a>
               </div>
             </div>
@@ -89,7 +89,7 @@ export default function MarineFooter() {
               <strong>Ashdaq Paint</strong>
             </a>
           </div>
-          <p className="font-mono text-sm text-white text-center">
+          <p className="font-sans text-sm text-white text-center">
             © {currentYear} - Toko Koko Lie. All rights reserved.
           </p>
         </div>

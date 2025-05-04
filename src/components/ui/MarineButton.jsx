@@ -27,14 +27,14 @@ export default function MarineButton({
 }) {
   const variantClass = variants[variant] || variants.primary;
   const sizeClass = sizes[size] || sizes.md;
-  const baseClasses = `font-mono font-bold rounded ${variantClass} ${sizeClass} ${className}`;
+  const baseClasses = `font-sans font-bold rounded ${variantClass} ${sizeClass} ${className}`;
   
   // If the button should be rendered as a link
   if (as === 'a') {
     return (
       <a
         href={href}
-        className={`inline-block ${baseClasses} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`inline-block hover:text-white ${baseClasses} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         {...props}
       >
         {loading ? (

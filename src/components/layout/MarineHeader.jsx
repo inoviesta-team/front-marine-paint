@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "@hooks/useAuth";
 import useAuthStore from "@features/auth/zustand/useAuthStore";
 import { History, LogOut, User } from "lucide-react";
+import MarineButton from "@components/ui/MarineButton";
 
 export default function MarineHeader() {
   const [isClient, setIsClient] = useState(false);
@@ -73,7 +74,7 @@ export default function MarineHeader() {
                 <a
                   key={index}
                   href={link.href}
-                  className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue flex items-center"
+                  className="font-sans font-bold text-marine-blue hover:text-marine-darkBlue flex items-center"
                 >
                   <svg
                     className="w-6 h-6 mr-1"
@@ -95,7 +96,7 @@ export default function MarineHeader() {
                 <a
                   key={index}
                   href={link.href}
-                  className="font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
+                  className="font-sans font-bold text-marine-blue hover:text-marine-darkBlue"
                 >
                   {link.label}
                 </a>
@@ -108,12 +109,7 @@ export default function MarineHeader() {
             {isClient && isAuthenticated ? (
               <UserDropdown />
             ) : (
-              <a
-                href="/account/login"
-                className="border border-marine-blue bg-marine-blue text-white rounded px-4 py-1 text-sm font-mono font-bold hover:bg-marine-darkBlue"
-              >
-                Log in
-              </a>
+              <MarineButton as="a" href="/account/login">Log In</MarineButton>
             )}
           </div>
         </div>
@@ -126,7 +122,7 @@ export default function MarineHeader() {
                 <a
                   key={index}
                   href={link.href}
-                  className="block font-mono font-bold text-marine-blue hover:text-marine-darkBlue flex items-center"
+                  className="block font-sans font-bold text-marine-blue hover:text-marine-darkBlue flex items-center"
                 >
                   <svg
                     className="w-6 h-6 mr-1"
@@ -148,7 +144,7 @@ export default function MarineHeader() {
                 <a
                   key={index}
                   href={link.href}
-                  className="block font-mono font-bold text-marine-blue hover:text-marine-darkBlue"
+                  className="block font-sans font-bold text-marine-blue hover:text-marine-darkBlue"
                 >
                   {link.label}
                 </a>
@@ -161,7 +157,7 @@ export default function MarineHeader() {
             ) : (
               <a
                 href="/account/login"
-                className="block border border-marine-blue bg-marine-blue text-white rounded px-4 py-1 text-sm font-mono font-bold hover:bg-marine-darkBlue"
+                className="block border border-marine-blue bg-marine-blue text-white rounded px-4 py-1 text-sm font-sans font-bold hover:bg-marine-darkBlue"
               >
                 Log in
               </a>
@@ -216,10 +212,10 @@ function UserDropdown() {
               className="w-10 h-10 rounded-full mr-2"
             />
             <div className="text-start">
-              <p className="font-mono text-sm font-bold text-marine-blue">
+              <p className="font-sans text-sm font-bold text-marine-blue">
                 {user.name}
               </p>
-              <p className="font-mono text-xs font-normal text-marine-blue">
+              <p className="font-sans text-xs font-normal text-marine-blue">
                 {user.email}
               </p>
             </div>

@@ -62,7 +62,7 @@ export default function RegisterForm() {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <div className="flex-grow container mx-auto px-4 md:px-8 py-12 flex flex-col md:flex-row gap-8">
         {/* Left side - Decorative/Informative */}
-        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-blue-900 to-blue-700 rounded-2xl overflow-hidden shadow-xl relative"></div>
+        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-marine-darkBlue to-marine-blue rounded-2xl overflow-hidden shadow-xl relative"></div>
 
         {/* Right side - Auth forms */}
         <div className="md:w-1/2 flex flex-col items-center">
@@ -77,7 +77,7 @@ export default function RegisterForm() {
             </a>
             <a
               href="/account/register"
-              className={`flex-1 py-3 px-6 rounded-lg font-medium flex justify-center items-center gap-2 bg-white shadow-sm text-blue-700`}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium flex justify-center items-center gap-2 bg-white shadow-sm text-marine-blue`}
             >
               <UserPlus size={18} />
               <span>Register</span>
@@ -177,22 +177,22 @@ export default function RegisterForm() {
                     id="terms"
                     name="terms"
                     type="checkbox"
-                    className="h-4 w-4 border-gray-300 rounded text-blue-600 focus:ring-blue-500"
+                    className="h-4 w-4 border-gray-300 rounded text-marine-lightBlue text-sm hover:text-marine-accent focus:ring-blue-500"
                   />
                   <label
                     htmlFor="terms"
                     className="ml-2 block text-sm text-gray-700"
                   >
                     I agree to the{" "}
-                    <span className="text-blue-600">Terms of Service</span> and{" "}
-                    <span className="text-blue-600">Privacy Policy</span>
+                    <span className="text-marine-lightBlue text-sm">Terms of Service</span> and{" "}
+                    <span className="text-marine-lightBlue text-sm">Privacy Policy</span>
                   </label>
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg mt-6 shadow-md transition-colors flex items-center justify-center"
+                className="w-full bg-marine-blue hover:bg-marine-accent text-white font-medium py-3 px-4 rounded-lg mt-4 shadow-md transition-colors flex items-center justify-center"
               >
                 <span>Create Account</span>
                 <ArrowRight size={18} className="ml-2" />
@@ -243,7 +243,7 @@ export default function RegisterForm() {
               Already have an account?{" "}
               <a
                 href="/account/login"
-                className="text-blue-600 font-medium hover:text-blue-800"
+                className="text-marine-lightBlue text-sm hover:text-marine-accent font-medium"
               >
                 Login
               </a>
