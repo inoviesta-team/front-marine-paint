@@ -57,7 +57,7 @@ export default function UserAddress() {
     <>
       <div className="bg-white rounded-xl p-6 w-full shadow-md">
         <div className="flex flex-wrap justify-between items-start mb-4">
-          <h2 className="text-2xl font-semibold text-slate-700">
+          <h2 className="text-2xl font-semibold text-slate-700 mb-2 sm:mb-0">
             Daftar Alamat
           </h2>
           <MarineButton onClick={handleOpenModal}>Tambah Alamat</MarineButton>

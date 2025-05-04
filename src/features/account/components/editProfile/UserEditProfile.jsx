@@ -28,14 +28,14 @@ export default function UserEditProfile() {
     <>
       <form onSubmit={handleSubmit} className="bg-white rounded-xl p-6 w-full shadow-md">
       <h2 className="text-2xl font-semibold text-slate-700 mb-3">
-            Daftar Alamat
+            Edit Profile
           </h2>
           <ValidationMessage  error={error} defaultMessage="Ubah profile gagal! Silahkan coba kembali"/>
           
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
           <div>
             <label className="block text-sm text-slate-600 mb-1">
-              Nama Penerima
+              Nama Lengkap
             </label>
             <input
               type="text"
@@ -48,7 +48,7 @@ export default function UserEditProfile() {
           </div>
 
           <div>
-            <label className="block text-sm text-slate-600 mb-1">Telepon</label>
+            <label className="block text-sm text-slate-600 mb-1">Email</label>
             <input
               type="mail"
               name="email"
