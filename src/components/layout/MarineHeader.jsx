@@ -14,13 +14,13 @@ export default function MarineHeader() {
   } catch (error) {}
 
   const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/about-us", label: "About Us" },
-    { href: "/products", label: "Products" },
-    { href: "/projects", label: "Projects" },
-    { href: "/articles", label: "Articles" },
-    { href: "/contact-us", label: "Contact Us" },
-    { href: "/cart", label: "Cart", isCart: true },
+    { href: "/", label: "Beranda" },
+    { href: "/about-us", label: "Tentang Kami" },
+    { href: "/products", label: "Produk" },
+    { href: "/projects", label: "Projek" },
+    { href: "/articles", label: "Artikel" },
+    { href: "/contact-us", label: "Kontak Kami" },
+    { href: "/cart", label: "Keranjang", isCart: true },
   ];
 
   return (
@@ -109,7 +109,7 @@ export default function MarineHeader() {
             {isClient && isAuthenticated ? (
               <UserDropdown />
             ) : (
-              <MarineButton as="a" href="/account/login">Log In</MarineButton>
+              <MarineButton as="a" href="/account/login">Masuk</MarineButton>
             )}
           </div>
         </div>
@@ -159,7 +159,7 @@ export default function MarineHeader() {
                 href="/account/login"
                 className="block border border-marine-blue bg-marine-blue text-white rounded px-4 py-1 text-sm font-sans font-bold hover:bg-marine-darkBlue"
               >
-                Log in
+                Masuk
               </a>
             )}
           </div>

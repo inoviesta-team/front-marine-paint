@@ -279,17 +279,17 @@ export default function SearchProduct() {
         </div>
         
         <div className="flex items-center space-x-2">
-          <span className="text-sm text-gray-700">Show</span>
+          <span className="text-sm text-gray-700">Tampilkan</span>
           <select
             value={filters.limit}
             onChange={(e) => handleLimitChange(e.target.value)}
-            className="bg-white border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-700"
+            className="bg-white border border-gray-300 rounded-md px-2 py-1 text-sm text-gray-700"
           >
             <option value="4">4</option>
             <option value="15">15</option>
             <option value="20">20</option>
           </select>
-          <span className="text-sm text-gray-700">products</span>
+          <span className="text-sm text-gray-700">produk</span>
         </div>
       </div>
     </div>

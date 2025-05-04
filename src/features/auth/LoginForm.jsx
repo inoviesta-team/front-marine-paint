@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import useAuthStore from "./zustand/useAuthStore";
+import ValidationMessage from "@components/ui/ValidationMessage";
 
 export default function LoginForm() {
   const [isClient, setIsClient] = useState(false);
@@ -73,11 +74,12 @@ export default function LoginForm() {
           {/* Form */}
           <div className="w-full max-w-md">
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Login to your account
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                Masuk ke akun kamu
               </h2>
+              <ValidationMessage error={error} defaultMessage="Terjadi kesalahan! Silahkan coba kembali" />
 
-              <div className="space-y-5">
+              <div className="space-y-5 mt-3">
                 <div className="space-y-2">
                   <label className="block text-gray-700 font-medium" htmlFor="email">
                     Email
@@ -124,17 +126,17 @@ export default function LoginForm() {
                 </div>
               </div>
 
-              <div className="mt-1.5">
+              {/* <div className="mt-1.5">
                 <a href="#" className="text-marine-lightBlue text-sm hover:text-marine-accent">
                   Forgot password?
                 </a>
-              </div>
+              </div> */}
 
               <button
                 type="submit"
                 className="w-full bg-marine-blue hover:bg-marine-accent text-white font-medium py-3 px-4 rounded-lg mt-4 shadow-md transition-colors flex items-center justify-center"
               >
-                <span>Sign In</span>
+                <span>Masuk</span>
                 <ArrowRight size={18} className="ml-2" />
               </button>
 
@@ -145,7 +147,7 @@ export default function LoginForm() {
                   </div>
                   <div className="relative flex justify-center text-sm">
                     <span className="px-2 bg-white text-gray-500">
-                      Or continue with
+                      Atau masuk dengan
                     </span>
                   </div>
                 </div>
@@ -180,12 +182,12 @@ export default function LoginForm() {
             </form>
 
             <p className="text-center mt-6 text-gray-600">
-              Don't have an account?{" "}
+              Tidak punya akun?{" "}
               <a
                 href="/account/register"
                 className="text-marine-lightBlue font-medium hover:text-marine-accent"
               >
-                Create one
+                Register
               </a>
             </p>
           </div>

@@ -45,30 +45,24 @@ const total = subtotal - discount + deliveryFee;
 >
   <main class="bg-gray-50 py-6">
     <div class="container mx-auto py-8 px-4 md:px-14">
-      <!-- Page Title -->
       <div class="mb-8">
-        <h1 class="font-sans font-bold text-marine-darkBlue text-3xl">Your Shopping Cart</h1>
+        <h1 class="font-sans font-bold text-marine-darkBlue text-3xl">Keranjang Belanja Anda</h1>
       </div>
       
-      <!-- Cart Content -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Cart Items -->
         <div class="lg:col-span-2">
           <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <!-- Cart Header -->
             <div class="grid grid-cols-12 gap-4 py-4 px-6 border-b border-gray-200 bg-gray-50">
-              <div class="col-span-6 font-sans font-bold text-marine-darkBlue">Product</div>
-              <div class="col-span-2 font-sans font-bold text-marine-darkBlue text-center">Price</div>
-              <div class="col-span-2 font-sans font-bold text-marine-darkBlue text-center">Quantity</div>
+              <div class="col-span-6 font-sans font-bold text-marine-darkBlue">Produk</div>
+              <div class="col-span-2 font-sans font-bold text-marine-darkBlue text-center">Harga</div>
+              <div class="col-span-2 font-sans font-bold text-marine-darkBlue text-center">Jumlah</div>
               <div class="col-span-2 font-sans font-bold text-marine-darkBlue text-right">Total</div>
             </div>
             
-            <!-- Cart Items List -->
             {sampleCartItems.length > 0 ? (
               <div>
                 {sampleCartItems.map((item) => (
                   <div class="grid grid-cols-12 gap-4 py-4 px-6 border-b border-gray-100 items-center">
-                    <!-- Product -->
                     <div class="col-span-6">
                       <div class="flex items-center">
                         <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
@@ -90,18 +84,16 @@ const total = subtotal - discount + deliveryFee;
                               <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
                               <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
                             </svg>
-                            Remove
+                            Hapus
                           </button>
                         </div>
                       </div>
                     </div>
                     
-                    <!-- Price -->
                     <div class="col-span-2 font-sans text-gray-700 text-center">
                       Rp{item.price.toLocaleString()}
                     </div>
                     
-                    <!-- Quantity -->
                     <div class="col-span-2 flex justify-center">
                       <div class="inline-flex items-center">
                         <button 
@@ -125,7 +117,6 @@ const total = subtotal - discount + deliveryFee;
                       </div>
                     </div>
                     
-                    <!-- Total -->
                     <div class="col-span-2 font-sans font-bold text-marine-darkBlue text-right">
                       Rp{(item.price * item.quantity).toLocaleString()}
                     </div>
@@ -141,30 +132,29 @@ const total = subtotal - discount + deliveryFee;
                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                   </svg>
                 </div>
-                <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-2">Your cart is empty</h3>
-                <p class="font-sans text-gray-600 mb-6">Looks like you haven't added any products yet.</p>
-                <MarineButton 
+                <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-2">Keranjang Anda kosong</h3>
+                <p class="font-sans text-gray-600 mb-6">Sepertinya Anda belum menambahkan produk apa pun.</p>
+                <MarineButton
                   as="a" 
                   href="/products" 
                   variant="primary"
                   size="md"
                   client:load
                 >
-                  Browse Products
+                  Jelajahi Produk
                 </MarineButton>
               </div>
             )}
             
-            <!-- Cart Actions -->
             <div class="py-4 px-6 border-t border-gray-200 flex flex-wrap gap-4 justify-between items-center bg-gray-50">
               <div class="flex items-center">
                 <input 
                   type="text" 
-                  placeholder="Coupon Code" 
+                  placeholder="Kode Kupon" 
                   class="w-48 h-10 border border-gray-300 rounded-lg px-4 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-marine-blue"
                 />
                 <button class="ml-2 h-10 px-4 bg-marine-blue text-white rounded-lg font-sans font-bold hover:bg-marine-darkBlue transition-colors">
-                  Apply
+                  Terapkan
                 </button>
               </div>
               
@@ -173,48 +163,41 @@ const total = subtotal - discount + deliveryFee;
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
-                Update Cart
+                Perbarui Keranjang
               </button>
             </div>
           </div>
         </div>
         
-        <!-- Order Summary -->
         <div class="lg:col-span-1">
           <div class="bg-white rounded-xl shadow-sm overflow-hidden">
             <div class="py-4 px-6 border-b border-gray-200 bg-gray-50">
-              <h2 class="font-sans font-bold text-marine-darkBlue text-lg">Order Summary</h2>
+              <h2 class="font-sans font-bold text-marine-darkBlue text-lg">Ringkasan Pesanan</h2>
             </div>
             
             <div class="p-6">
-              <!-- Subtotal -->
               <div class="flex justify-between mb-3">
-                <span class="font-sans text-gray-600">Sub Total</span>
+                <span class="font-sans text-gray-600">Subtotal</span>
                 <span class="font-sans font-medium text-marine-darkBlue">Rp{subtotal.toLocaleString()}</span>
               </div>
               
-              <!-- Discount -->
               <div class="flex justify-between mb-3">
-                <span class="font-sans text-gray-600">Discount (10%)</span>
+                <span class="font-sans text-gray-600">Diskon (10%)</span>
                 <span class="font-sans font-medium text-green-600">-Rp{discount.toLocaleString()}</span>
               </div>
               
-              <!-- Delivery Fee -->
               <div class="flex justify-between mb-4">
-                <span class="font-sans text-gray-600">Delivery Fee</span>
+                <span class="font-sans text-gray-600">Biaya Pengiriman</span>
                 <span class="font-sans font-medium text-marine-darkBlue">Rp{deliveryFee.toLocaleString()}</span>
               </div>
               
-              <!-- Divider -->
               <div class="border-t border-gray-200 my-4"></div>
               
-              <!-- Total -->
               <div class="flex justify-between mb-6">
                 <span class="font-sans font-bold text-marine-darkBlue">Total</span>
                 <span class="font-sans font-bold text-marine-darkBlue text-xl">Rp{total.toLocaleString()}</span>
               </div>
               
-              <!-- Checkout Button -->
               <MarineButton 
                 variant="primary"
                 size="lg"
@@ -224,14 +207,13 @@ const total = subtotal - discount + deliveryFee;
                 Checkout
               </MarineButton>
               
-              <!-- Continue Shopping Link -->
               <div class="mt-4 text-center">
                 <a href="/products" class="font-sans text-marine-blue hover:text-marine-darkBlue inline-flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
                     <path d="M19 12H5"></path>
                     <path d="M12 19l-7-7 7-7"></path>
                   </svg>
-                  Continue Shopping
+                  Lanjutkan Belanja
                 </a>
               </div>
             </div>

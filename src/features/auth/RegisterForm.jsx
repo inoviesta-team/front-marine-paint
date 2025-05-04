@@ -91,7 +91,7 @@ export default function RegisterForm() {
               className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8"
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                Create your account
+                Buat akun Anda
               </h2>
               <ValidationMessage error={error} defaultMessage="Register gagal! Silahkan coba kembali" />
 
@@ -101,7 +101,7 @@ export default function RegisterForm() {
                     className="block text-gray-700 font-medium"
                     htmlFor="register-name"
                   >
-                    Full Name
+                    Nama Lengkap
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -113,7 +113,7 @@ export default function RegisterForm() {
                       value={registerName}
                       onChange={(e) => setRegisterName(e.target.value)}
                       className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="John Smith"
+                      placeholder="John Agus"
                     />
                   </div>
                 </div>
@@ -135,7 +135,7 @@ export default function RegisterForm() {
                       value={registerEmail}
                       onChange={(e) => setRegisterEmail(e.target.value)}
                       className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="your@email.com"
+                      placeholder="contoh@email.com"
                     />
                   </div>
                 </div>
@@ -168,7 +168,7 @@ export default function RegisterForm() {
                     </button>
                   </div>
                   <p className="text-sm text-gray-500">
-                    Must be at least 6 characters
+                    Harus terdiri dari setidaknya 6 karakter
                   </p>
                 </div>
 
@@ -183,9 +183,9 @@ export default function RegisterForm() {
                     htmlFor="terms"
                     className="ml-2 block text-sm text-gray-700"
                   >
-                    I agree to the{" "}
-                    <span className="text-marine-lightBlue text-sm">Terms of Service</span> and{" "}
-                    <span className="text-marine-lightBlue text-sm">Privacy Policy</span>
+                    Saya setuju dengan{" "}
+                    <span className="text-marine-lightBlue text-sm">Syarat Layanan</span> <br /> dan{" "}
+                    <span className="text-marine-lightBlue text-sm">Kebijakan Privasi</span>
                   </label>
                 </div>
               </div>
@@ -194,7 +194,7 @@ export default function RegisterForm() {
                 type="submit"
                 className="w-full bg-marine-blue hover:bg-marine-accent text-white font-medium py-3 px-4 rounded-lg mt-4 shadow-md transition-colors flex items-center justify-center"
               >
-                <span>Create Account</span>
+                <span>Buat Akun</span>
                 <ArrowRight size={18} className="ml-2" />
               </button>
 
@@ -205,7 +205,7 @@ export default function RegisterForm() {
                   </div>
                   <div className="relative flex justify-center text-sm">
                     <span className="px-2 bg-white text-gray-500">
-                      Or sign up with
+                      Atau masuk dengan
                     </span>
                   </div>
                 </div>
@@ -240,7 +240,7 @@ export default function RegisterForm() {
             </form>
 
             <p className="text-center mt-6 text-gray-600">
-              Already have an account?{" "}
+              Sudah punya akun?{" "}
               <a
                 href="/account/login"
                 className="text-marine-lightBlue text-sm hover:text-marine-accent font-medium"
