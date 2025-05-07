@@ -3,7 +3,7 @@ import MarineButton from "@components/ui/MarineButton";
 import { brandApi } from "@features/products/api/brandApi";
 import { categoryApi } from "@features/products/api/categoryApi";
 import { productApi } from "@features/products/api/productApi";
-import { ArrowDown, ArrowRight, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, Filter, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 export default function SearchProduct() {
@@ -44,7 +44,12 @@ export default function SearchProduct() {
       key: "Rating",
       value: "avgRating",
     },
-  ]
+  ];
+
+  const [showFilter, setShowFilter] = useState(false);
+  const handleShowFilter = () => {
+    setShowFilter(!showFilter);
+  };
 
   const handleSortOrder = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -63,17 +68,18 @@ export default function SearchProduct() {
   };
 
   const handleInputFilterChange = (e) => {
-    const { name } = e.target;name
-
+    const { name } = e.target;
+    name;
 
     if (name === "minPrice" || name === "maxPrice") {
-        const numericValue = e.target.value.replace(/\D/g, ""); 
-        const formattedValue = numericValue ? `${parseInt(numericValue).toLocaleString()}` : "";
-        e.target.value = formattedValue;
+      const numericValue = e.target.value.replace(/\D/g, "");
+      const formattedValue = numericValue
+        ? `${parseInt(numericValue).toLocaleString()}`
+        : "";
+      e.target.value = formattedValue;
     }
 
-    setInputFilter(prev => ({ ...prev, [name]: e.target.value }));
-
+    setInputFilter((prev) => ({ ...prev, [name]: e.target.value }));
   };
 
   const fetchProducts = async () => {
@@ -110,7 +116,7 @@ export default function SearchProduct() {
       limit: numLimit,
       page: 1,
     }));
-  }; 
+  };
 
   useEffect(() => {
     getDataFilter();
@@ -122,7 +128,7 @@ export default function SearchProduct() {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
             Produk Terbaik Kami!
@@ -132,41 +138,59 @@ export default function SearchProduct() {
           </p>
         </div>
 
-        <div className="mt-4 md:mt-0 w-full md:w-1/2">
-          <label htmlFor="search" className="sr-only">
-            Cari
-          </label>
-          <div className="relative rounded-md shadow">
-            <input
-              onChange={handleInputFilterChange}
-              id="search"
-              name="search"
-              className="focus:ring-blue-500 focus:border-blue-500 block w-full h-12 pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
-              placeholder="Cari produk..."
-              type="search"
-            />
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-              <MarineButton variant="primary" size="sm" type="submit">
-                <span className="sr-only">Search</span>
-                <svg
-                  className="h-5 w-5 my-0.5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </MarineButton>
+        <div className="flex justify-between items-stretch gap-2 lg:gap-0 lg:block mt-4 md:mt-0 w-full lg:w-1/2">
+          <div className="w-full">
+            <label htmlFor="search" className="sr-only">
+              Cari
+            </label>
+            <div className="relative rounded-md shadow">
+              <input
+                onChange={handleInputFilterChange}
+                id="search"
+                name="search"
+                className="focus:ring-blue-500 focus:border-blue-500 block w-full h-12 pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
+                placeholder="Cari produk..."
+                type="search"
+              />
+              <div className="hidden lg:flex absolute inset-y-0 right-0 items-center pr-3">
+                <MarineButton variant="primary" size="sm" type="submit">
+                  <span className="sr-only">Search</span>
+                  <svg
+                    className="h-5 w-5 my-0.5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </MarineButton>
+              </div>
             </div>
           </div>
+          <button
+            className="block lg:hidden bg-marine-blue text-white py-1 px-4 text-sm rounded-md"
+            onClick={handleShowFilter}
+          >
+            <Filter />
+          </button>
         </div>
       </div>
 
       <div className="flex justify-between items-start gap-x-8 gap-y-10">
-        <div className="w-1/4 hidden lg:block sticky top-8">
+        <div
+          className={`${
+            showFilter ? "block" : "hidden lg:block"
+          } p-5 lg:px-0 bg-white lg:bg-gray-50 fixed inset-0 z-50 w-full lg:w-1/4 lg:sticky`}
+        >
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-xl font-bold text-gray-900">Filter Produk</h3>
+            <button className="block lg:hidden" onClick={handleShowFilter}>
+              <X />
+            </button>
+          </div>
           <div className="space-y-8">
             <div>
               <h3 className="text-lg font-medium text-gray-900">Kategori</h3>
@@ -232,7 +256,19 @@ export default function SearchProduct() {
                     >
                       {sort.key}
                     </label>
-                    {inputFilter.sortBy === sort.value && <button onClick={handleSortOrder} type="button" className="ml-2">{sortOrder === 'asc' ? <ArrowDown size={16} /> : <ArrowUp size={16}/>}</button>}
+                    {inputFilter.sortBy === sort.value && (
+                      <button
+                        onClick={handleSortOrder}
+                        type="button"
+                        className="ml-2"
+                      >
+                        {sortOrder === "asc" ? (
+                          <ArrowDown size={16} />
+                        ) : (
+                          <ArrowUp size={16} />
+                        )}
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -246,7 +282,7 @@ export default function SearchProduct() {
                   name="minPrice"
                   className="w-full p-2 border rounded text-sm"
                   placeholder="MIN"
-                  />
+                />
                 {/* <ArrowRight color="#505050" /> */}
                 -
                 <input
@@ -258,45 +294,50 @@ export default function SearchProduct() {
                 />
               </div>
             </div>
-            <MarineButton variant="tertiary" className="w-full">Cari Produk</MarineButton>
+            <MarineButton variant="tertiary" className="w-full">
+              Cari Produk
+            </MarineButton>
           </div>
         </div>
 
-        <div className="w-3/4">
+        <div className="w-full lg:w-3/4">
           <p className="mb-2 text-lg font-medium text-gray-900">
             Ditemukan {pagination?.totalProducts} produk: Anti Fouling Ashdaq
           </p>
-          <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {products.map((product) => (
-              <MarineProductCard key={`product-${product.id}`} product={product} />
+              <MarineProductCard
+                key={`product-${product.id}`}
+                product={product}
+              />
             ))}
           </div>
 
-          <div>
+          <div className="w-full">
             {/* Product list rendering - kode tidak ditampilkan di sini */}
 
             {/* Pagination UI */}
-            <div className="flex items-center justify-between py-4">
-              <div className="flex items-center space-x-2">
-                <button
+            <div className="w-full flex flex-wrap items-center justify-center lg:justify-between gap-4 py-4">
+              <div className="flex justify-center items-center space-x-2 w-full lg:w-auto">
+                <MarineButton
+                className="w-full"
                   onClick={() => handlePageChange(pagination.currentPage - 1)}
                   disabled={pagination.currentPage <= 1}
-                  className="bg-white border border-gray-300 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-marine-blue disabled:opacity-50"
                 >
                   Previous
-                </button>
+                </MarineButton>
 
-                <span className="text-sm text-gray-700">
+                {/* <span className="text-sm text-gray-700">
                   Page {pagination.currentPage} of {pagination.totalPages}
-                </span>
+                </span> */}
 
-                <button
+                <MarineButton
+                className="w-full"
                   onClick={() => handlePageChange(pagination.currentPage + 1)}
                   disabled={pagination.currentPage >= pagination.totalPages}
-                  className="bg-white border border-gray-300 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-marine-blue disabled:opacity-50"
                 >
                   Next
-                </button>
+                </MarineButton>
               </div>
 
               <div className="flex items-center space-x-2">

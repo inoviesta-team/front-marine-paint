@@ -13,7 +13,8 @@ export default function ProductImageGallery({ productId, productImages = [] }) {
       const response = await productApiStatic.getImages(productId);
       const images = response.data
      
-      setSelectedImage(images.find((img) => img.isMain)[0] || images[0]);
+      // setSelectedImage(images.find((img) => img.isMain)[0] || images[0]);
+      setSelectedImage(null);
       setOtherImage(images);
     }
     

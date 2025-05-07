@@ -5,33 +5,44 @@ export default function QuantitySelector({
   min = 1, 
   max = 99, 
   onChange,
-  disabled = false
+  disabled = false,
+  quantity,
+  setQuantity,
+  cart,
+  handleUpdateCart
 }) {
-  const [quantity, setQuantity] = useState(initial);
-  
-  const handleIncrement = () => {
+  const handleIncrement = async () => {
     if (!disabled && quantity < max) {
       const newValue = quantity + 1;
       setQuantity(newValue);
       if (onChange) onChange(newValue);
+      if(cart?.id) await handleUpdateCart(newValue)
     }
   };
   
-  const handleDecrement = () => {
+  const handleDecrement = async () => {
     if (!disabled && quantity > min) {
       const newValue = quantity - 1;
       setQuantity(newValue);
       if (onChange) onChange(newValue);
+      if(cart?.id) await handleUpdateCart(newValue)
     }
   };
   
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     if (disabled) return;
     
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= min && value <= max) {
+    const value = Number(e.target.value);
+    const isNaNValue = isNaN(value);
+    const isValidValue = !isNaNValue && value >= min && value <= max;
+    const isIntegerValue = Number.isInteger(value);
+
+    if (isValidValue && isIntegerValue) {
       setQuantity(value);
       if (onChange) onChange(value);
+      if(cart?.id) await handleUpdateCart(value)
+    } else {
+      e.target.value = quantity;
     }
   };
   
@@ -52,7 +63,7 @@ export default function QuantitySelector({
       </button>
       
       <input 
-        type="number" 
+        type="text" 
         value={quantity} 
         min={min}
         max={max}
