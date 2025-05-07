@@ -3,11 +3,13 @@ import { useAuth } from "@hooks/useAuth";
 import useAuthStore from "@features/auth/zustand/useAuthStore";
 import { History, LogOut, User } from "lucide-react";
 import MarineButton from "@components/ui/MarineButton";
+import useCartStore from "@features/cart/zustand/useCartStore";
 
 export default function MarineHeader() {
   const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // for mobile menu toggle
   const { user, isAuthenticated, logout } = useAuthStore();
+  const { carts } = useCartStore();
 
   try {
     if (!isClient) setIsClient(true);
@@ -90,7 +92,7 @@ export default function MarineHeader() {
                       d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                     />
                   </svg>
-                  (2)
+                  ({carts.length})
                 </a>
               ) : (
                 <a
@@ -138,7 +140,7 @@ export default function MarineHeader() {
                       d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                     />
                   </svg>
-                  (2)
+                  ({carts.length})
                 </a>
               ) : (
                 <a

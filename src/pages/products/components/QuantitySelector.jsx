@@ -1,3 +1,4 @@
+import useCartStore from '@features/cart/zustand/useCartStore';
 import { useState } from 'react';
 
 export default function QuantitySelector({ 
@@ -8,15 +9,23 @@ export default function QuantitySelector({
   disabled = false,
   quantity,
   setQuantity,
-  cart,
-  handleUpdateCart
+  cart
 }) {
+  const { updateCart } = useCartStore();
+
+  const handleUpdateCart = async (cartId, quantity) => {
+    const requestUpdateCart = {
+      quantity
+    };
+    await updateCart(cartId, requestUpdateCart);
+  };
+
   const handleIncrement = async () => {
     if (!disabled && quantity < max) {
       const newValue = quantity + 1;
       setQuantity(newValue);
       if (onChange) onChange(newValue);
-      if(cart?.id) await handleUpdateCart(newValue)
+      if(cart?.id) await handleUpdateCart(cart.id, newValue)
     }
   };
   
@@ -25,7 +34,7 @@ export default function QuantitySelector({
       const newValue = quantity - 1;
       setQuantity(newValue);
       if (onChange) onChange(newValue);
-      if(cart?.id) await handleUpdateCart(newValue)
+      if(cart?.id) await handleUpdateCart(cart.id, newValue)
     }
   };
   
@@ -40,7 +49,7 @@ export default function QuantitySelector({
     if (isValidValue && isIntegerValue) {
       setQuantity(value);
       if (onChange) onChange(value);
-      if(cart?.id) await handleUpdateCart(value)
+      if(cart?.id) await handleUpdateCart(cart.id, value)
     } else {
       e.target.value = quantity;
     }

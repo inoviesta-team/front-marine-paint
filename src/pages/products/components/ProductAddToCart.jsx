@@ -6,7 +6,7 @@ import useCartStore from "@features/cart/zustand/useCartStore";
 
 export default function ProductAddToCart({ product }) {
   const { isAuthenticated, user } = useAuthStore();
-  const { carts, getCarts, addToCart, updateCart, deleteCart } = useCartStore();
+  const { carts, getCarts, addToCart, deleteCart } = useCartStore();
   const backButtonRef = useRef();
 
   const [cart, setCart] = useState(carts.find(cart => cart.product.id === product.id) || {});
@@ -41,21 +41,9 @@ export default function ProductAddToCart({ product }) {
 
     const newCart = await addToCart(requestAddToCart);
 
-    console.log("LALA: ", newCart);
-    
-
     setCart(newCart);
   };
 
-
-  const handleUpdateCart = async (quantity) => {
-    console.log("ALALALLA");
-    
-    const requestUpdateCart = {
-      quantity
-    }
-    await updateCart(cart.id, requestUpdateCart);
-  }
 
   return (
     <>
@@ -69,11 +57,10 @@ export default function ProductAddToCart({ product }) {
         <QuantitySelector
           initial={1}
           min={1}
-          max={product.stockQuantity || 99}
+          max={999}
           quantity={quantity}
           setQuantity={setQuantity}
           cart={cart}
-          handleUpdateCart={handleUpdateCart}
         />
       </div>
       <div className="flex flex-col sm:flex-row gap-4">

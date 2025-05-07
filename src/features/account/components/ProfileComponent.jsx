@@ -8,7 +8,7 @@ import UserChangePassword from "./changePassword/UserChangePassword";
 export default function ProfileComponent() {
   const { user } = useAuthStore();
 
-  const [tab, setTab] = useState("editProfile");
+  const [tab, setTab] = useState("address");
 
   const tabSection = {
     address: <UserAddress/>,

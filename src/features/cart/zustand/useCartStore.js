@@ -33,7 +33,8 @@ const useCartStore = create(
           const newCarts = get().carts.filter((cart) => cart.id !== cartResponse.id);
           newCarts.push(cartResponse);
 
-          set({ carts: newCarts, loading: false });
+          await get().getCarts();
+          // set({ carts: newCarts, loading: false });
 
           return cartResponse;
         } catch (error) {
