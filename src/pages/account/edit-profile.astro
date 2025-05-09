@@ -1,0 +1,17 @@
+---
+import UserEditProfile from "@features/account/components/editProfile/UserEditProfile";
+import AccountLayout from "@features/account/layout/AccountLayout";
+import MainLayout from "@layouts/MainLayout.astro";
+import AuthGuard from "src/middleware/AuthGuard";
+---
+
+<MainLayout
+  title="Login | ShopAstro"
+  description="Log in to your ShopAstro account"
+>
+  <AuthGuard client:only="react">
+    <AccountLayout client:only="react" >
+        <UserEditProfile client:only="react" />
+    </AccountLayout>
+  </AuthGuard>
+</MainLayout>

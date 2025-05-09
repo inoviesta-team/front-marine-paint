@@ -6,8 +6,13 @@ const useCartStore = create(
   persist(
     (set, get) => ({
       carts: [],
+      selectedCart: [],
       loading: false,
       error: null,
+
+      handleSelectedCart: (carts) => {
+        set({ selectedCart: carts });
+      },
 
       getCarts: async (request) => {
         set({ loading: true, error: null });

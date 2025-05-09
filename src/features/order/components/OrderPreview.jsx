@@ -1,54 +1,29 @@
 import MarineButton from "@components/ui/MarineButton";
-import React, { useEffect, useState } from "react";
-import useCartStore from "../zustand/useCartStore";
+import useAddressStore from "@features/account/zustand/useAddressStore";
+import CartQuantitySelector from "@features/cart/components/CartQuantitySelector";
+import useCartStore from "@features/cart/zustand/useCartStore";
 import { ShoppingCart } from "lucide-react";
-import QuantitySelector from "src/pages/products/components/QuantitySelector";
-import CartQuantitySelector from "./CartQuantitySelector";
+import { useEffect, useState } from "react";
 
-export default function CartPreview() {
-  const { selectedCart, carts, getCarts, deleteCart, handleSelectedCart } = useCartStore();
-  const [selectedCarts, setSelectedCarts] = useState(selectedCart);
-//   console.log("carts: ", carts);
-  console.log("selectedCart: ", selectedCart);
+export default function OrderPreview() {
+  const { address = [], mainAddress } = useAddressStore();
+  const { selectedCart, getCarts, deleteCart } = useCartStore();
+  const [selectedAddress, setSelectedAddress] = useState(mainAddress);
+  const [selectedAddressId, setSelectedAddressId] = useState("");
 
-  const subtotal = selectedCarts.reduce(
+  const subtotal = selectedCart.reduce(
     (total, item) => total + item.product.price * item.quantity,
     0
   );
 
-
-  const handleSelectCart = (cart) => {
-    const alreadySelect = selectedCarts.filter((item) => item.id === cart.id)
-    console.log("alreadySelect: ", alreadySelect);
+  const handleSelectAddress = (e) => {
+    setSelectedAddressId(e.target.value)
+    const selectAddr = address.find(addr => addr.id == e.target.value)
+    console.log("address", address);
+    console.log("selectAddr", selectAddr);
     
-
-    if (alreadySelect.length > 0) {
-      setSelectedCarts(selectedCarts.filter((c) => c.id !== cart.id));
-      handleSelectedCart(selectedCarts.filter((c) => c.id !== cart.id))
-    } else {
-      setSelectedCarts([...selectedCarts, cart]);
-      handleSelectedCart([...selectedCarts, cart])
-    }
+    setSelectedAddress(selectAddr)
   };
-
-  useEffect(() => {
-    getCarts()
-  }, [])
-
-
-  const handleCheckout = () => {
-    if(selectedCarts.length <= 0) {
-      return
-    }
-
-    window.location.href = "/cart/checkout"
-  }
-
-  useEffect(() => {
-    const newSelectedCarts = carts.filter((cart) => selectedCarts.some((selected) => selected.id === cart.id));
-    setSelectedCarts(newSelectedCarts);
-    handleSelectedCart(newSelectedCarts);
-  }, [carts])
 
   return (
     <div class="container mx-auto py-8 px-4 md:px-14">
@@ -76,19 +51,12 @@ export default function CartPreview() {
               </div>
             </div>
 
-            {carts.length > 0 ? (
+            {selectedCart.length > 0 ? (
               <div>
-                {carts.map((item) => (
+                {selectedCart.map((item) => (
                   <div className="border-b flex justify-start items-center gap-2 lg:gap-1 py-4 px-6">
-                    <input
-                      id={`checkbox-${item.id}`}
-                      type="checkbox"
-                      className="accent-marine-darkBlue rounded border-gray-300 text-marine-blue focus:ring-marine-blue mr-0.5"
-                      checked={selectedCarts.filter((selectedCart) => selectedCart.id === item.id).length > 0}
-                      onChange={() => handleSelectCart(item)}
-                    />
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-                      <button onClick={() => handleSelectCart(item)} class="col-span-6">
+                      <div class="col-span-6">
                         <div class="flex items-center">
                           <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                             <img
@@ -103,49 +71,71 @@ export default function CartPreview() {
                             <h3 class="font-sans font-bold text-marine-darkBlue">
                               {item.product.name}
                             </h3>
-                            <button
-                              onClick={() => deleteCart(item.id)}
-                              class="font-sans text-sm text-red-500 hover:text-red-700 flex items-center mt-1"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="mr-1"
-                              >
-                                <path d="M3 6h18"></path>
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                              </svg>
-                              Hapus
-                            </button>
                           </div>
                         </div>
-                      </button>
-
-                      <button onClick={() => handleSelectCart(item)} class="col-span-2 font-sans text-gray-700 text-center">
-                        Rp {item.product.price.toLocaleString()}
-                      </button>
-
-                      <div class="col-span-2 flex justify-center">
-                        <CartQuantitySelector
-                          initial={item.quantity}
-                          min={1}
-                          max={999}
-                          cart={item}
-                        />
                       </div>
 
-                      <button onClick={() => handleSelectCart(item)} class="hidden lg:block col-span-2 font-sans font-bold text-marine-darkBlue text-right">
+                      <div class="col-span-2 font-sans text-gray-700 text-center">
+                        Rp {item.product.price.toLocaleString()}
+                      </div>
+
+                      <div class="col-span-2 flex justify-center">
+                        <div className="flex items-center">
+                          <button
+                            type="button"
+                            className={`opacity-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 text-gray-600 hover:bg-gray-200 transition-colors`}
+                            aria-label="Decrease quantity"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M5 12h14"></path>
+                            </svg>
+                          </button>
+
+                          <input
+                            type="text"
+                            className={`w-16 h-10 text-center font-sans focus:outline-none focus:ring-1 bg-white focus:ring-marine-blue`}
+                            aria-label="Quantity"
+                            disabled
+                            value={item.quantity}
+                          />
+
+                          <button
+                            type="button"
+                            className={`opacity-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 text-gray-600 hover:bg-gray-200 transition-colors`}
+                            aria-label="Increase quantity"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M12 5v14"></path>
+                              <path d="M5 12h14"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="hidden lg:block col-span-2 font-sans font-bold text-marine-darkBlue text-right">
                         Rp
                         {(item.product.price * item.quantity).toLocaleString()}
-                      </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -199,17 +189,69 @@ export default function CartPreview() {
                   Terapkan
                 </button>
               </div> */}
-
-              <a href="/products" class="h-10 px-4 bg-white border border-gray-300 text-marine-darkBlue rounded-lg font-sans hover:text-marine-darkBlue transition-colors flex items-center">
-                <ShoppingCart className="mr-2" size={18} />
-                Lanjutkan Belanja
-              </a>
             </div>
           </div>
         </div>
 
-        <div class="lg:col-span-1">
-          <div class="lg:sticky lg:top-2 bg-white rounded-xl shadow-sm overflow-hidden">
+        <div class="lg:sticky lg:top-2 lg:col-span-1">
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="p-6">
+              <div class="flex justify-between mb-6">
+                <span class="text-xl font-sans font-bold text-marine-darkBlue">
+                  Pilih Alamat
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                <select
+                  className="w-full p-2 border rounded-lg font-sans text-sm focus:outline-none focus:ring-2 focus:ring-marine-blue"
+                  aria-label="Select Address"
+                    value={selectedAddressId}
+                    onChange={handleSelectAddress}
+                >
+                  {address.map((addr) => (
+                    <option key={addr.id} value={addr.id}>
+                      {addr.recipientName}, {addr.address}, {addr.city}, {addr.phone}
+                    </option>
+                  ))}
+                </select>
+
+                <div
+                  key={selectedAddress.id}
+                  className={`w-full text-left p-4 border rounded-lg border-blue-500 bg-blue-50`}
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-lg font-medium text-slate-700">
+                      {selectedAddress.addressType}{" "}
+                        <span className="text-sm text-blue-500">(Dipilih)</span>
+                    </span>
+                  </div>
+                  <div className="text-sm text-slate-600 space-y-1">
+                    <p>
+                      <strong>Penerima:</strong> {selectedAddress.recipientName}
+                    </p>
+                    <p>
+                      <strong>Telepon:</strong> {selectedAddress.phone}
+                    </p>
+                    <p>
+                      <strong>Alamat:</strong> {selectedAddress.address},{" "}
+                      {selectedAddress.city}, {selectedAddress.province},{" "}
+                      {selectedAddress.postalCode}
+                    </p>
+                    <p>
+                      <strong>Negara:</strong> {selectedAddress.country}
+                    </p>
+                    {selectedAddress.notes && (
+                      <p>
+                        <strong>Catatan:</strong> {selectedAddress.notes}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden mt-4">
             <div class="hidden lg:block py-4 px-6 border-b border-gray-200 bg-gray-50">
               <h2 class="font-sans font-bold text-marine-darkBlue text-lg -mb-1">
                 Ringkasan Pesanan
@@ -250,38 +292,13 @@ export default function CartPreview() {
               </div>
 
               <MarineButton
-                onClick={handleCheckout}
                 variant="primary"
                 size="lg"
                 className="w-full justify-center shadow-md hover:shadow-lg"
                 client:load
               >
-                Checkout
+                Buat Pesanan
               </MarineButton>
-
-              <div class="mt-4 text-center">
-                <a
-                  href="/products"
-                  class="block lg:hidden font-sans text-marine-blue hover:text-marine-darkBlue inline-flex items-center"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="mr-2"
-                  >
-                    <path d="M19 12H5"></path>
-                    <path d="M12 19l-7-7 7-7"></path>
-                  </svg>
-                  Lanjutkan Belanja
-                </a>
-              </div>
             </div>
           </div>
         </div>

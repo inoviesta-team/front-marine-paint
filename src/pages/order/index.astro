@@ -1,0 +1,14 @@
+---
+import OrderHistory from "@features/order/components/OrderHistory";
+import MainLayout from "@layouts/MainLayout.astro";
+import AuthGuard from "src/middleware/AuthGuard";
+---
+
+<MainLayout
+  title="Login | ShopAstro"
+  description="Log in to your ShopAstro account"
+>
+  <AuthGuard client:only="react">
+    <OrderHistory client:only="react" />
+  </AuthGuard>
+</MainLayout>

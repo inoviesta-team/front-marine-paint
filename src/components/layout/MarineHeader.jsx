@@ -92,7 +92,7 @@ export default function MarineHeader() {
                       d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                     />
                   </svg>
-                  ({carts.length})
+                  ({carts?.length || 0})
                 </a>
               ) : (
                 <a
@@ -140,7 +140,7 @@ export default function MarineHeader() {
                       d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                     />
                   </svg>
-                  ({carts.length})
+                  ({carts?.length || 0})
                 </a>
               ) : (
                 <a
@@ -245,7 +245,7 @@ function UserDropdown() {
             </a>
             
             <a
-              href="/account"
+              href="/order"
               className="flex w-full rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer"
               role="menuitem"
             >
