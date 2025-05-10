@@ -6,6 +6,9 @@ export async function getProducts(filterRequest = {}) {
   const limit = filterRequest.limit;
   const brandId = filterRequest.brandId;
   
+  // console.log(localStorage.getItem("jwtToken"));
+  
+
   const response = await fetch(`http://localhost:3000/api/products?page=${page}&limit=${limit}&brandId=${brandId}&categoryId=${categoryId}`, {
     method: "GET",
     headers: {

@@ -2,15 +2,18 @@
 import FloatingWhatsAppButton from "@components/ui/FloatingWhatsAppButton";
 import CartPreview from "@features/cart/components/CartPreview";
 import MainLayout from "@layouts/MainLayout.astro";
+import AuthGuard from "src/middleware/AuthGuard";
 ---
 
 <MainLayout
   title="Shopping Cart | Toko Koko Lie"
   description="View and manage your shopping cart items"
 >
-  <main class="bg-gray-50 py-6">
-    <CartPreview client:only="react" />
-  </main>
+  <AuthGuard client:only="react" redirect="/account/login" >
+    <main class="bg-gray-50 py-6">
+      <CartPreview client:only="react" />
+    </main>
+  </AuthGuard>
   
   <FloatingWhatsAppButton client:load />
 </MainLayout>

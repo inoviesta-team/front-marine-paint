@@ -5,6 +5,8 @@ export default function AccountLayout({ children }) {
 
     const { user, logout } = useAuthStore();
 
+    const url = new URL(window.location.href).pathname;
+
   return (
     <div className="font-sans min-h-screen bg-gray-50 py-3 container mx-auto px-4 md:px-14 relative z-10">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
@@ -30,7 +32,7 @@ export default function AccountLayout({ children }) {
                   </div>
                 </div> */}
               </div>
-              <div className="text-center mt-2 mb-6">
+              <div className="px-6 mt-2 mb-6">
                 <h3 className="text-xl text-slate-700 font-bold leading-normal mb-1">
                   {user.name}
                 </h3>
@@ -39,10 +41,10 @@ export default function AccountLayout({ children }) {
                 </div>
               </div>
               <nav className="space-y-4 px-4">
-          <a className="bg-blue-50 p-3 rounded-md block font-medium text-blue-600" href="/account/address">Alamat</a>
-          <a className="p-3 rounded-md block text-gray-600" href="/account/edit-profile">Edit Profile</a>
-          <a className="p-3 rounded-md block text-gray-600" href="/order">History Order</a>
-          <a className="p-3 rounded-md block text-gray-600" href="/account/change-password">Ganti Password</a>
+          <a className={`${url === '/account/address' || url === '/account' ? 'bg-blue-50 font-medium text-blue-600' : 'text-gray-600'} p-3 rounded-md block`} href="/account/address">Alamat</a>
+          <a className={`${url === '/account/edit-profile' ? 'bg-blue-50 font-medium text-blue-600' : 'text-gray-600'} p-3 rounded-md block`} href="/account/edit-profile">Edit Profile</a>
+          <a className={`${url === '/order' ? 'bg-blue-50 font-medium text-blue-600' : 'text-gray-600'} p-3 rounded-md block`} href="/order">History Order</a>
+          <a className={`${url === '/account/change-password' ? 'bg-blue-50 font-medium text-blue-600' : 'text-gray-600'} p-3 rounded-md block`} href="/account/change-password">Ganti Password</a>
           <button onClick={logout} className="p-3 rounded-md block text-red-500" href="/account/change-password">Keluar / Logout</button>
         </nav>
             </div>

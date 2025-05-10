@@ -1,7 +1,7 @@
 import useAuthStore from '@features/auth/zustand/useAuthStore'
 import React, { useRef, useEffect } from 'react'
 
-export default function AuthGuard({children}) {
+export default function AuthGuard({children, redirect = "/"}) {
 
     const { isAuthenticated, user, loading } = useAuthStore()
     const backButtonRef = useRef();
@@ -15,6 +15,6 @@ export default function AuthGuard({children}) {
     }, [isAuthenticated, user]);
 
   return (
-    <div><a ref={backButtonRef} className='hidden' href="/"></a> {children}</div>
+    <div><a ref={backButtonRef} className='hidden' href={redirect}></a> {children}</div>
   )
 }

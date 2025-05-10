@@ -76,16 +76,13 @@ export default function UserAddress() {
             >
               <div className="flex justify-between items-center mb-2">
                 <span className="text-lg font-medium text-slate-700">
-                  {addr.addressType}{" "}
+                  {addr.recipientName}{" "}
                   {addr.isDefault && (
-                    <span className="text-sm text-blue-500">(Utama)</span>
+                    <span className="text-sm text-blue-500">(UTAMA)</span>
                   )}
                 </span>
               </div>
               <div className="text-sm text-slate-600 space-y-1">
-                <p>
-                  <strong>Penerima:</strong> {addr.recipientName}
-                </p>
                 <p>
                   <strong>Telepon:</strong> {addr.phone}
                 </p>

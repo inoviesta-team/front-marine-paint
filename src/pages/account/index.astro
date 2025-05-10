@@ -1,14 +1,17 @@
 ---
+import UserAddress from "@features/account/components/UserAddress";
+import AccountLayout from "@features/account/layout/AccountLayout";
 import MainLayout from "@layouts/MainLayout.astro";
 import AuthGuard from "src/middleware/AuthGuard";
-import ProfileComponent from '@features/account/components/ProfileComponent'
 ---
 
 <MainLayout
   title="Login | ShopAstro"
   description="Log in to your ShopAstro account"
 >
-  <AuthGuard client:only="react">
-    <ProfileComponent client:only="react" />
+  <AuthGuard client:only="react" >
+    <AccountLayout client:only="react" >
+      <UserAddress client:only="react" />
+    </AccountLayout>
   </AuthGuard>
 </MainLayout>

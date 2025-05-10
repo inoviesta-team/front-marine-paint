@@ -1,0 +1,14 @@
+---
+import OrderDetailPage from '@features/order/components/OrderDetailPage'
+import MainLayout from "@layouts/MainLayout.astro";
+import AuthGuard from "src/middleware/AuthGuard";
+---
+
+<MainLayout
+  title="Login | ShopAstro"
+  description="Log in to your ShopAstro account"
+>
+  <AuthGuard client:only="react" redirect='/account/login' >
+    <OrderDetailPage client:only="react" />
+  </AuthGuard>
+</MainLayout>

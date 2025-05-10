@@ -1,14 +1,12 @@
 ---
-import MarineLayout from "@layouts/MarineLayout.astro";
-import MarineHeader from "@components/layout/MarineHeader";
 import MarineFooter from "@components/layout/MarineFooter";
-import MarineButton from "@components/ui/MarineButton";
+import MarineHeader from "@components/layout/MarineHeader";
 import FloatingWhatsAppButton from "@components/ui/FloatingWhatsAppButton";
-import TabSection from "./components/TabSection";
-import ProductImageGallery from "./components/ProductImageGallery";
-import QuantitySelector from "./components/QuantitySelector";
-import ProductAddToCart from "./components/ProductAddToCart";
 import { getProducts, productApiStatic } from "@features/products/api/productApiStatic";
+import MarineLayout from "@layouts/MarineLayout.astro";
+import ProductAddToCart from "./components/ProductAddToCart";
+import ProductImageGallery from "./components/ProductImageGallery";
+import TabSection from "./components/TabSection";
 
 export async function getStaticPaths() {
   try {

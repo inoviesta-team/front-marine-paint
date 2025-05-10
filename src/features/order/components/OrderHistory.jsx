@@ -1,96 +1,115 @@
+import NotFound from "@components/ui/NotFound";
 import AccountLayout from "@features/account/layout/AccountLayout";
-import React from "react";
-
-const orders = [
-  {
-    id: "№266215",
-    date: "15 ноября 2021",
-    total: 6700,
-    status: "В работе",
-    items: [
-      {
-        image: "/images/jacket.jpg",
-        name: "Джинсовая куртка Oversize со стеганными рукавами и заклепками",
-        category: "Верхняя одежда",
-        size: "S",
-        color: "Голубой",
-        price: 3700,
-        quantity: 1,
-      },
-      {
-        image: "/images/sweater.jpg",
-        name: "Идеальный короткий свитер с кружевными вставками",
-        category: "Свитера и худи",
-        size: "S",
-        price: 1500,
-        quantity: 2,
-      },
-    ],
-  },
-  {
-    id: "№258841",
-    date: "12 ноября 2021",
-    total: 3700,
-    status: "В работе",
-    items: [
-      {
-        image: "/images/sweater.jpg",
-        name: "Идеальный короткий свитер с кружевными вставками",
-        category: "Свитера и худи",
-        size: "S",
-        price: 3700,
-        quantity: 1,
-      },
-    ],
-  },
-];
+import { valueUtil } from "@utils/valueUtil";
+import { useEffect, useState } from "react";
+import { orderApi } from "../api/orderApi";
+import { orderStatus } from "../util/orderStatus";
 
 export default function OrderHistory() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const statusDefault = urlParams.get("statusDefault") || "PENDING";
+  
+  const [selectedOrder, setSelectedOrder] = useState({});
+  const [orders, setOrder] = useState([]);
+  const [status, setStatus] = useState(statusDefault);
+  const getOrders = async () => {
+    const res = await orderApi.getOrders({
+      page: 1,
+      limit: 100,
+      status,
+    });
+
+    setOrder(res?.data?.data?.orders);
+  };
+
+  console.log("orders: ", orders);
+
+  useEffect(() => {
+    getOrders();
+  }, [status]);
+
+  const tabBar = [
+    "PENDING", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"
+  ]
+
   return (
     <AccountLayout>
-    <h2 className="text-2xl font-semibold mb-4">History Order</h2>
+      <h2 className="text-2xl font-semibold mb-4">History Order</h2>
 
-{/* Filter tabs */}
-<div className="flex gap-1 md:gap-4 mb-6">
-  <button className="px-2 py-1 md:px-4 md:py-2 bg-blue-100 text-blue-600 rounded-full">Belum Bayar</button>
-  <button className="px-2 py-1 md:px-4 md:py-2 bg-gray-100 text-gray-700 rounded-full">Dikemas</button>
-  <button className="px-2 py-1 md:px-4 md:py-2 bg-gray-100 text-gray-700 rounded-full">Dikirim</button>
-  <button className="px-2 py-1 md:px-4 md:py-2 bg-gray-100 text-gray-700 rounded-full">Batal</button>
-</div>
-
-{/* Orders */}
-<div className="space-y-6">
-  {orders.map((order) => (
-    <div key={order.id} className="border rounded-xl p-4 bg-white shadow-md">
-      <div className="flex justify-between items-center mb-4 border-b p-2">
-        <div className="text-xl text-gray-600">
-          Заказ <strong>{order.id}</strong> — {order.date}
+      {/* Filter tabs */}
+      <div className="overflow-x-auto mb-6">
+        <div className="flex gap-3 md:gap-4">
+          {tabBar.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setStatus(tab)}
+              className={`min-w-32 w-8 h-12 ${
+                status === tab ? "bg-blue-100 text-blue-600" : "bg-gray-100 border border-gray-200 text-gray-700"
+              } rounded-full`}
+            >
+              {orderStatus[tab]}
+            </button>
+          ))}
         </div>
-        <div className="text-blue-600 text-sm">{order.status}</div>
       </div>
+
+      {/* Orders */}
       <div className="space-y-6">
-        {order.items.map((item, index) => (
-          <div key={index} className="flex items-center gap-4">
-            <img src={"https://i.pravatar.cc/150"} alt={item.name} className="w-20 h-24 rounded object-cover" />
-            <div className="flex-1">
-              <p className="font-medium">{item.name}</p>
-              <p className="text-sm text-gray-500">{item.category} • Размер {item.size}</p>
-              {item.color && (
-                <span className="inline-block mt-1 px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded">
-                  {item.color}
-                </span>
-              )}
-            </div>
-            <div className="text-right text-sm">
-              {item.quantity} x {item.price}
-              <div className="text-lg font-semibold">{item.quantity * item.price}</div>
-            </div>
+        {orders.length > 0 ? orders.map((order) => (
+          <div
+            key={order.orderNumber}
+            className="border rounded-xl p-4 bg-white shadow-md"
+          >
+            <a
+              href={`/order/order-detail?orderId=${
+                order.id
+              }&orderJson=${JSON.stringify(order)}`}
+              className="flex justify-between items-center mb-4 border-b p-2"
+            >
+              <div className="text-lg text-marine-darkBlue">
+                {order.orderNumber}{" "}
+                <span className="hidden sm:inline-block">-</span>{" "}
+                <br className="sm:hidden" />{" "}
+                {valueUtil.formatDate(order.createdAt)}
+              </div>
+              <div className="hidden sm:inline-block text-blue-600 text-md uppercase">
+                {orderStatus[order.status]}
+              </div>
+            </a>
+            <a
+              href={`/order/order-detail?orderId=${
+                order.id
+              }&orderJson=${JSON.stringify(order)}`}
+              className="space-y-6"
+            >
+              {order.orderItems.map((item, index) => (
+                <div key={index} className="flex items-center gap-4">
+                  <img
+                    src={
+                      item?.product?.media[0]?.url ||
+                      "https://i.pravatar.cc/150"
+                    }
+                    alt={item.product.name}
+                    className="w-20 h-20 rounded object-cover shadow"
+                  />
+                  <div className="flex-1">
+                    <p className="text-sm sm:text-md font-medium text-marine-darkBlue">
+                      {item.product.name}
+                    </p>
+                    <p className="text-xs sm:text-sm text-gray-500">
+                      {item.quantity} x{" "}
+                      {valueUtil.formatPriceRupiah(item.unitPrice)}
+                    </p>
+                    <div className="text-sm sm:text-md font-medium text-marine-darkBlue">
+                      Rp {valueUtil.formatPriceRupiah(item.subtotal)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </a>
           </div>
-        ))}
+        )) : <NotFound message="Order Tidak Ditemukan" />}
       </div>
-    </div>
-  ))}
-</div>
     </AccountLayout>
   );
 }
