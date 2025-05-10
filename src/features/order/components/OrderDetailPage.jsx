@@ -1,39 +1,56 @@
+import MarineButton from "@components/ui/MarineButton";
+import { ratingApi } from "@features/rating/api/ratingApi";
+import RatingProductFormModal from "@features/rating/components/RatingProductFormModal";
+import { Rating } from "@smastrom/react-rating";
 import { valueUtil } from "@utils/valueUtil";
 import { FileText } from "lucide-react";
+import { useEffect, useState } from "react";
+import { orderApi } from "../api/orderApi";
 import { paymentApi } from "../api/paymentApi";
 import { orderStatus } from "../util/orderStatus";
-import { useEffect, useState } from "react";
-import { ratingApi } from "@features/rating/api/ratingApi";
-import MarineButton from "@components/ui/MarineButton";
-import RatingProductFormModal from "@features/rating/components/RatingProductFormModal";
 
 export default function OrderDetailPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const orderId = urlParams.get("orderId");
   const orderJson = urlParams.get("orderJson");
+  const [orderData, setOrderData] = useState({});
+  const [myRating, setMyRating] = useState([]);
   const orderJsonData = orderJson ? JSON.parse(orderJson) : {};
-  // const [isHasRated, setIsHasRated] = useState(true)
+  // const [orderJsonData, setOrderJsonData] = useState(orderJson ? JSON.parse(orderJson) : {})
+  const [loading, setLoading] = useState(true);
 
   if (!orderId || !orderJson) return window.history.back();
 
-  const checkIsHasRated = async () => {
-    if (orderJsonData.status !== "DELIVERED") {
-      return true;
+  const getOrderData = async () => {
+    try {
+      const res = await orderApi.getOrderById(orderId);
+      if (res?.data?.status) {
+        setOrderData(res?.data?.data);
+      }
+    } catch (error) {
+      console.log("GET ORDER BY ID ERR: ", error);
     }
+  };
 
-    if (
-      orderJsonData &&
-      orderJsonData?.id &&
-      orderJsonData?.orderItems.length > 0
-    ) {
-      await orderJsonData.orderItems.map(async (order) => {
-        const res = await ratingApi.checkRating(order.productId, orderId);
-        const isHasRated = res?.data?.data?.hasRated;
-        order.hasRated = isHasRated;
-      });
+  const getRatingMe = async () => {
+    const request = {
+      page: 1,
+      limit: 100,
+      filter: `{"orderId": "${orderId}"}`,
+    };
+    const resRating = await ratingApi.getRatingMe(request);
+    if (resRating?.data?.status) {
+      setMyRating(resRating?.data?.data?.ratings);
     }
+  };
 
-    // if(isHasRated === false) return <MarineButton size="xs">Berikan Ulasan</MarineButton>
+  const checkAlreadyRated = (productId) => {
+    const alreadyRated = myRating.find(
+      (rating) => rating.productId == productId && rating.orderId == orderId
+    );
+    // console.log(`alreadyRated ${productId}: `, alreadyRated);
+
+    return alreadyRated;
   };
 
   const handlePaymentOrder = async () => {
@@ -54,7 +71,11 @@ export default function OrderDetailPage() {
   };
 
   useEffect(() => {
-    checkIsHasRated();
+    getOrderData();
+    getRatingMe();
+    // (async () => {
+    //   await ;
+    // })();
   }, []);
 
   const [showRateModal, setShowRateModal] = useState(false);
@@ -70,6 +91,8 @@ export default function OrderDetailPage() {
     setShowRateModal(true);
   };
 
+  console.log("orderData: ", orderData);
+
   return (
     <>
       <div className="container mx-auto py-8 px-4 md:px-14 space-y-8">
@@ -82,20 +105,18 @@ export default function OrderDetailPage() {
             <div className="space-y-2">
               <div>
                 <p className="text-gray-500">Nomor Pesanan</p>
-                <p className="font-medium text-lg">
-                  {orderJsonData.orderNumber}
-                </p>
+                <p className="font-medium text-lg">{orderData.orderNumber}</p>
               </div>
               <div>
                 <p className="text-gray-500">Status</p>
                 <p className="font-semibold text-blue-600 uppercase">
-                  {orderStatus[orderJsonData.status]}
+                  {orderStatus[orderData.status]}
                 </p>
               </div>
               <div>
                 <p className="text-gray-500">Total Pembayaran</p>
                 <p className="font-semibold">
-                  Rp {valueUtil.formatPriceRupiah(orderJsonData.totalAmount)}
+                  Rp {valueUtil.formatPriceRupiah(orderData.totalAmount)}
                 </p>
               </div>
             </div>
@@ -103,18 +124,16 @@ export default function OrderDetailPage() {
             <div className="space-y-2">
               <div>
                 <p className="text-gray-500">Tanggal Order</p>
-                <p>{valueUtil.formatDateWithTime(orderJsonData.createdAt)}</p>
+                <p>{valueUtil.formatDateWithTime(orderData.createdAt)}</p>
               </div>
               <div>
                 <p className="text-gray-500">Catatan Pembeli</p>
-                <p className="italic text-gray-600">
-                  {orderJsonData.notes || "-"}
-                </p>
+                <p className="italic text-gray-600">{orderData.notes || "-"}</p>
               </div>
             </div>
           </div>
 
-          {orderJsonData.status === "PENDING" && (
+          {orderData.status === "PENDING" && (
             <div className="mt-6">
               <button
                 onClick={handlePaymentOrder}
@@ -129,51 +148,69 @@ export default function OrderDetailPage() {
           <div className="mt-8">
             <p className="text-gray-500 mb-2">Alamat Pengiriman</p>
             <div className="bg-gray-50 p-4 rounded-lg border text-sm whitespace-pre-line text-gray-700">
-              {orderJsonData.shippingAddress}
+              {orderData.shippingAddress}
             </div>
           </div>
         </div>
 
         <div className="border rounded-xl p-4 bg-white shadow-md">
           <div className="space-y-6">
-            {orderJsonData?.orderItems?.map((item, index) => (
-              <div key={index} className="flex items-center gap-4">
-                <img
-                  src={"https://i.pravatar.cc/150"}
-                  alt={item.product.name}
-                  className="w-20 h-20 rounded object-cover shadow"
-                />
-                <div className="flex-1">
-                  <p className="text-sm sm:text-md font-medium text-marine-darkBlue">
-                    {item.product.name}
-                  </p>
-                  <p className="text-xs sm:text-sm text-gray-500">
-                    {item.quantity} x{" "}
-                    {valueUtil.formatPriceRupiah(item.unitPrice)}
-                  </p>
-                  <div className="text-sm sm:text-md font-medium text-marine-darkBlue">
-                    Rp {valueUtil.formatPriceRupiah(item.subtotal)}
-                    {!item.isHasRated ? "AAA" : "SSS"}
+            {orderJsonData?.orderItems?.map((item, index) => {
+              const rating = checkAlreadyRated(item.productId);
+              return (
+                <div key={index} className="flex items-center gap-4">
+                  <img
+                    src={"https://i.pravatar.cc/150"}
+                    alt={item.product.name}
+                    className="w-20 h-20 rounded-xl object-cover shadow"
+                  />
+                  <div className="flex-1">
+                    <p className="line-clamp-1 text-sm sm:text-md font-medium text-marine-darkBlue">
+                      {item.product.name}
+                    </p>
+                    <p className="text-xs sm:text-sm text-gray-500">
+                      {item.quantity} x{" "}
+                      {valueUtil.formatPriceRupiah(item.unitPrice)}
+                    </p>
+                    <div className="text-sm sm:text-md font-medium text-marine-darkBlue">
+                      Rp {valueUtil.formatPriceRupiah(item.subtotal)}
+                    </div>
+                    {orderData.status === "DELIVERED" && (
+                      <>
+                        {!rating?.id ? (
+                          <MarineButton
+                            onClick={() => showRatingModal(item.product)}
+                            size="xs"
+                          >
+                            Berikan Ulasan
+                          </MarineButton>
+                        ) : (
+                          <div className="flex flex-wrap justify-start items-center gap-x-2 gap-y-1">
+                            <Rating
+                              readOnly
+                              halfFillMode="svg"
+                              style={{ maxWidth: 80 }}
+                              value={rating.rating}
+                            />
+                            <p className="line-clamp-2 text-marine-darkBlue text-sm">
+                              <span className="hidden sm:inline">(</span>Ulasan:{" "}
+                              {rating.comment}
+                              <span className="hidden sm:inline">)</span>
+                            </p>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
-                  {orderJsonData.status === "DELIVERED" && (
-                    <>
-                      {!item.isHasRated ? (
-                        <MarineButton
-                          onClick={() => showRatingModal(item.product)}
-                          size="xs"
-                        >
-                          Berikan Ulasan
-                        </MarineButton>
-                      ) : null}
-                    </>
-                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
       <RatingProductFormModal
+        getRatingMe={getRatingMe}
+        orderJsonData={orderJsonData}
         showModal={showRateModal}
         handleCloseModal={closeRateModal}
         product={selectedProductRate}

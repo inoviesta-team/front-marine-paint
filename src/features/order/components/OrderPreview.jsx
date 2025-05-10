@@ -101,14 +101,20 @@ export default function OrderPreview() {
       quantity: item.quantity,
     }));
 
+    // const request = {
+    //   customerId: user.id,
+    //   addressId: selectedAddressId,
+    //   shippingMethod: selectedShipping.id,
+    //   cod: "no",
+    //   notes: inputUser.notes,
+    //   orderItems,
+    // };
+    
     const request = {
-      customerId: user.id,
+      cartIds: selectedCart.map((item) => item.id),
       addressId: selectedAddressId,
-      shippingMethod: selectedShipping.id,
-      cod: "no",
-      notes: inputUser.notes,
-      orderItems,
-    };
+      notes: inputUser.notes
+    }
 
     console.log("req: ", request);
     const resOrder = await orderApi.createOrder(request);

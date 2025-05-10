@@ -90,10 +90,10 @@ export default function OrderHistory() {
                       "https://i.pravatar.cc/150"
                     }
                     alt={item.product.name}
-                    className="w-20 h-20 rounded object-cover shadow"
+                    className="w-20 h-20 rounded-xl object-cover shadow"
                   />
                   <div className="flex-1">
-                    <p className="text-sm sm:text-md font-medium text-marine-darkBlue">
+                    <p className="line-clamp-1 text-sm sm:text-md font-medium text-marine-darkBlue">
                       {item.product.name}
                     </p>
                     <p className="text-xs sm:text-sm text-gray-500">

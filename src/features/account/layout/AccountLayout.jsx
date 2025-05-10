@@ -1,19 +1,18 @@
-import useAuthStore from '@features/auth/zustand/useAuthStore'
-import React from 'react'
+import useAuthStore from "@features/auth/zustand/useAuthStore";
+import React from "react";
 
 export default function AccountLayout({ children }) {
+  const { user, logout } = useAuthStore();
 
-    const { user, logout } = useAuthStore();
-
-    const url = new URL(window.location.href).pathname;
+  const url = new URL(window.location.href).pathname;
 
   return (
     <div className="font-sans min-h-screen bg-gray-50 py-3 container mx-auto px-4 md:px-14 relative z-10">
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
-          <div className="lg:sticky lg:top-16 w-full lg:w-1/4 relative mx-auto lg:max-w-xl min-w-0 break-words bg-white mb-6 shadow-lg rounded-xl">
-            <div className="p-4">
-              <div className="flex flex-wrap justify-center">
-                {/* <div className="w-full flex justify-center">
+      <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
+        <div className="lg:sticky lg:top-16 w-full lg:w-1/4 relative mx-auto lg:max-w-xl min-w-0 break-words bg-white mb-6 shadow-lg rounded-xl">
+          <div className="p-4">
+            <div className="flex flex-wrap justify-center">
+              {/* <div className="w-full flex justify-center">
                   <div className="relative">
                     <img
                       src="https://github.com/creativetimofficial/soft-ui-dashboard-tailwind/blob/main/build/assets/img/team-2.jpg?raw=true"
@@ -31,27 +30,69 @@ export default function AccountLayout({ children }) {
                     </div>
                   </div>
                 </div> */}
-              </div>
-              <div className="px-6 mt-2 mb-6">
-                <h3 className="text-xl text-slate-700 font-bold leading-normal mb-1">
-                  {user.name}
-                </h3>
-                <div class="text-xs mt-0 mb-2 text-slate-400 font-bold uppercase">
-                  {user.email}
-                </div>
-              </div>
-              <nav className="space-y-4 px-4">
-          <a className={`${url === '/account/address' || url === '/account' ? 'bg-blue-50 font-medium text-blue-600' : 'text-gray-600'} p-3 rounded-md block`} href="/account/address">Alamat</a>
-          <a className={`${url === '/account/edit-profile' ? 'bg-blue-50 font-medium text-blue-600' : 'text-gray-600'} p-3 rounded-md block`} href="/account/edit-profile">Edit Profile</a>
-          <a className={`${url === '/order' ? 'bg-blue-50 font-medium text-blue-600' : 'text-gray-600'} p-3 rounded-md block`} href="/order">History Order</a>
-          <a className={`${url === '/account/change-password' ? 'bg-blue-50 font-medium text-blue-600' : 'text-gray-600'} p-3 rounded-md block`} href="/account/change-password">Ganti Password</a>
-          <button onClick={logout} className="p-3 rounded-md block text-red-500" href="/account/change-password">Keluar / Logout</button>
-        </nav>
             </div>
+            <div className="px-4 md:px-3 mt-2 mb-6">
+              <h3 className="text-xl text-slate-700 font-bold leading-normal mb-1">
+                {user.name}
+              </h3>
+              <div class="text-xs mt-0 mb-2 text-slate-400 font-bold uppercase">
+                {user.email}
+              </div>
+            </div>
+            <nav className="space-y-4 md:px-1">
+              <a
+                className={`${
+                  url === "/account/address" || url === "/account"
+                    ? "bg-blue-50 font-medium text-blue-600"
+                    : "text-gray-600"
+                } p-3 rounded-md block`}
+                href="/account/address"
+              >
+                Alamat
+              </a>
+              <a
+                className={`${
+                  url === "/account/edit-profile"
+                    ? "bg-blue-50 font-medium text-blue-600"
+                    : "text-gray-600"
+                } p-3 rounded-md block`}
+                href="/account/edit-profile"
+              >
+                Edit Profile
+              </a>
+              <a
+                className={`${
+                  url === "/order"
+                    ? "bg-blue-50 font-medium text-blue-600"
+                    : "text-gray-600"
+                } p-3 rounded-md block`}
+                href="/order"
+              >
+                History Order
+              </a>
+              <a
+                className={`${
+                  url === "/account/change-password"
+                    ? "bg-blue-50 font-medium text-blue-600"
+                    : "text-gray-600"
+                } p-3 rounded-md block`}
+                href="/account/change-password"
+              >
+                Ganti Password
+              </a>
+              <button
+                onClick={logout}
+                className="p-3 rounded-md block text-red-500"
+                href="/account/change-password"
+              >
+                Keluar / Logout
+              </button>
+            </nav>
           </div>
+        </div>
 
-          <div className="w-full lg:w-3/4 min-h-screen">
-            {/* <div className="flex justify-around items-center bg-white rounded-xl p-6 w-full shadow-md mb-3">
+        <div className="w-full lg:w-3/4 min-h-screen">
+          {/* <div className="flex justify-around items-center bg-white rounded-xl p-6 w-full shadow-md mb-3">
               <button
                 className={`${tab === 'address' ? 'text-marine-lightBlue font-semibold' : 'text-gray-500 font-medium'}`}
                 onClick={() => setTab('address')}
@@ -71,12 +112,10 @@ export default function AccountLayout({ children }) {
                 Ubah Password
               </button>
             </div> */}
-            {/* USER ADDRESSES */}
-            <div className="rounded-xl">
-             {children}
-            </div>
-          </div>
+          {/* USER ADDRESSES */}
+          <div className="rounded-xl">{children}</div>
         </div>
       </div>
-  )
+    </div>
+  );
 }
