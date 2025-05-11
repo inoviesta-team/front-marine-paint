@@ -7,10 +7,11 @@ export default function MarineArticleCard({
     excerpt: 'Lorem ipsum dolor sit amet...',
     readTime: '3 mins reading',
     publishedAt: '1 month ago'
-  }
+  },
+  isShrink = false
 }) {
   return (
-    <div className="group h-full">
+    <div className={`${isShrink && "flex-shrink-0 max-w-96"} group h-full`}>
       <div className="marine-card overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-all duration-300">
         {/* Enhanced image section with hover effect */}
         <div className="relative h-52 overflow-hidden">
@@ -41,7 +42,7 @@ export default function MarineArticleCard({
           <p className='font-sans text-gray-600 text-sm mb-2'>
             {article.publishedAt}
           </p>
-          <h3 className="font-sans font-bold text-marine-darkBlue text-xl mb-2.5 group-hover:text-marine-blue transition-colors duration-300 line-clamp-3">
+          <h3 className="font-sans font-bold text-marine-darkBlue text-xl mb-2.5 group-hover:text-marine-blue transition-colors duration-300 line-clamp-2">
             {article.title}
           </h3>
           

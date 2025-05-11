@@ -7,6 +7,8 @@ import MarineLayout from "@layouts/MarineLayout.astro";
 import ProductAddToCart from "./components/ProductAddToCart";
 import ProductImageGallery from "./components/ProductImageGallery";
 import TabSection from "./components/TabSection";
+import { valueUtil } from "@utils/valueUtil";
+import MainLayout from "@layouts/MainLayout.astro";
 
 export async function getStaticPaths() {
   try {
@@ -74,47 +76,46 @@ const productImages = [
 ];
 ---
 
-<MarineLayout
+<MainLayout
   title={`${product.media.length} -  ${product.name} | Toko Koko Lie`}
   description={product.description}
   image={product.image}
->
-  <MarineHeader client:load />
-  
+> 
   <main>
-    <!-- Breadcrumb -->
-    <div class="bg-gray-50 py-3">
-      <div class="container mx-auto px-4 md:px-14 relative z-10">
-        <nav class="flex" aria-label="Breadcrumb">
-          <ol class="flex items-center space-x-1 text-sm font-sans">
-            <li>
-              <a href="/" class="text-marine-blue hover:text-marine-darkBlue">Home</a>
-            </li>
-            <li class="flex items-center">
-              <span class="text-gray-500 mx-1">/</span>
-              <a href="/products" class="text-marine-blue hover:text-marine-darkBlue">Products</a>
-            </li>
-            <li class="flex items-center">
-              <span class="text-gray-500 mx-1">/</span>
-              <a href={`/products?categoryId=${product.categoryId}`} class="text-marine-blue hover:text-marine-darkBlue capitalize">
-                {product.categoryName || 'Category'}
-              </a>
-            </li>
-            <li class="flex items-center">
-              <span class="text-gray-500 mx-1">/</span>
-              <span class="text-gray-600" aria-current="page">
-                {product.name}
-              </span>
-            </li>
-          </ol>
-        </nav>
-      </div>
-    </div>
-    
     <!-- Product Detail Section -->
-    <section class="py-12 bg-white">
-      <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <section class="sm:py-4 bg-white">
+      <div class=" mx-auto sm:py-4 px-4 md:px-14 relative z-10">
+        
+        <!-- BREADCRUMB -->
+        <div class="py-3">
+          <div class="container mx-auto px-2 py-3 relative z-10">
+            <nav class="flex" aria-label="Breadcrumb">
+              <ol class="flex items-center space-x-1 text-sm font-sans">
+                <li>
+                  <a href="/" class="text-marine-blue hover:text-marine-darkBlue">Beranda</a>
+                </li>
+                <li class="flex items-center">
+                  <span class="text-gray-500 mx-1">/</span>
+                  <a href="/products" class="text-marine-blue hover:text-marine-darkBlue">Produk</a>
+                </li>
+                <!-- <li class="flex items-center">
+                  <span class="text-gray-500 mx-1">/</span>
+                  <a href={`/products?categoryId=${product.categoryId}`} class="text-marine-blue hover:text-marine-darkBlue capitalize">
+                    {product.categoryName || 'Category'}
+                  </a>
+                </li> -->
+                <li class="flex items-center">
+                  <span class="text-gray-500 mx-1">/</span>
+                  <span class="text-gray-600" aria-current="page">
+                    {product.name}
+                  </span>
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <!-- Product Images -->
           <div>
             <ProductImageGallery productId={product?.id} productImages={product.media} client:load />
@@ -122,26 +123,18 @@ const productImages = [
           
           <!-- Product Info -->
           <div>
-            <h1 class="font-sans font-bold text-marine-darkBlue text-3xl mb-3">
+            <h1 class="font-sans font-bold text-marine-darkBlue/85 text-2xl sm:text-4xl mb-3">
               {product.name}
             </h1>
             
-            <!-- Product Code/SKU if available -->
-            {product.sku && (
-              <p class="text-sm text-gray-500 mb-2">
-                SKU: {product.sku}
-              </p>
-            )}
-            
             <!-- Ratings -->
-            <div class="flex items-center mb-4">
-              <div class="flex text-yellow-400">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <svg
-                    width="16"
-                    height="16"
+            <div class="flex items-center mb-1">
+              <div class="flex text-[#FFA52F]">
+                <svg
+                    width="18"
+                    height="18"
                     viewBox="0 0 24 24"
-                    fill={i < Math.floor(product.avgRating || 0) ? "currentColor" : "none"}
+                    fill={"currentColor"}
                     stroke="currentColor"
                     stroke-width="2"
                     stroke-linecap="round"
@@ -150,9 +143,8 @@ const productImages = [
                   >
                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                   </svg>
-                ))}
               </div>
-              <span class="ml-2 text-sm text-gray-600">
+              <span class="ml-1 text-base text-gray-600">
                 {product.avgRating?.toFixed(1) || '0.0'} ({product.ratingCount || 0} {product.ratingCount === 1 ? 'Rating' : 'Ratings'})
               </span>
             </div>
@@ -160,21 +152,17 @@ const productImages = [
             <!-- Price -->
             <div class="mb-4">
               <div class="flex items-end gap-2">
-                <span class="font-sans font-bold text-2xl text-marine-darkBlue">
-                  Rp{product.price?.toLocaleString()}
+                <span class="font-sans font-bold text-xl sm:text-2xl text-marine-darkBlue/85">
+                  Rp {valueUtil.formatPriceRupiah(product.price)}
                 </span>
                 
-                {product.originalPrice && product.originalPrice > product.price && (
-                  <span class="font-sans text-gray-500 line-through text-sm">
-                    Rp{product.originalPrice.toLocaleString()}
+                  <span class="font-sans text-[#697886] line-through text-base">
+                    Rp {valueUtil.formatPriceRupiah(product.price + (product.price * 40/100))}
                   </span>
-                )}
                 
-                {product.discount && (
-                  <span class="font-sans text-green-600 text-sm font-medium">
-                    Save {product.discount}%
+                  <span class="font-sans text-[#697886] text-sm font-medium">
+                    Hemat 40%
                   </span>
-                )}
               </div>
             </div>
             
@@ -194,12 +182,12 @@ const productImages = [
             )}
             
             <!-- Description -->
-            <div class="mb-6">
+            <!-- <div class="mb-6">
               <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-2">Description</h3>
               <p class="font-sans text-gray-600 whitespace-pre-line">
                 {product.description}
               </p>
-            </div>
+            </div> -->
             
             <!-- Key Features -->
             {product.features && product.features.length > 0 && (
@@ -215,6 +203,18 @@ const productImages = [
             
             <!-- Quantity -->
             <ProductAddToCart product={product} client:only="react" />
+
+            <div class="my-4">
+              <p class="text-[#697886]">Tersedia juga pembelian via</p>
+              <div class="flex items-center justify-start">
+                <a href="#">
+                  <img src="/images/icon/tokopedia.png" alt="Tokopedia" />
+                </a>
+                <a href="#">
+                  <img src="/images/icon/shopee.png" alt="Shopee" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -380,6 +380,4 @@ const productImages = [
     <!-- Floating WhatsApp Button -->
     <FloatingWhatsAppButton client:load />
   </main>
-  
-  <MarineFooter client:visible />
-</MarineLayout>
+</>

@@ -1,4 +1,5 @@
 import useCartStore from '@features/cart/zustand/useCartStore';
+import { Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
 
 export default function QuantitySelector({ 
@@ -59,16 +60,16 @@ export default function QuantitySelector({
     <div className="flex items-center">
       <button 
         type="button"
-        className={`w-10 h-10 bg-gray-100 rounded-l-lg flex items-center justify-center border border-gray-200 text-marine-darkBlue transition-colors ${
+        className={`w-10 h-10 bg-white rounded-lg flex items-center justify-center border-2 border-gray-400 transition-colors ${
           disabled || quantity <= min 
             ? 'cursor-not-allowed opacity-50' 
-            : 'hover:bg-gray-200'
+            : 'text-marine-darkBlue'
         }`}
         onClick={handleDecrement}
         disabled={disabled || quantity <= min}
         aria-label="Decrease quantity"
       >
-        <span className="text-xl font-bold">−</span>
+        <span className="text-xl font-bold"><Minus size={20} color='#15486b' /></span>
       </button>
       
       <input 
@@ -77,7 +78,7 @@ export default function QuantitySelector({
         min={min}
         max={max}
         onChange={handleInputChange}
-        className={`w-16 h-10 border-t border-b border-gray-200 text-center font-sans focus:outline-none focus:ring-1 focus:ring-marine-blue ${
+        className={`w-16 h-10 border-gray-200 text-center font-sans focus:outline-none focus:ring-1 focus:ring-marine-blue rounded-lg mx-1 ${
           disabled ? 'cursor-not-allowed bg-gray-100' : ''
         }`}
         disabled={disabled}
@@ -86,16 +87,16 @@ export default function QuantitySelector({
       
       <button 
         type="button"
-        className={`w-10 h-10 bg-gray-100 rounded-r-lg flex items-center justify-center border border-gray-200 text-marine-darkBlue transition-colors ${
+        className={`w-10 h-10 bg-white rounded-lg flex items-center justify-center border-2 border-gray-400 transition-colors ${
           disabled || quantity >= max 
             ? 'cursor-not-allowed opacity-50' 
-            : 'hover:bg-gray-200'
+            : 'text-marine-darkBlue'
         }`}
         onClick={handleIncrement}
         disabled={disabled || quantity >= max}
         aria-label="Increase quantity"
       >
-        <span className="text-xl font-bold">+</span>
+        <span className="text-xl font-bold"><Plus size={20} color='#15486b' /></span>
       </button>
     </div>
   );

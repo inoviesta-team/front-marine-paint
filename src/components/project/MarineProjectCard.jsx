@@ -1,9 +1,9 @@
 import MarineButton from '@components/ui/MarineButton';
 import React from 'react';
 
-export default function MarineProjectCard({ project = { name: 'KM BUANA', type: 'Ship' } }) {
+export default function MarineProjectCard({ project = { name: 'KM BUANA', type: 'Ship' }, isShrink = false }) {
   return (
-    <div className="marine-card overflow-hidden group">
+    <div className={`${isShrink && "flex-shrink-0 max-w-80"} marine-card overflow-hidden group`}>
       <div className="relative h-48 overflow-hidden">
         <div className="absolute inset-0 bg-marine-darkBlue/20 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
         {project.image ? (

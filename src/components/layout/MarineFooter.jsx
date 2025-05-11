@@ -4,8 +4,8 @@ export default function MarineFooter() {
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className="bg-[url('/images/abstract-pattern-2.png')] bg-cover bg-left pt-12 pb-6 px-4 md:px-14 text-white">
-      <div className="container mx-auto py-0 px-4 md:px-14">
+    <footer className="bg-[url('/images/abstract-pattern-2.png')] bg-cover bg-left pt-12 pb-6 px-2 md:px-0 text-white">
+      <div className="mx-auto py-0 px-4 md:px-14">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div>
             <img src="/images/logo-white.png" alt="Koko Lie" className='w-24' />
@@ -64,10 +64,10 @@ export default function MarineFooter() {
               <span className="font-sans font-bold text-white md:text-right -mb-4">Online Shop</span>
               <div className="flex items-center md:justify-end mt-2">
                 <a href="#">
-                  <img src="/images/icon/tokopedia.png" alt="" />
+                  <img src="/images/icon/tokopedia.png" alt="Tokopedia" />
                 </a>
                 <a href="#">
-                  <img src="/images/icon/shopee.png" alt="" />
+                  <img src="/images/icon/shopee.png" alt="Shopee" />
                 </a>
               </div>
             </div>

@@ -8,7 +8,7 @@ import MarineTestimonialCard from "@components/testimonial/MarineTestimonialCard
 import MarineButton from "@components/ui/MarineButton";
 import MarineValueCard from "@components/value/MarineValueCard";
 import MainLayout from "@layouts/MainLayout.astro";
-import { Map, MapPin } from "lucide-react";
+import { ArrowRight, Map, MapPin } from "lucide-react";
 
 // Fetch data for the page
 let products = [];
@@ -75,20 +75,20 @@ try {
               href="/products" 
               variant="tertiary"
               size="lg"
-              className="w-full sm:w-auto text-center shadow-lg rounded-xl hover:shadow-xl transition-all duration-300"
+              className="w-full sm:w-auto text-center shadow-lg rounded-xl hover:shadow-xl transition-all duration-300 sm:flex sm:items-center gap-2"
             >
-              Belanja Sekarang
+              <span>Belanja Sekarang</span> <ArrowRight className="hidden sm:inline"/>
             </MarineButton>
             
             <!-- Fixed contrast issue with the "Hubungi kami" button -->
             <MarineButton
               as="a" 
               href="/contact-us" 
-              variant="primary"
+              variant="tertiary"
               size="lg"
-              className="w-full sm:w-auto text-center bg-green-500 rounded-xl text-marine-darkBlue hover:bg-gray-100 sm:flex sm:items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="w-full sm:w-auto text-center text-white hover:text-white bg-green-500 rounded-xl sm:flex sm:items-center gap-2 shadow-lg  transition-all duration-300"
             >
-              <span>Konsultasi Whatsapp</span>
+              <span>Konsultasi <span class="hidden sm:inline">via</span> Whatsapp</span>
               <svg
               class="hidden sm:inline"
                 xmlns="http://www.w3.org/2000/svg"
@@ -127,10 +127,12 @@ try {
       </div>
       
       <!-- Enhanced product grid with hover effects -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-        {products.map((product) => (
+      <div class="overflow-x-auto">
+        <div class="flex gap-6 p-2">
+          {products.map((product) => (
           <MarineProductCard product={product} />
         ))}
+        </div>
       </div>
       
       <!-- Enhanced CTA button -->
@@ -179,12 +181,14 @@ try {
   <section class="py-16 bg-white relative overflow-hidden">
     <div class="absolute -top-20 -left-20 w-40 h-40 rounded-full bg-marine-accent opacity-5"></div>
     <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
-      <h2 class="font-sans font-bold text-marine-blue text-3xl text-center mb-12">Projects</h2>
+      <h2 class="font-sans font-bold text-marine-blue text-3xl text-center mb-12">Projek Kami</h2>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="overflow-x-auto">
+        <div class="flex gap-6 p-2">
         {projects.map((project) => (
-          <MarineProjectCard project={project} />
+          <MarineProjectCard isShrink={true} project={project} />
         ))}
+      </div>
       </div>
       
       <div class="flex justify-center mt-12">
@@ -223,7 +227,7 @@ try {
       
       <!-- Enhanced testimonial cards with better layout -->
       <div class="overflow-x-auto">
-        <div class="flex gap-3 p-2">
+        <div class="flex gap-4 sm:gap-6 p-2">
 
           {testimonials.map((testimonial) => (
             <MarineTestimonialCard testimonial={testimonial} />
@@ -271,10 +275,12 @@ try {
       </div>
       
       <!-- Enhanced article cards with better layout -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="overflow-x-auto">
+        <div class="flex gap-6 p-2">
         {articles.map((article) => (
-          <MarineArticleCard article={article} />
+          <MarineArticleCard isShrink={true} article={article} />
         ))}
+      </div>
       </div>
       
       <!-- Enhanced CTA button -->

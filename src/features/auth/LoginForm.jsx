@@ -140,7 +140,7 @@ export default function LoginForm() {
                 <ArrowRight size={18} className="ml-2" />
               </button>
 
-              <div className="mt-6">
+              {/* <div className="mt-6">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-200"></div>
@@ -178,7 +178,7 @@ export default function LoginForm() {
                     <span className="ml-2">Google</span>
                   </button>
                 </div>
-              </div>
+              </div> */}
             </form>
 
             <p className="text-center mt-6 text-gray-600">

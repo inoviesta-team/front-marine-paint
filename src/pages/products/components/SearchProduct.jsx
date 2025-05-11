@@ -3,6 +3,7 @@ import MarineButton from "@components/ui/MarineButton";
 import { brandApi } from "@features/products/api/brandApi";
 import { categoryApi } from "@features/products/api/categoryApi";
 import { productApi } from "@features/products/api/productApi";
+import MarineProductCardSearch from "@features/products/components/MarineProductCardSearch";
 import { ArrowDown, ArrowRight, ArrowUp, Filter, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
@@ -148,7 +149,7 @@ export default function SearchProduct() {
                 onChange={handleInputFilterChange}
                 id="search"
                 name="search"
-                className="focus:ring-blue-500 focus:border-blue-500 block w-full h-12 pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
+                className="focus:ring-blue-500 focus:border-blue-500 block w-full h-12 pl-4 sm:pl-5 pr-12 sm:text-sm border-gray-300 rounded-md"
                 placeholder="Cari produk..."
                 type="search"
               />
@@ -304,9 +305,9 @@ export default function SearchProduct() {
           <p className="mb-2 text-lg font-medium text-gray-900">
             Ditemukan {pagination?.totalProducts} produk: Anti Fouling Ashdaq
           </p>
-          <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {products.map((product) => (
-              <MarineProductCard
+              <MarineProductCardSearch
                 key={`product-${product.id}`}
                 product={product}
               />
