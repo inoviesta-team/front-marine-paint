@@ -1,3 +1,4 @@
+import MarineButton from '@components/ui/MarineButton';
 import React from 'react';
 
 export default function MarineProjectCard({ project = { name: 'KM BUANA', type: 'Ship' } }) {
@@ -17,12 +18,23 @@ export default function MarineProjectCard({ project = { name: 'KM BUANA', type: 
           </div>
         )}
       </div>
-      <div className="p-4 flex justify-between items-center">
+      <div className="px-4 pt-4 flex justify-between items-center">
         <div>
           <h3 className="font-sans font-bold text-marine-darkBlue text-xl mb-1">{project.name}</h3>
-          <p className="font-sans font-bold text-marine-blue">{project.type}</p>
+          {/* <p className="font-sans font-bold text-marine-blue">{project.type}</p> */}
+          <p className="font-sans text-neutral-600/90 line-clamp-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae, adipisci!</p>
         </div>
-        <a href="#" className="font-sans text-marine-lightBlue hover:text-marine-blue transition-colors">Detail</a>
+      </div>
+      <div className="px-4 py-4">
+      <MarineButton
+          as="a" 
+          href="/products" 
+          variant="tertiary"
+          size="md"
+          className="border-marine-blue/50 text-marine-blue/85 font-sans w-full text-center  rounded-xl py-2 transition-all duration-300"
+        >
+          Detail
+        </MarineButton>
       </div>
     </div>
   );

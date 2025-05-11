@@ -78,7 +78,8 @@ export const marineApi = {
    * Get all projects
    */
   getProjects: async (filterRequest = {}) => {
-    const products = await axiosInstance.get("/products", filterRequest);
+    // const products = await axiosInstance.get("/products", filterRequest);
+    const products = marineProjects;
 
     return products;
   },
@@ -146,7 +147,7 @@ export const marineApi = {
       filteredTestimonials = filteredTestimonials.slice(0, params.limit);
     }
     
-    return filteredTestimonials;
+    return [...filteredTestimonials, ...filteredTestimonials];
   },
 
   /**

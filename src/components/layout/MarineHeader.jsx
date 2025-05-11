@@ -26,15 +26,16 @@ export default function MarineHeader() {
   ];
 
   return (
-    <header className="bg-white py-6 shadow-md">
+    <header className="bg-white py-4 sm:py-3 shadow-md">
       <div className="mx-auto px-4 sm:px-6 lg:px-16">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex-shrink-0">
             <a href="/" className="flex items-center">
-              <span className="text-2xl font-bold text-marine-blue">
+              <img src="/images/logo.png" alt="Koko Lie" className="w-20" />
+              {/* <span className="text-2xl font-bold text-marine-blue">
                 Toko Koko Lie
-              </span>
+              </span> */}
             </a>
           </div>
 
@@ -111,7 +112,7 @@ export default function MarineHeader() {
             {isClient && isAuthenticated ? (
               <UserDropdown />
             ) : (
-              <MarineButton as="a" href="/account/login">Masuk</MarineButton>
+              <MarineButton variant="tertiary" className="rounded-xl" as="a" href="/account/login">Masuk</MarineButton>
             )}
           </div>
         </div>
@@ -157,12 +158,7 @@ export default function MarineHeader() {
             {isClient && isAuthenticated ? (
               <UserDropdown />
             ) : (
-              <a
-                href="/account/login"
-                className="block border border-marine-blue bg-marine-blue text-white rounded px-4 py-1 text-sm font-sans font-bold hover:bg-marine-darkBlue"
-              >
-                Masuk
-              </a>
+              <MarineButton variant="tertiary" className="rounded-xl w-full lg:w-auto text-center" as="a" href="/account/login">Masuk</MarineButton>
             )}
           </div>
         )}

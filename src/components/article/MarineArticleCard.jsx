@@ -29,31 +29,34 @@ export default function MarineArticleCard({
           
           {/* Article metadata overlay */}
           <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-sans text-marine-darkBlue z-20">
-            {article.publishedAt}
-          </div>
-          <div className="absolute top-4 right-4 bg-marine-blue/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-sans text-white z-20">
             {article.readTime}
           </div>
+          {/* <div className="absolute top-4 right-4 bg-marine-blue/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-sans text-white z-20">
+            {article.readTime}
+          </div> */}
         </div>
         
         {/* Enhanced content section */}
         <div className="p-6 flex-1 flex flex-col">
-          <h3 className="font-sans font-bold text-marine-darkBlue text-xl mb-3 group-hover:text-marine-blue transition-colors duration-300 line-clamp-2">
+          <p className='font-sans text-gray-600 text-sm mb-2'>
+            {article.publishedAt}
+          </p>
+          <h3 className="font-sans font-bold text-marine-darkBlue text-xl mb-2.5 group-hover:text-marine-blue transition-colors duration-300 line-clamp-3">
             {article.title}
           </h3>
           
-          <p className="font-sans text-gray-600 text-sm mb-6 flex-1 line-clamp-3">
+          <p className="font-sans text-gray-600 text-sm mb-5 line-clamp-2">
             {article.excerpt}
           </p>
           
           {/* Enhanced button with better positioning */}
-          <div className="mt-auto">
+          <div>
             <MarineButton 
               as="a" 
               href={`/articles/${article.id}`} 
               variant="tertiary" 
-              size="sm"
-              className="w-full justify-center"
+              // size="sm"
+              className="border w-full text-center rounded-xl"
             >
               Baca Selengkapnya
             </MarineButton>

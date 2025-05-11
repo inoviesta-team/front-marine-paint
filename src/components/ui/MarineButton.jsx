@@ -3,7 +3,7 @@ import React from 'react';
 const variants = {
   primary: 'bg-marine-blue text-white hover:bg-marine-darkBlue shadow-md hover:shadow-lg',
   secondary: 'border-2 border-white text-white hover:bg-white/10 shadow-md',
-  tertiary: 'bg-white text-marine-blue border-2 border-marine-blue hover:bg-gray-50 shadow-md'
+  tertiary: 'bg-white text-marine-blue border-2 border-marine-blue shadow-md'
 };
 
 const sizes = {
@@ -35,7 +35,8 @@ export default function MarineButton({
     return (
       <a
         href={href}
-        className={`inline-block hover:text-white ${baseClasses} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+        // className={`inline-block hover:text-white ${baseClasses} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`inline-block hover:text-marine-blue ${baseClasses} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         {...props}
       >
         {loading ? (
