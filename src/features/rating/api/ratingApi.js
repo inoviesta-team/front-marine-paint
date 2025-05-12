@@ -13,6 +13,17 @@ export const ratingApi = {
         }
     },
 
+    getRatingByProductId: async (productId) => {
+        try {
+            const response = await axiosInstance.get(`/ratings/products/${productId}`);
+            
+            return response;
+        } catch (error) {
+            console.error('GET RATING ME ERR: ', error);
+            throw error;
+        }
+    },
+
     checkRating: async (productId, orderId) => {
         try {
             const response = await axiosInstance.get(`/ratings/check?productId=${productId}&orderId=${orderId}`);

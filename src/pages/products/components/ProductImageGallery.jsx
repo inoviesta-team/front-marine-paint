@@ -10,6 +10,8 @@ export default function ProductImageGallery({ productId, productImages = [] }) {
   const getImages = async () => {
     const response = await productApiStatic.getImages(productId);
     const images = response.data
+    console.log("images: ", images);
+    
    
     setSelectedImage(images && images.find((img) => img.isMain) || images[0]);
     // setSelectedImage(null);
@@ -23,14 +25,11 @@ export default function ProductImageGallery({ productId, productImages = [] }) {
   return (
     <div className="w-full">
       {/* Main Image with navigation */}
-      <div className="relative mb-4 border border-gray-200 rounded-lg overflow-hidden h-80 flex items-center justify-center bg-white">
+      <div className="relative mb-4 border border-gray-200 rounded-lg overflow-hidden h-80 sm:h-96 flex items-center justify-center bg-white">
         <img 
-          src={beUrl + selectedImage?.filePath} 
+          src={selectedImage ? beUrl + selectedImage?.filePath : "/images/no-image.png"} 
           alt={selectedImage?.fileName} 
           className="w-full h-full object-contain transition-all duration-300"
-          onError={(e) => {
-            e.target.src = "/images/no-image.png"
-          }}
         />
       </div>
       
@@ -39,17 +38,17 @@ export default function ProductImageGallery({ productId, productImages = [] }) {
       <div className="flex gap-3 p-2">
         {otherImage.map((image, index) => (
           <div 
-            key={index}
+            key={`product-image-${index}`}
             className={`flex-shrink-0 border rounded-lg overflow-hidden w-24 h-24 cursor-pointer transition-all duration-200 ${
               selectedImage?.id === image?.id
-                ? "border-marine-blue ring-2 ring-marine-blue ring-opacity-50" 
-                : "border-gray-200 hover:border-marine-blue"
+                ? "border-marine-blue ring-2 ring-marine-blue/5" 
+                : "border-gray-200 hover:border-marine-blue opacity-55"
             }`}
             onClick={() => setSelectedImage(image)}
           >
             <img 
               src={beUrl + image.filePath} 
-              alt={`View ${index + 1}`} 
+              alt={`Product image ${image.fileName}`} 
               className="w-full h-full object-cover"
             />
           </div>

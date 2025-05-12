@@ -6,17 +6,12 @@ import { productApi } from "@features/products/api/productApi";
 import MarineProductCardSearch from "@features/products/components/MarineProductCardSearch";
 import { ArrowDown, ArrowRight, ArrowUp, Filter, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
 
 export default function SearchProduct() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
-  const [filters, setFilters] = useState({
-    page: 1,
-    limit: 4,
-    categoryId: "",
-    brandId: "",
-  });
 
   const [pagination, setPagination] = useState({
     totalProducts: 0,
@@ -25,11 +20,70 @@ export default function SearchProduct() {
   });
 
   const [inputFilter, setInputFilter] = useState({
+    categories: [],
+    brands: [],
     search: "",
     minPrice: "",
     maxPrice: "",
     sortBy: "",
   });
+
+  const handleChangeSelectedCategories = (e) => {
+    const value = Number(e.target.value);
+    setInputFilter({
+      ...inputFilter,
+      ["categories"]: [value],
+    });
+
+    // IF CATEGORY REQUEST IS ARRAY, UNCOMMENT THIS. AND CHANGE TYPE INPUT FROM RADIO TO CHECKBOX
+    // const categoriesIndex = inputFilter.categories.findIndex(
+    //   (category) => category === value
+    // );
+    // if (categoriesIndex === -1) {
+    //   const newCategories = [...inputFilter.categories, value]
+
+    //   setInputFilter({
+    //     ...inputFilter,
+    //     ["categories"]: newCategories,
+    //   })
+    // } else {
+    //   const newCategories = categories.filter((category) => category.id !== value)
+
+    //   setInputFilter({
+    //     ...inputFilter,
+    //     ["categories"]: newCategories,
+    //   })
+    // }
+  };
+
+  const handleChangeSelectedBrands = (e) => {
+    const value = Number(e.target.value);
+
+    setInputFilter({
+      ...inputFilter,
+      ["brands"]: [value],
+    });
+
+    // IF BRAND REQUEST IS ARRAY, UNCOMMENT THIS. AND CHANGE TYPE INPUT FROM RADIO TO CHECKBOX
+    // const brandsIndex = inputFilter.brands.findIndex(
+    //   (brand) => brand === value
+    // );
+    // if (brandsIndex === -1) {
+    //   const newBrands = [...inputFilter.brands, value];
+    //   setInputFilter({
+    //     ...inputFilter,
+    //     ["brands"]: newBrands,
+    //   });
+    // } else {
+    //   const newBrands = brands.filter((brand) => brand.id !== value);
+    //   setInputFilter({
+    //     ...inputFilter,
+    //     ["brands"]: newBrands,
+    //   });
+    // }
+  };
+
+  const [searchValue] = useDebounce(inputFilter.search, 1000);
 
   const [sortOrder, setSortOrder] = useState("asc");
   const sortBy = [
@@ -46,6 +100,11 @@ export default function SearchProduct() {
       value: "avgRating",
     },
   ];
+
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 4,
+  });
 
   const [showFilter, setShowFilter] = useState(false);
   const handleShowFilter = () => {
@@ -70,7 +129,6 @@ export default function SearchProduct() {
 
   const handleInputFilterChange = (e) => {
     const { name } = e.target;
-    name;
 
     if (name === "minPrice" || name === "maxPrice") {
       const numericValue = e.target.value.replace(/\D/g, "");
@@ -80,12 +138,36 @@ export default function SearchProduct() {
       e.target.value = formattedValue;
     }
 
-    setInputFilter((prev) => ({ ...prev, [name]: e.target.value }));
+    setInputFilter({
+      ...inputFilter,
+      [name]: e.target.value,
+    });
   };
 
   const fetchProducts = async () => {
+    console.log("inputFilter.categories: ", inputFilter.categories);
+
+    const request = {
+      ...filters,
+      // categoryId: inputFilter.categories,
+      // brands: inputFilter.brands,
+      categoryId:
+        inputFilter.categories.length > 0 ? inputFilter.categories[0] : null,
+      brandId: inputFilter.brands.length > 0 ? inputFilter.brands[0] : null,
+      minPrice: inputFilter.minPrice
+        ? Number(inputFilter.minPrice.replace(/\D/g, ""))
+        : null,
+      maxPrice: inputFilter.maxPrice
+        ? Number(inputFilter.maxPrice.replace(/\D/g, ""))
+        : null,
+      search: inputFilter.search,
+      sortBy: inputFilter.sortBy,
+      sortOrder: sortOrder,
+    };
+
+    console.log("request: ", request);
     try {
-      const res = await productApi.getProducts(filters);
+      const res = await productApi.getProducts(request);
       const { products, pagination: paginationData } = res?.data?.data || {};
 
       if (products) setProducts(products);
@@ -126,6 +208,11 @@ export default function SearchProduct() {
   useEffect(() => {
     fetchProducts();
   }, [filters]);
+
+  useEffect(() => {
+    console.log("SEARCH VALUE: ", searchValue);
+    fetchProducts()
+  }, [searchValue]);
 
   return (
     <>
@@ -199,10 +286,11 @@ export default function SearchProduct() {
                 {categories.map((category) => (
                   <li className="flex items-center" key={category.id}>
                     <input
+                      onChange={handleChangeSelectedCategories}
                       id={`category-${category.id}`}
-                      name="category"
+                      name="categories"
                       value={category.id}
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 border-gray-300 text-marine-blue accent-marine-blue focus:ring-blue-500"
                     />
                     <label
@@ -222,10 +310,11 @@ export default function SearchProduct() {
                 {brands.map((brand) => (
                   <li className="flex items-center" key={brand.id}>
                     <input
+                      onChange={handleChangeSelectedBrands}
                       id={`brand-${brand.id}`}
-                      name="brand"
+                      name="brands"
                       value={brand.id}
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 border-gray-300 text-marine-blue accent-marine-blue focus:ring-blue-500"
                     />
                     <label
@@ -245,8 +334,8 @@ export default function SearchProduct() {
                   <li className="flex items-center" key={`sort-${index}`}>
                     <input
                       name="sortBy"
-                      onChange={handleInputFilterChange}
-                      id={`sort-${sort.value}`}
+                      onChange={(e) => handleInputFilterChange(e)}
+                      id={`sortBy`}
                       value={sort.value}
                       type="radio"
                       className="h-4 w-4 border-gray-300 text-marine-blue accent-marine-blue focus:ring-blue-500"
@@ -295,7 +384,11 @@ export default function SearchProduct() {
                 />
               </div>
             </div>
-            <MarineButton variant="tertiary" className="w-full">
+            <MarineButton
+              onClick={fetchProducts}
+              variant="tertiary"
+              className="w-full"
+            >
               Cari Produk
             </MarineButton>
           </div>
@@ -305,7 +398,7 @@ export default function SearchProduct() {
           <p className="mb-2 text-lg font-medium text-gray-900">
             Ditemukan {pagination?.totalProducts} produk: Anti Fouling Ashdaq
           </p>
-          <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
             {products.map((product) => (
               <MarineProductCardSearch
                 key={`product-${product.id}`}
@@ -321,7 +414,7 @@ export default function SearchProduct() {
             <div className="w-full flex flex-wrap items-center justify-center lg:justify-between gap-4 py-4">
               <div className="flex justify-center items-center space-x-2 w-full lg:w-auto">
                 <MarineButton
-                className="w-full"
+                  className="w-full"
                   onClick={() => handlePageChange(pagination.currentPage - 1)}
                   disabled={pagination.currentPage <= 1}
                 >
@@ -333,7 +426,7 @@ export default function SearchProduct() {
                 </span> */}
 
                 <MarineButton
-                className="w-full"
+                  className="w-full"
                   onClick={() => handlePageChange(pagination.currentPage + 1)}
                   disabled={pagination.currentPage >= pagination.totalPages}
                 >

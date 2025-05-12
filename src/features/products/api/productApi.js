@@ -2,12 +2,23 @@ import axiosInstance from "@api/axiosInstance";
 
 export const productApi = {
   getProducts: async (filterRequest = {}) => {
-    const categoryId = filterRequest.categoryId;
-    const page = filterRequest.page;
+    // if there is some null, "", [], and other falsy value, dont put to queryParams
+    const queryParams = Object.keys(filterRequest)
+      .filter(key => filterRequest[key])
+      .reduce((acc, key) => {
+        acc.append(key, filterRequest[key]);
+        return acc;
+      }, new URLSearchParams())
+      .toString();
+
+
+    const categoryId = filterRequest.categoryId || null;
+    const sortBy = filterRequest.sortBy || "createdAt";
+    const sortOrder = filterRequest.sortOrder;
     const limit = filterRequest.limit;
-    const brandId = filterRequest.brandId;
+    const page = filterRequest.page;
     
-    const products = await axiosInstance.get(`/products/?page=${page}&limit=${limit}&brandId=${brandId}&categoryId=${categoryId}`);
+    const products = await axiosInstance.get(`/products/?${queryParams}`, filterRequest);
 
     return products;
   },
