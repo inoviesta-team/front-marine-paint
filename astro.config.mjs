@@ -14,6 +14,9 @@ export default defineConfig({
   ],
   output: 'static', // Default is static, but explicitly setting it for clarity
   vite: {
+    preview: {
+      allowedHosts: ["https://049f-182-2-165-157.ngrok-free.app/"],
+    },
     css: {
       postcss: {
         plugins: [
@@ -38,3 +41,4 @@ export default defineConfig({
     }
   }
 });
+

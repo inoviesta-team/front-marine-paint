@@ -6,10 +6,10 @@ export default function TabSection(children) {
   const [activeTab, setActiveTab] = useState('details');
   
   const tabs = [
-    { id: 'details', label: 'Details' },
-    { id: 'specification', label: 'Specification' },
-    { id: 'application', label: 'Application' },
-    { id: 'reviews', label: 'Reviews' }
+    { id: 'details', label: 'Detail' },
+    // { id: 'specification', label: 'Specification' },
+    // { id: 'application', label: 'Application' },
+    { id: 'reviews', label: 'Ulasan' }
   ];
   
   return (

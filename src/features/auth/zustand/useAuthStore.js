@@ -20,7 +20,7 @@ const useAuthStore = create(
           useAddressStore.getState().getAddress();
           useCartStore.getState().getCarts();
         } catch (err) {
-          console.error('Failed to load user:', err);
+          // console.error('Failed to load user:', err);
           authApi.logout();
           set({ user: null, isAuthenticated: false, loading: false });
         }

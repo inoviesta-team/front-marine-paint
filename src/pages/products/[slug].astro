@@ -19,10 +19,8 @@ export async function getStaticPaths() {
       brandId: ""
     });
 
-    console.log("response: ", response);
-    // console.log("response: ", response?.data?.validationErrors);
-    
-    
+    // console.log("response: ", response);
+    // console.log("response: ", response?.data?.validationErrors);    
     
     const products = response?.data?.products || [];
     
@@ -36,9 +34,7 @@ export async function getStaticPaths() {
   }
 }
 
-const { product } = Astro.props;
-console.log("asasa product: ", product);
-
+const { product } = Astro.props
 
 
 let relatedProducts = [];
@@ -57,23 +53,25 @@ try {
   console.error('Error fetching related products:', error);
 }
 
-const tabs = [
-  { id: "details", label: "Details" },
-  { id: "specification", label: "Specification" },
-  { id: "application", label: "Application" },
-  { id: "reviews", label: "Reviews" }
-];
+console.log("asasa product: ", product);
 
-const productImages = [
-  {
-    src: product.image || '/images/products/placeholder.png',
-    alt: product.name
-  },
-  ...(product.images?.map((img, index) => ({
-    src: img,
-    alt: `${product.name} - View ${index + 2}`
-  })) || [])
-];
+// const tabs = [
+//   { id: "details", label: "Details" },
+//   // { id: "specification", label: "Specification" },
+//   // { id: "application", label: "Application" },
+//   { id: "reviews", label: "Reviews" }
+// ];
+
+// const productImages = [
+//   {
+//     src: product.image || '/images/products/placeholder.png',
+//     alt: product.name
+//   },
+//   ...(product.images?.map((img, index) => ({
+//     src: img,
+//     alt: `${product.name} - View ${index + 2}`
+//   })) || [])
+// ];
 ---
 
 <MainLayout
@@ -222,14 +220,14 @@ const productImages = [
     
     <!-- Product Tabs -->
     <section class="py-8 px-4 md:px-14">
-      <TabSection client:load tabs={tabs}>
+      <TabSection client:load>
         <Fragment slot="details">
           <!-- Details Content -->
           <div>
-            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Product Details</h3>
-            {product.fullDescription ? (
+            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Deskripsi Produk</h3>
+            {product.description ? (
               <div class="prose prose-sm font-sans text-gray-700">
-                {product.fullDescription}
+                {product.description}
               </div>
             ) : (
               <p class="font-sans text-gray-700">
@@ -238,8 +236,7 @@ const productImages = [
             )}
           </div>
         </Fragment>
-        <Fragment slot="specification">
-          <!-- Specifications Content -->
+        <!-- <Fragment slot="specification">
           <div>
             <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Specifications</h3>
             {product.specifications ? (
@@ -259,7 +256,6 @@ const productImages = [
           </div>
         </Fragment>
         <Fragment slot="application">
-          <!-- Application Content -->
           <div>
             <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Application Instructions</h3>
             {product.applicationInstructions ? (
@@ -270,11 +266,11 @@ const productImages = [
               <p class="font-sans text-gray-600">Application instructions will be provided with the product.</p>
             )}
           </div>
-        </Fragment>
+        </Fragment> -->
         <Fragment slot="reviews">
           <!-- Reviews Content -->
           <div>
-            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Customer Reviews</h3>
+            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Ulasan Pelanggan</h3>
             {product.reviewCount > 0 ? (
               <div class="space-y-6">
                 {/* Display reviews if available */}

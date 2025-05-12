@@ -36,7 +36,7 @@ export const productApiStatic = {
         },
       });
       const products = await response.json();
-      console.log("products: ", products);
+      // console.log("products: ", products);
       
       return products;
     },
@@ -59,8 +59,8 @@ export const productApiStatic = {
         },
       });
       const images = await response.json();
-      console.log("IMAGESS: ", images);
-      console.log("IMAGESS ID: ", id);
+      // console.log("IMAGESS: ", images);
+      // console.log("IMAGESS ID: ", id);
       return images;
     }
   };

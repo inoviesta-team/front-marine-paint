@@ -6,6 +6,8 @@ import useCartStore from "@features/cart/zustand/useCartStore";
 
 export default function ProductAddToCart({ product }) {
   const { isAuthenticated, user } = useAuthStore();
+  console.log("product: ", product);
+  
   const { carts, getCarts, addToCart, deleteCart } = useCartStore();
   const goAuthButtonRef = useRef();
 
@@ -21,6 +23,7 @@ export default function ProductAddToCart({ product }) {
 
   useEffect(() => {
     const fetchCarts = async () => {
+      if(!isAuthenticated || !user?.id) return
       await getCarts();
       const cartItem =
         isAuthenticated && carts.find((cart) => cart.product.id === product.id);
@@ -106,7 +109,7 @@ export default function ProductAddToCart({ product }) {
         >
           <span>Konsultasi via Whatsapp</span>
           <svg
-            class="hidden sm:inline"
+            className="hidden sm:inline"
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
