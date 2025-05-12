@@ -22,10 +22,10 @@ export default function SearchProduct() {
   const [inputFilter, setInputFilter] = useState({
     categories: [],
     brands: [],
-    search: "",
-    minPrice: "",
-    maxPrice: "",
-    sortBy: "",
+    search: null,
+    minPrice: null,
+    maxPrice: null,
+    sortBy: null,
   });
 
   const handleChangeSelectedCategories = (e) => {
@@ -103,10 +103,10 @@ export default function SearchProduct() {
 
   const [filters, setFilters] = useState({
     page: 1,
-    limit: 4,
+    limit: 20,
   });
 
-  const [showFilter, setShowFilter] = useState(false);
+  const [showFilter, setShowFilter] = useState(true);
   const handleShowFilter = () => {
     setShowFilter(!showFilter);
   };
@@ -144,9 +144,15 @@ export default function SearchProduct() {
     });
   };
 
-  const fetchProducts = async () => {
-    console.log("inputFilter.categories: ", inputFilter.categories);
+  const handleSearchProduct = async () => {
+    setFilters({
+      ...filters,
+      page: 1,
+    });
+    await fetchProducts();
+  }
 
+  const fetchProducts = async () => {
     const request = {
       ...filters,
       // categoryId: inputFilter.categories,
@@ -165,7 +171,7 @@ export default function SearchProduct() {
       sortOrder: sortOrder,
     };
 
-    console.log("request: ", request);
+    // console.log("request: ", request);
     try {
       const res = await productApi.getProducts(request);
       const { products, pagination: paginationData } = res?.data?.data || {};
@@ -177,6 +183,7 @@ export default function SearchProduct() {
           totalPages: paginationData.totalPages || 0,
           currentPage: paginationData.page || 1,
         });
+        setShowFilter(false)
       }
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -201,6 +208,22 @@ export default function SearchProduct() {
     }));
   };
 
+  const handleResetFilter = async () => {
+    setInputFilter({
+      categories: [],
+      brands: [],
+      minPrice: null,
+      maxPrice: null,
+      search: inputFilter.search,
+      sortBy: null,
+    });
+    setFilters({
+      page: 1,
+      limit: 20,
+    });
+    await fetchProducts();
+  }
+
   useEffect(() => {
     getDataFilter();
   }, []);
@@ -210,13 +233,12 @@ export default function SearchProduct() {
   }, [filters]);
 
   useEffect(() => {
-    console.log("SEARCH VALUE: ", searchValue);
-    fetchProducts()
+    handleSearchProduct()
   }, [searchValue]);
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
+      <div className={"flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8"}>
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
             Produk Terbaik Kami!
@@ -236,12 +258,12 @@ export default function SearchProduct() {
                 onChange={handleInputFilterChange}
                 id="search"
                 name="search"
-                className="focus:ring-blue-500 focus:border-blue-500 block w-full h-12 pl-4 sm:pl-5 pr-12 sm:text-sm border-gray-300 rounded-md"
+                className="focus:ring-blue-500 focus:border-blue-500 block w-full h-12 pl-4 sm:pl-5 pr-12 sm:text-sm border-gray-300 rounded-xl"
                 placeholder="Cari produk..."
                 type="search"
               />
-              <div className="hidden lg:flex absolute inset-y-0 right-0 items-center pr-3">
-                <MarineButton variant="primary" size="sm" type="submit">
+              <div className="hidden lg:flex absolute inset-y-0 right-0 items-center pr-2.5">
+                <MarineButton className="rounded-lg" onClick={handleSearchProduct} variant="primary" size="sm" type="submit">
                   <span className="sr-only">Search</span>
                   <svg
                     className="h-5 w-5 my-0.5"
@@ -270,7 +292,7 @@ export default function SearchProduct() {
       <div className="flex justify-between items-start gap-x-8 gap-y-10">
         <div
           className={`${
-            showFilter ? "block" : "hidden lg:block"
+            showFilter ? "block overflow-y-scroll lg:overflow-y-hidden" : "hidden lg:block"
           } p-5 lg:px-0 bg-white lg:bg-gray-50 fixed inset-0 z-50 w-full lg:w-1/4 lg:sticky`}
         >
           <div className="flex justify-between items-center mb-2">
@@ -291,6 +313,7 @@ export default function SearchProduct() {
                       name="categories"
                       value={category.id}
                       type="radio"
+                      checked={inputFilter.categories.includes(category.id)}
                       className="h-4 w-4 border-gray-300 text-marine-blue accent-marine-blue focus:ring-blue-500"
                     />
                     <label
@@ -315,6 +338,7 @@ export default function SearchProduct() {
                       name="brands"
                       value={brand.id}
                       type="radio"
+                      checked={inputFilter.brands.includes(brand.id)}
                       className="h-4 w-4 border-gray-300 text-marine-blue accent-marine-blue focus:ring-blue-500"
                     />
                     <label
@@ -338,6 +362,7 @@ export default function SearchProduct() {
                       id={`sortBy`}
                       value={sort.value}
                       type="radio"
+                      checked={inputFilter.sortBy === sort.value}
                       className="h-4 w-4 border-gray-300 text-marine-blue accent-marine-blue focus:ring-blue-500"
                     />
                     <label
@@ -384,6 +409,11 @@ export default function SearchProduct() {
                 />
               </div>
             </div>
+            {
+              Object.values(inputFilter).some((value) => Boolean(value)) && (inputFilter.categories.length > 0 || inputFilter.brands.length > 0) && (
+                <button onClick={handleResetFilter} className="text-marine-blue text-sm border-b border-marine-blue">Reset filter</button>
+              )
+            }
             <MarineButton
               onClick={fetchProducts}
               variant="tertiary"
@@ -396,7 +426,7 @@ export default function SearchProduct() {
 
         <div className="w-full lg:w-3/4">
           <p className="mb-2 text-lg font-medium text-gray-900">
-            Ditemukan {pagination?.totalProducts} produk: Anti Fouling Ashdaq
+            Ditemukan {pagination?.totalProducts} produk{searchValue && `: ${searchValue}`}
           </p>
           <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
             {products.map((product) => (
@@ -418,7 +448,7 @@ export default function SearchProduct() {
                   onClick={() => handlePageChange(pagination.currentPage - 1)}
                   disabled={pagination.currentPage <= 1}
                 >
-                  Previous
+                  Sebelumnya
                 </MarineButton>
 
                 {/* <span className="text-sm text-gray-700">
@@ -430,7 +460,7 @@ export default function SearchProduct() {
                   onClick={() => handlePageChange(pagination.currentPage + 1)}
                   disabled={pagination.currentPage >= pagination.totalPages}
                 >
-                  Next
+                  Selanjutnya
                 </MarineButton>
               </div>
 
@@ -441,9 +471,9 @@ export default function SearchProduct() {
                   onChange={(e) => handleLimitChange(e.target.value)}
                   className="bg-white border border-gray-300 rounded-md px-2 py-1 text-sm text-gray-700"
                 >
-                  <option value="4">4</option>
-                  <option value="15">15</option>
                   <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
                 </select>
                 <span className="text-sm text-gray-700">produk</span>
               </div>
