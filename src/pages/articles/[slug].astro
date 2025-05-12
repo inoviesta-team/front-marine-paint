@@ -1,16 +1,16 @@
 ---
-import MarineLayout from '@layouts/MarineLayout.astro';
+import MainLayout from '@layouts/MainLayout.astro';
 
 
 const { slug } = Astro.params;
 
-let res = await fetch(`https://wp.vigorjs.me/wp-json/wp/v2/posts?slug=${slug}`);
+let res = await fetch(`https://wp.kokoliemart.com/wp-json/wp/v2/posts?slug=${slug}`);
 let [post] = await res.json();
 
 // The getStaticPaths() is required for static Astro sites.
 // If using SSR, you will not need this function.
 export async function getStaticPaths() {
-  let data = await fetch("https://wp.vigorjs.me/wp-json/wp/v2/posts");
+  let data = await fetch("https://wp.kokoliemart.com/wp-json/wp/v2/posts");
   let posts = await data.json();
 
   return posts.map((post) => ({
@@ -19,9 +19,9 @@ export async function getStaticPaths() {
   }));
 }
 ---
-<MarineLayout title={post.title.rendered}>
-  <article>
+<MainLayout title={post.title.rendered}>
+  <article class="wp-article">
     <h1 set:html={post.title.rendered} />
     <Fragment set:html={post.content.rendered} />
   </article>
-</MarineLayout>
+</MainLayout>

@@ -40,7 +40,7 @@ export default function MarineProductCardSearch({ product }) {
         </h3>
         
         {product.description && (
-          <p className="hidden sm:block line-clamp-1 text-gray-600 text-sm mb-3">
+          <p className="line-clamp-1 text-gray-600 text-sm mb-3">
             {product.description}
           </p>
         )}

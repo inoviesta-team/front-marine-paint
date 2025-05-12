@@ -19,7 +19,7 @@ export default function MarineHeader() {
     { href: "/", label: "Beranda" },
     // { href: "/about-us", label: "Tentang Kami" },
     { href: "/products", label: "Produk" },
-    { href: "/projects", label: "Projek" },
+    // { href: "/projects", label: "Projek" },
     { href: "/articles", label: "Artikel" },
     { href: "/contact-us", label: "Kontak Kami" },
     { href: "/cart", label: "Keranjang", isCart: true },

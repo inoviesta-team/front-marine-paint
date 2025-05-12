@@ -25,7 +25,7 @@ export default function OrderDetailPage() {
     try {
       const res = await orderApi.getOrderById(orderId);
       if (res?.data?.status) {
-        setOrderData(res?.data?.data);
+        setOrderData(res?.data?.data?.id ? res?.data?.data : res?.data?.data?.data);
       }
     } catch (error) {
       console.log("GET ORDER BY ID ERR: ", error);

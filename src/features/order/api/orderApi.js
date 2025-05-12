@@ -30,8 +30,8 @@ export const orderApi = {
 
     createOrder: async (request) => {
         try {
-            // const res = await axiosInstance.post("/orders/", request);
-            const res = await axiosInstance.post("/cart/checkout", request);
+            const res = await axiosInstance.post("/orders/", request);
+            // const res = await axiosInstance.post("/cart/checkout", request);
 
             console.log("res: ", res);
             

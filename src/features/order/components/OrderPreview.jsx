@@ -8,6 +8,8 @@ import { orderApi } from "../api/orderApi";
 import { valueUtil } from "@utils/valueUtil";
 import useAuthStore from "@features/auth/zustand/useAuthStore";
 import { paymentApi } from "../api/paymentApi";
+import { productApi } from "@features/products/api/productApi";
+import { beUrl } from "@utils/url";
 
 export default function OrderPreview() {
   const { user } = useAuthStore();
@@ -24,12 +26,13 @@ export default function OrderPreview() {
     notes: "",
   });
 
-  const [subtotal, setSubtotal] = useState(
-    selectedCart.reduce(
-      (total, item) => total + item.product.price * item.quantity,
-      0
-    )
-  );
+  const totalPriceProduct = selectedCart.reduce(
+    (total, item) => total + item.product.price * item.quantity,
+    0
+  )
+
+  const [subtotal, setSubtotal] = useState(totalPriceProduct);
+  const [images, setImages] = useState([]);
 
   const handleSelectAddress = (e) => {
     setSelectedAddressId(e.target.value);
@@ -44,7 +47,7 @@ export default function OrderPreview() {
       (shipping) => shipping.id == e.target.value
     );
     setSelectedShipping(shipping);
-    setSubtotal(subtotal + shipping.cost);
+    setSubtotal(totalPriceProduct + shipping.cost);
   };
 
   const handleInputUser = (e) => {
@@ -80,20 +83,36 @@ export default function OrderPreview() {
       orderItems,
     };
 
-    console.log("LALALALA: ", request);
-    
-    // console.log("request: ", request);
-
     const res = await orderApi.getOptionByAddress(request);
     setShippings(res?.data?.data);
   };
+
+  const getProductImages = async () => {
+    const imgArr = [];
+
+    for (let i = 0; i < selectedCart.length; i++) {
+      const response = await productApi.getImageProductById(
+        selectedCart[i].product.id
+      );
+      if (response?.data?.status && response?.data?.data?.length > 0) {
+        const image =
+          response.data?.data.filter((image) => image.isMain)[0] ||
+          response.data?.data[0];
+        imgArr.push(image);
+      }
+    }
+
+    setImages(imgArr);
+  };
+
+  useEffect(() => {
+    getProductImages();
+  }, []);
 
   useEffect(() => {
     getShippings();
   }, [selectedAddressId]);
 
-  // console.log("shippings: ", shippings);
-  // console.log("selectedShipping: ", selectedShipping);
 
   const handleSubmitOrder = async () => {
     const orderItems = selectedCart.map((item) => ({
@@ -101,28 +120,30 @@ export default function OrderPreview() {
       quantity: item.quantity,
     }));
 
-    // const request = {
-    //   customerId: user.id,
-    //   addressId: selectedAddressId,
-    //   shippingMethod: selectedShipping.id,
-    //   cod: "no",
-    //   notes: inputUser.notes,
-    //   orderItems,
-    // };
-    
     const request = {
-      cartIds: selectedCart.map((item) => item.id),
+      customerId: user.id,
       addressId: selectedAddressId,
-      notes: inputUser.notes
-    }
+      shippingMethod: selectedShipping.id,
+      cod: "no",
+      notes: inputUser.notes,
+      orderItems,
+    };
+
+    // const request = {
+    //   cartIds: selectedCart.map((item) => item.id),
+    //   addressId: selectedAddressId,
+    //   notes: inputUser.notes,
+    // };
 
     console.log("req: ", request);
     const resOrder = await orderApi.createOrder(request);
 
-    const orderId = resOrder?.data?.data?.id || ""
-    const orderJsonData = resOrder?.data?.data || {}
+    const orderId = resOrder?.data?.data?.id || "";
+    const orderJsonData = resOrder?.data?.data || {};
 
-    window.location.href = `/order/order-detail?orderId=${orderId}&orderJson=${JSON.stringify(orderJsonData)}`
+    window.location.href = `/order/order-detail?orderId=${orderId}&orderJson=${JSON.stringify(
+      orderJsonData
+    )}`;
   };
 
   return (
@@ -153,92 +174,101 @@ export default function OrderPreview() {
 
             {selectedCart.length > 0 ? (
               <div>
-                {selectedCart.map((item) => (
-                  <div className="border-b flex justify-start items-center gap-2 lg:gap-1 py-4 px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-                      <div className="col-span-6">
-                        <div className="flex items-center">
-                          <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                            <img
-                              src={
-                                "https://down-id.img.susercontent.com/file/id-11134207-7r98y-lvobtdwybblw56"
-                              }
-                              alt={"Image"}
-                              className="w-full h-full object-cover"
+                {selectedCart.map((item) => {
+                  const image = images.find(
+                    (img) => img.productId === item.product.id
+                  );
+                  return (
+                    <div className="border-b flex justify-start items-center gap-2 lg:gap-1 py-4 px-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                        <div className="col-span-6">
+                          <div className="flex items-center">
+                            <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                              <img
+                                src={
+                                  image?.filePath
+                                    ? beUrl + image.filePath
+                                    : "/images/no-image.png"
+                                }
+                                alt={item.product.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="ml-4">
+                              <h3 className="font-sans font-bold text-marine-darkBlue">
+                                {item.product.name}
+                              </h3>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-span-2 font-sans text-gray-700 text-center">
+                          Rp {item.product.price.toLocaleString()}
+                        </div>
+
+                        <div className="col-span-2 flex justify-center">
+                          <div className="flex items-center">
+                            <button
+                              type="button"
+                              className={`cursor-default opacity-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 text-gray-600 hover:bg-gray-200 transition-colors`}
+                              aria-label="Decrease quantity"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <path d="M5 12h14"></path>
+                              </svg>
+                            </button>
+
+                            <input
+                              type="text"
+                              className={`w-16 h-10 text-center font-sans focus:outline-none focus:ring-1 bg-white focus:ring-marine-blue`}
+                              aria-label="Quantity"
+                              disabled
+                              value={item.quantity}
                             />
-                          </div>
-                          <div className="ml-4">
-                            <h3 className="font-sans font-bold text-marine-darkBlue">
-                              {item.product.name}
-                            </h3>
+
+                            <button
+                              type="button"
+                              className={`cursor-default opacity-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 text-gray-600 hover:bg-gray-200 transition-colors`}
+                              aria-label="Increase quantity"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <path d="M12 5v14"></path>
+                                <path d="M5 12h14"></path>
+                              </svg>
+                            </button>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="col-span-2 font-sans text-gray-700 text-center">
-                        Rp {item.product.price.toLocaleString()}
-                      </div>
-
-                      <div className="col-span-2 flex justify-center">
-                        <div className="flex items-center">
-                          <button
-                            type="button"
-                            className={`opacity-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 text-gray-600 hover:bg-gray-200 transition-colors`}
-                            aria-label="Decrease quantity"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <path d="M5 12h14"></path>
-                            </svg>
-                          </button>
-
-                          <input
-                            type="text"
-                            className={`w-16 h-10 text-center font-sans focus:outline-none focus:ring-1 bg-white focus:ring-marine-blue`}
-                            aria-label="Quantity"
-                            disabled
-                            value={item.quantity}
-                          />
-
-                          <button
-                            type="button"
-                            className={`opacity-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 text-gray-600 hover:bg-gray-200 transition-colors`}
-                            aria-label="Increase quantity"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <path d="M12 5v14"></path>
-                              <path d="M5 12h14"></path>
-                            </svg>
-                          </button>
+                        <div className="hidden lg:block col-span-2 font-sans font-bold text-marine-darkBlue text-right">
+                          Rp
+                          {(
+                            item.product.price * item.quantity
+                          ).toLocaleString()}
                         </div>
-                      </div>
-
-                      <div className="hidden lg:block col-span-2 font-sans font-bold text-marine-darkBlue text-right">
-                        Rp
-                        {(item.product.price * item.quantity).toLocaleString()}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="py-12 px-6 text-center">
@@ -453,7 +483,10 @@ export default function OrderPreview() {
                 {/* PRODUCT PRICE */}
                 {selectedCart &&
                   selectedCart.map((cart) => (
-                    <div key={cart.id} className="flex justify-between items-center">
+                    <div
+                      key={cart.id}
+                      className="flex justify-between items-center"
+                    >
                       <p className="space-x-1">
                         <span className="capitalize">{cart.product.name}</span>{" "}
                         <span>x</span> <span>{cart.quantity}</span>

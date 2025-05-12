@@ -4,10 +4,11 @@ import { valueUtil } from "@utils/valueUtil";
 import { useEffect, useState } from "react";
 import { orderApi } from "../api/orderApi";
 import { orderStatus } from "../util/orderStatus";
+import { beUrl } from "@utils/url";
 
 export default function OrderHistory() {
   const urlParams = new URLSearchParams(window.location.search);
-  const statusDefault = urlParams.get("statusDefault") || "PENDING";
+  const statusDefault = urlParams.get("statusDefault") || "PROCESSING";
   
   const [selectedOrder, setSelectedOrder] = useState({});
   const [orders, setOrder] = useState([]);
@@ -37,7 +38,7 @@ export default function OrderHistory() {
       <h2 className="text-2xl font-semibold mb-4">History Order</h2>
 
       {/* Filter tabs */}
-      <div className="overflow-x-auto mb-6">
+      <div className="overflow-x-auto mb-6 pb-3">
         <div className="flex gap-3 md:gap-4">
           {tabBar.map((tab) => (
             <button
@@ -82,30 +83,28 @@ export default function OrderHistory() {
               }&orderJson=${JSON.stringify(order)}`}
               className="space-y-6"
             >
-              {order.orderItems.map((item, index) => (
-                <div key={index} className="flex items-center gap-4">
-                  <img
-                    src={
-                      item?.product?.media[0]?.url ||
-                      "https://i.pravatar.cc/150"
-                    }
-                    alt={item.product.name}
-                    className="w-20 h-20 rounded-xl object-cover shadow"
-                  />
-                  <div className="flex-1">
-                    <p className="line-clamp-1 text-sm sm:text-md font-medium text-marine-darkBlue">
-                      {item.product.name}
-                    </p>
-                    <p className="text-xs sm:text-sm text-gray-500">
-                      {item.quantity} x{" "}
-                      {valueUtil.formatPriceRupiah(item.unitPrice)}
-                    </p>
-                    <div className="text-sm sm:text-md font-medium text-marine-darkBlue">
-                      Rp {valueUtil.formatPriceRupiah(item.subtotal)}
-                    </div>
+              {order.orderItems.map((item, index) => {
+                const image = item?.product?.media.length > 0 && (item?.product?.media.find((image) => image.isMain == true) || item?.product?.media[0]);
+                return <div key={index} className="flex items-center gap-4">
+                <img
+                  src={image?.id ? beUrl + image.filePath : "/images/no-image.png"}
+                  alt={item.product.name}
+                  className="w-20 h-20 rounded-xl object-cover shadow"
+                />
+                <div className="flex-1">
+                  <p className="line-clamp-1 text-sm sm:text-md font-medium text-marine-darkBlue">
+                    {item.product.name}
+                  </p>
+                  <p className="text-xs sm:text-sm text-gray-500">
+                    {item.quantity} x{" "}
+                    {valueUtil.formatPriceRupiah(item.unitPrice)}
+                  </p>
+                  <div className="text-sm sm:text-md font-medium text-marine-darkBlue">
+                    Rp {valueUtil.formatPriceRupiah(item.subtotal)}
                   </div>
                 </div>
-              ))}
+              </div>
+              })}
             </a>
           </div>
         )) : <NotFound message="Order Tidak Ditemukan" />}

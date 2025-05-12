@@ -4,12 +4,15 @@ import useCartStore from "../zustand/useCartStore";
 import { ShoppingCart } from "lucide-react";
 import QuantitySelector from "src/pages/products/components/QuantitySelector";
 import CartQuantitySelector from "./CartQuantitySelector";
+import { productApi } from "@features/products/api/productApi";
+import { beUrl } from "@utils/url";
 
 export default function CartPreview() {
   const { selectedCart, carts, getCarts, deleteCart, handleSelectedCart } = useCartStore();
   const [selectedCarts, setSelectedCarts] = useState(selectedCart);
-//   console.log("carts: ", carts);
-  console.log("selectedCart: ", selectedCart);
+  const [images, setImages] = useState([]);
+  console.log("images: ", images);
+  // console.log("selectedCart: ", selectedCart);
 
   const subtotal = selectedCarts.reduce(
     (total, item) => total + item.product.price * item.quantity,
@@ -31,8 +34,23 @@ export default function CartPreview() {
     }
   };
 
+  const getProductImages = async () => {
+    const imgArr = []
+
+    for(let i = 0; i < carts.length; i++) {
+      const response = await productApi.getImageProductById(carts[i].product.id)
+      if(response?.data?.status && response?.data?.data?.length > 0) {
+        const image = response.data?.data.filter((image) => image.isMain)[0] || response.data?.data[0]
+        imgArr.push(image)
+      }
+    }
+
+    setImages(imgArr)
+  }
+
   useEffect(() => {
     getCarts()
+    getProductImages()
   }, [])
 
 
@@ -49,6 +67,9 @@ export default function CartPreview() {
     setSelectedCarts(newSelectedCarts);
     handleSelectedCart(newSelectedCarts);
   }, [carts])
+
+  console.log("carts: ", carts);
+  
 
   return (
     <div class="container mx-auto py-8 px-4 md:px-14">
@@ -78,77 +99,76 @@ export default function CartPreview() {
 
             {carts.length > 0 ? (
               <div>
-                {carts.map((item) => (
-                  <div className="border-b flex justify-start items-center gap-2 lg:gap-1 py-4 px-6">
-                    <input
-                      id={`checkbox-${item.id}`}
-                      type="checkbox"
-                      className="accent-marine-darkBlue rounded border-gray-300 text-marine-blue focus:ring-marine-blue mr-0.5"
-                      checked={selectedCarts.filter((selectedCart) => selectedCart.id === item.id).length > 0}
-                      onChange={() => handleSelectCart(item)}
-                    />
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-                      <button onClick={() => handleSelectCart(item)} class="col-span-6">
-                        <div class="flex items-center">
-                          <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                            <img
-                              src={
-                                "https://down-id.img.susercontent.com/file/id-11134207-7r98y-lvobtdwybblw56"
-                              }
-                              alt={"Image"}
-                              class="w-full h-full object-cover"
-                            />
-                          </div>
-                          <div class="ml-4">
-                            <h3 class="font-sans font-bold text-marine-darkBlue">
-                              {item.product.name}
-                            </h3>
-                            <button
-                              onClick={() => deleteCart(item.id)}
-                              class="font-sans text-sm text-red-500 hover:text-red-700 flex items-center mt-1"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="mr-1"
-                              >
-                                <path d="M3 6h18"></path>
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                              </svg>
-                              Hapus
-                            </button>
-                          </div>
+                {carts.map((item) => {
+                  const image = images.find((img) => img.productId === item.product.id)
+                  return <div className="border-b flex justify-start items-center gap-2 lg:gap-1 py-4 px-6">
+                  <input
+                    id={`checkbox-${item.id}`}
+                    type="checkbox"
+                    className="accent-marine-darkBlue rounded border-gray-300 text-marine-blue focus:ring-marine-blue mr-0.5"
+                    checked={selectedCarts.filter((selectedCart) => selectedCart.id === item.id).length > 0}
+                    onChange={() => handleSelectCart(item)}
+                  />
+                  <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                    <button onClick={() => handleSelectCart(item)} class="col-span-6">
+                      <div class="flex items-center">
+                        <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                          <img
+                            src={image?.filePath ? beUrl + image.filePath : "/images/no-image.png"}
+                            alt={item.product.name}
+                            class="w-full h-full object-cover"
+                          />
                         </div>
-                      </button>
-
-                      <button onClick={() => handleSelectCart(item)} class="col-span-2 font-sans text-gray-700 text-center">
-                        Rp {item.product.price.toLocaleString()}
-                      </button>
-
-                      <div class="col-span-2 flex justify-center">
-                        <CartQuantitySelector
-                          initial={item.quantity}
-                          min={1}
-                          max={999}
-                          cart={item}
-                        />
+                        <div class="ml-4">
+                          <h3 class="font-sans font-bold text-marine-darkBlue">
+                            {item.product.name}
+                          </h3>
+                          <button
+                            onClick={() => deleteCart(item.id)}
+                            class="font-sans text-sm text-red-500 hover:text-red-700 flex items-center mt-1"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="mr-1"
+                            >
+                              <path d="M3 6h18"></path>
+                              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                            </svg>
+                            Hapus
+                          </button>
+                        </div>
                       </div>
+                    </button>
 
-                      <button onClick={() => handleSelectCart(item)} class="hidden lg:block col-span-2 font-sans font-bold text-marine-darkBlue text-right">
-                        Rp
-                        {(item.product.price * item.quantity).toLocaleString()}
-                      </button>
+                    <button onClick={() => handleSelectCart(item)} class="col-span-2 font-sans text-gray-700 text-center">
+                      Rp {item.product.price.toLocaleString()}
+                    </button>
+
+                    <div class="col-span-2 flex justify-center">
+                      <CartQuantitySelector
+                        initial={item.quantity}
+                        min={1}
+                        max={999}
+                        cart={item}
+                      />
                     </div>
+
+                    <button onClick={() => handleSelectCart(item)} class="hidden lg:block col-span-2 font-sans font-bold text-marine-darkBlue text-right">
+                      Rp
+                      {(item.product.price * item.quantity).toLocaleString()}
+                    </button>
                   </div>
-                ))}
+                </div>
+                })}
               </div>
             ) : (
               <div class="py-12 px-6 text-center">

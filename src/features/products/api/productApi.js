@@ -25,5 +25,10 @@ export const productApi = {
   getProductById: async (id) => {
     const product = await axiosInstance.get(`/products/${id}`);
     return product;
+  },
+
+  getImageProductById: async (id) => {
+    const product = await axiosInstance.get(`/products/${id}/media`);
+    return product;
   }
 };
