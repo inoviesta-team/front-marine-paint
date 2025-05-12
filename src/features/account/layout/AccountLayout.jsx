@@ -35,7 +35,7 @@ export default function AccountLayout({ children }) {
               <h3 className="text-xl text-slate-700 font-bold leading-normal mb-1">
                 {user.name}
               </h3>
-              <div class="text-xs mt-0 mb-2 text-slate-400 font-bold uppercase">
+              <div className="text-xs mt-0 mb-2 text-slate-400 font-bold uppercase">
                 {user.email}
               </div>
             </div>

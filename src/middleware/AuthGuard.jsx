@@ -1,7 +1,8 @@
 import useAuthStore from '@features/auth/zustand/useAuthStore'
+import { fePathUrl } from '@utils/url';
 import React, { useRef, useEffect } from 'react'
 
-export default function AuthGuard({children, redirect = "/"}) {
+export default function AuthGuard({children, redirect = fePathUrl.login}) {
 
     const { isAuthenticated, user, loading } = useAuthStore()
     const backButtonRef = useRef();

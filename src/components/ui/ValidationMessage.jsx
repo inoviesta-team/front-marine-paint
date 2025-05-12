@@ -3,7 +3,7 @@ import React from "react";
 export default function ValidationMessage({ error, defaultMessage = "Terjadi kesalahan! Silahkan coba kembali" }) {
 
     const validationErrors = error?.response?.data?.data?.validationErrors;
-    const errorMessage = error?.response?.data?.message;
+    const errorMessage = error?.response?.data?.message;;
 
     return (
       <>

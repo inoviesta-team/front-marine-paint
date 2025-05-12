@@ -1,4 +1,5 @@
 import useAuthStore from '@features/auth/zustand/useAuthStore'
+import { fePathUrl } from '@utils/url';
 import React, { useRef, useEffect } from 'react'
 
 export default function OnlyGuest({children}) {
@@ -15,6 +16,6 @@ export default function OnlyGuest({children}) {
     }, [isAuthenticated, user]);
 
   return (
-    <div><a ref={backButtonRef} className='hidden' href="/"></a> {children}</div>
+    <div><a ref={backButtonRef} className='hidden' href={fePathUrl.home}></a> {children}</div>
   )
 }

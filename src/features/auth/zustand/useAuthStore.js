@@ -11,6 +11,8 @@ const useAuthStore = create(
       isAuthenticated: false,
       loading: false,
       error: null,
+      
+      setError: (error) => set({ error: error }),
 
       checkAuth: async () => {
         set({ loading: true });
