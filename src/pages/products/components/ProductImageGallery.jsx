@@ -21,11 +21,16 @@ export default function ProductImageGallery({ productId, productImages = [] }) {
     getImages();
   }, []);
 
+  console.log("selectedImage: " , selectedImage);
+  
+
   return (
     <div className="w-full">
       {/* Main Image with navigation */}
       <div className="relative mb-4 border border-gray-200 rounded-lg overflow-hidden h-80 sm:h-96 flex items-center justify-center bg-white">
-        <img
+        {
+          selectedImage.mediaType === "IMAGE" ? (
+            <img
           src={
             selectedImage
               ? beUrl + selectedImage?.filePath
@@ -34,6 +39,19 @@ export default function ProductImageGallery({ productId, productImages = [] }) {
           alt={selectedImage?.fileName}
           className="w-full h-full object-contain transition-all duration-300"
         />
+          ) : (
+            <video
+            src={
+              selectedImage
+                ? beUrl + selectedImage?.filePath
+                : "/images/no-image.png"
+            }
+            alt={selectedImage?.fileName}
+            className="w-full h-full object-contain transition-all duration-300"
+            controls
+          />
+          )
+        }
       </div>
 
       {/* Thumbnail Gallery */}
@@ -49,11 +67,22 @@ export default function ProductImageGallery({ productId, productImages = [] }) {
               }`}
               onClick={() => setSelectedImage(image)}
             >
-              <img
+              {
+                image.mediaType === "IMAGE" ? (
+                  <img
                 src={beUrl + image.filePath}
                 alt={`Product image ${image.fileName}`}
                 className="w-full h-full object-cover"
               />
+                ) : (
+                  <video
+                  src={beUrl + image.filePath}
+                  alt={`Product video ${image.fileName}`}
+                  className="w-full h-full object-cover"
+                  controls={false}
+                />
+                )
+              }
             </div>
           ))}
         </div>

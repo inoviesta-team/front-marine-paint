@@ -151,7 +151,7 @@ export default function SearchProduct() {
       page: 1,
     });
     await fetchProducts();
-  }
+  };
 
   const fetchProducts = async () => {
     const request = {
@@ -184,7 +184,7 @@ export default function SearchProduct() {
           totalPages: paginationData.totalPages || 0,
           currentPage: paginationData.page || 1,
         });
-        setShowFilter(false)
+        setShowFilter(false);
       }
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -223,7 +223,7 @@ export default function SearchProduct() {
       limit: 20,
     });
     await fetchProducts();
-  }
+  };
 
   useEffect(() => {
     getDataFilter();
@@ -234,12 +234,16 @@ export default function SearchProduct() {
   }, [filters]);
 
   useEffect(() => {
-    handleSearchProduct()
+    handleSearchProduct();
   }, [searchValue]);
 
   return (
     <>
-      <div className={"flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8"}>
+      <div
+        className={
+          "flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8"
+        }
+      >
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
             Produk Terbaik Kami!
@@ -264,7 +268,13 @@ export default function SearchProduct() {
                 type="search"
               />
               <div className="hidden lg:flex absolute inset-y-0 right-0 items-center pr-2.5">
-                <MarineButton className="rounded-lg" onClick={handleSearchProduct} variant="primary" size="sm" type="submit">
+                <MarineButton
+                  className="rounded-lg"
+                  onClick={handleSearchProduct}
+                  variant="primary"
+                  size="sm"
+                  type="submit"
+                >
                   <span className="sr-only">Search</span>
                   <svg
                     className="h-5 w-5 my-0.5"
@@ -293,7 +303,9 @@ export default function SearchProduct() {
       <div className="flex justify-between items-start gap-x-8 gap-y-10">
         <div
           className={`${
-            showFilter ? "block overflow-y-scroll lg:overflow-y-hidden" : "hidden lg:block"
+            showFilter
+              ? "block overflow-y-scroll lg:overflow-y-hidden"
+              : "hidden lg:block"
           } p-5 lg:px-0 bg-white lg:bg-gray-50 fixed inset-0 z-50 w-full lg:w-1/4 lg:sticky`}
         >
           <div className="flex justify-between items-center mb-2">
@@ -303,55 +315,59 @@ export default function SearchProduct() {
             </button>
           </div>
           <div className="space-y-8">
-            <div>
-              <h3 className="text-lg font-medium text-gray-900">Kategori</h3>
-              <ul className="mt-4 space-y-3">
-                {categories.map((category) => (
-                  <li className="flex items-center" key={category.id}>
-                    <input
-                      onChange={handleChangeSelectedCategories}
-                      id={`category-${category.id}`}
-                      name="categories"
-                      value={category.id}
-                      type="radio"
-                      checked={inputFilter.categories.includes(category.id)}
-                      className="h-4 w-4 border-gray-300 text-marine-blue accent-marine-blue focus:ring-blue-500"
-                    />
-                    <label
-                      htmlFor={`category-${category.id}`}
-                      className="ml-3 text-sm text-gray-600"
-                    >
-                      {category.name}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {categories.length > 0 && (
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">Kategori</h3>
+                <ul className="mt-4 space-y-3">
+                  {categories.map((category) => (
+                    <li className="flex items-center" key={category.id}>
+                      <input
+                        onChange={handleChangeSelectedCategories}
+                        id={`category-${category.id}`}
+                        name="categories"
+                        value={category.id}
+                        type="radio"
+                        checked={inputFilter.categories.includes(category.id)}
+                        className="h-4 w-4 border-gray-300 text-marine-blue accent-marine-blue focus:ring-blue-500"
+                      />
+                      <label
+                        htmlFor={`category-${category.id}`}
+                        className="ml-3 text-sm text-gray-600"
+                      >
+                        {category.name}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-            <div>
-              <h3 className="text-lg font-medium text-gray-900">Brand</h3>
-              <ul className="mt-4 space-y-3">
-                {brands.map((brand) => (
-                  <li className="flex items-center" key={brand.id}>
-                    <input
-                      onChange={handleChangeSelectedBrands}
-                      id={`brand-${brand.id}`}
-                      name="brands"
-                      value={brand.id}
-                      type="radio"
-                      checked={inputFilter.brands.includes(brand.id)}
-                      className="h-4 w-4 border-gray-300 text-marine-blue accent-marine-blue focus:ring-blue-500"
-                    />
-                    <label
-                      htmlFor={`brand-${brand.id}`}
-                      className="ml-3 text-sm text-gray-600"
-                    >
-                      {brand.name}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {brands.length > 0 && (
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">Brand</h3>
+                <ul className="mt-4 space-y-3">
+                  {brands.map((brand) => (
+                    <li className="flex items-center" key={brand.id}>
+                      <input
+                        onChange={handleChangeSelectedBrands}
+                        id={`brand-${brand.id}`}
+                        name="brands"
+                        value={brand.id}
+                        type="radio"
+                        checked={inputFilter.brands.includes(brand.id)}
+                        className="h-4 w-4 border-gray-300 text-marine-blue accent-marine-blue focus:ring-blue-500"
+                      />
+                      <label
+                        htmlFor={`brand-${brand.id}`}
+                        className="ml-3 text-sm text-gray-600"
+                      >
+                        {brand.name}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <div>
               <h3 className="text-lg font-medium text-gray-900">Urutan</h3>
               <ul className="mt-4 space-y-3">
@@ -410,11 +426,16 @@ export default function SearchProduct() {
                 />
               </div>
             </div>
-            {
-              Object.values(inputFilter).some((value) => Boolean(value)) && (inputFilter.categories.length > 0 || inputFilter.brands.length > 0) && (
-                <button onClick={handleResetFilter} className="text-marine-blue text-sm border-b border-marine-blue">Reset filter</button>
-              )
-            }
+            {Object.values(inputFilter).some((value) => Boolean(value)) &&
+              (inputFilter.categories.length > 0 ||
+                inputFilter.brands.length > 0) && (
+                <button
+                  onClick={handleResetFilter}
+                  className="text-marine-blue text-sm border-b border-marine-blue"
+                >
+                  Reset filter
+                </button>
+              )}
             <MarineButton
               onClick={fetchProducts}
               variant="tertiary"
@@ -427,20 +448,21 @@ export default function SearchProduct() {
 
         <div className="w-full lg:w-3/4">
           <p className="mb-2 text-lg font-medium text-gray-900">
-            Ditemukan {pagination?.totalProducts} produk{searchValue && `: ${searchValue}`}
+            Ditemukan {pagination?.totalProducts} produk
+            {searchValue && `: ${searchValue}`}
           </p>
-          {
-            products.length > 0 ? (
-              <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
-            {products.map((product) => (
-              <MarineProductCardSearch
-                key={`product-${product.id}`}
-                product={product}
-              />
-            ))}
-          </div>
-            ) : <NotFound message="Produk tidak ditemukan" />
-          }
+          {products.length > 0 ? (
+            <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
+              {products.map((product) => (
+                <MarineProductCardSearch
+                  key={`product-${product.id}`}
+                  product={product}
+                />
+              ))}
+            </div>
+          ) : (
+            <NotFound message="Produk tidak ditemukan" />
+          )}
 
           <div className={`w-full`}>
             {/* Product list rendering - kode tidak ditampilkan di sini */}
