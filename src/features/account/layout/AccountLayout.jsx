@@ -36,12 +36,17 @@ export default function AccountLayout({ children }) {
               <h3 className="text-xl text-slate-700 font-bold leading-normal mb-1">
                 {user.name}
               </h3>
-              <p className="flex items-center gap-1 text-sm mt-0 mb-1 text-slate-400 font-bold">
-              <Mail size={16}/><span>{user.email}</span>
-              </p>
-              <p className="flex items-center gap-1 text-sm mt-0 mb-2 text-slate-400 font-bold">
-                <Phone size={16} /> <span>{user.phoneNumber}</span>
-              </p>
+              {user.email && (
+                <p className="flex items-center gap-1 text-sm mt-0 mb-1 text-slate-400 font-bold">
+                  <Mail size={16} />
+                  <span>{user.email}</span>
+                </p>
+              )}
+              {user.phoneNumber && (
+                <p className="flex items-center gap-1 text-sm mt-0 mb-2 text-slate-400 font-bold">
+                  <Phone size={16} /> <span>{user.phoneNumber}</span>
+                </p>
+              )}
             </div>
             <nav className="space-y-4 md:px-1">
               <a

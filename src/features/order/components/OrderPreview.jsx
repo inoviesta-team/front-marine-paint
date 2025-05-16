@@ -526,7 +526,7 @@ export default function OrderPreview() {
                 onClick={handleSubmitOrder}
                 variant="primary"
                 size="lg"
-                className="w-full justify-center shadow-md hover:shadow-lg"
+                className="rounded-lg w-full justify-center shadow-md hover:shadow-lg"
                 client:load
               >
                 Buat Pesanan
