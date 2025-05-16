@@ -1,3 +1,4 @@
+import ValidationMessage from "@components/ui/ValidationMessage";
 import {
   ArrowRight,
   Eye,
@@ -5,12 +6,12 @@ import {
   Lock,
   LogIn,
   Mail,
+  Phone,
   User,
   UserPlus,
 } from "lucide-react";
 import { useState } from "react";
 import useAuthStore from "./zustand/useAuthStore";
-import ValidationMessage from "@components/ui/ValidationMessage";
 
 export default function RegisterForm() {
   const [isClient, setIsClient] = useState(false);
@@ -22,6 +23,7 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [registerName, setRegisterName] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
+  const [registerPhoneNumber, setRegisterPhoneNumber] = useState("")
   const [registerPassword, setRegisterPassword] = useState("");
 
   const togglePasswordVisibility = () => {
@@ -30,7 +32,7 @@ export default function RegisterForm() {
 
   const { register, user, isAuthenticated, error } = useAuthStore();
 
-  console.log("errorrr: ", error);
+  // console.log("errorrr: ", error);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,15 +44,16 @@ export default function RegisterForm() {
     const reqData = {
       name: registerName,
       email: registerEmail,
+      phoneNumber: registerPhoneNumber,
       password: registerPassword,
     };
 
-    console.log(reqData);
+    // console.log(reqData);
 
     try {
       const data = await register(reqData);
-      console.log("la data: ", data);
-      console.log("la user: ", user);
+      // console.log("la data: ", data);
+      // console.log("la user: ", user);
       // Redirect to previous page or dashboard
       // window.location.href = "/account";
     } catch (err) {
@@ -62,7 +65,9 @@ export default function RegisterForm() {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <div className="flex-grow container mx-auto px-4 md:px-8 py-12 flex flex-col md:flex-row gap-8">
         {/* Left side - Decorative/Informative */}
-        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-marine-darkBlue to-marine-blue rounded-2xl overflow-hidden shadow-xl relative"></div>
+        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-marine-darkBlue to-marine-blue rounded-2xl overflow-hidden shadow-xl relative">
+          <img src="/images/ship-wallpaper.png" alt="Kokolie Mart" />
+        </div>
 
         {/* Right side - Auth forms */}
         <div className="md:w-1/2 flex flex-col items-center">
@@ -112,7 +117,7 @@ export default function RegisterForm() {
                       id="register-name"
                       value={registerName}
                       onChange={(e) => setRegisterName(e.target.value)}
-                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-marine-blue focus:border-transparent"
                       placeholder="John Agus"
                     />
                   </div>
@@ -134,8 +139,27 @@ export default function RegisterForm() {
                       id="register-email"
                       value={registerEmail}
                       onChange={(e) => setRegisterEmail(e.target.value)}
-                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-marine-blue focus:border-transparent"
                       placeholder="contoh@email.com"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-gray-700 font-medium" htmlFor="email">
+                    Telepon
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Phone size={18} className="text-gray-400" />
+                    </div>
+                    <input
+                      type="tel"
+                      id="phoneNume"
+                      value={registerPhoneNumber}
+                      onChange={(e) => setRegisterPhoneNumber(e.target.value)}
+                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-marine-blue focus:border-transparent"
+                      placeholder="your@email.com"
                     />
                   </div>
                 </div>
@@ -156,7 +180,7 @@ export default function RegisterForm() {
                       id="register-password"
                       value={registerPassword}
                       onChange={(e) => setRegisterPassword(e.target.value)}
-                      className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-marine-blue focus:border-transparent"
                       placeholder="••••••••"
                     />
                     <button
@@ -177,7 +201,7 @@ export default function RegisterForm() {
                     id="terms"
                     name="terms"
                     type="checkbox"
-                    className="h-4 w-4 border-gray-300 rounded text-marine-lightBlue text-sm hover:text-marine-accent focus:ring-blue-500"
+                    className="h-4 w-4 border-gray-300 rounded text-marine-lightBlue text-sm hover:text-marine-accent focus:ring-marine-blue"
                   />
                   <label
                     htmlFor="terms"

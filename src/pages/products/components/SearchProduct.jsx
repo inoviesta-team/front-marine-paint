@@ -1,5 +1,6 @@
 import MarineProductCard from "@components/product/MarineProductCard";
 import MarineButton from "@components/ui/MarineButton";
+import NotFound from "@components/ui/NotFound";
 import { brandApi } from "@features/products/api/brandApi";
 import { categoryApi } from "@features/products/api/categoryApi";
 import { productApi } from "@features/products/api/productApi";
@@ -417,7 +418,7 @@ export default function SearchProduct() {
             <MarineButton
               onClick={fetchProducts}
               variant="tertiary"
-              className="w-full"
+              className="w-full rounded-lg"
             >
               Cari Produk
             </MarineButton>
@@ -428,7 +429,9 @@ export default function SearchProduct() {
           <p className="mb-2 text-lg font-medium text-gray-900">
             Ditemukan {pagination?.totalProducts} produk{searchValue && `: ${searchValue}`}
           </p>
-          <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
+          {
+            products.length > 0 ? (
+              <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
             {products.map((product) => (
               <MarineProductCardSearch
                 key={`product-${product.id}`}
@@ -436,15 +439,17 @@ export default function SearchProduct() {
               />
             ))}
           </div>
+            ) : <NotFound message="Produk tidak ditemukan" />
+          }
 
-          <div className="w-full">
+          <div className={`w-full`}>
             {/* Product list rendering - kode tidak ditampilkan di sini */}
 
             {/* Pagination UI */}
             <div className="w-full flex flex-wrap items-center justify-center lg:justify-between gap-4 py-4">
               <div className="flex justify-center items-center space-x-2 w-full lg:w-auto">
                 <MarineButton
-                  className="w-full"
+                  className="w-full rounded-lg"
                   onClick={() => handlePageChange(pagination.currentPage - 1)}
                   disabled={pagination.currentPage <= 1}
                 >
@@ -456,7 +461,7 @@ export default function SearchProduct() {
                 </span> */}
 
                 <MarineButton
-                  className="w-full"
+                  className="w-full rounded-lg"
                   onClick={() => handlePageChange(pagination.currentPage + 1)}
                   disabled={pagination.currentPage >= pagination.totalPages}
                 >

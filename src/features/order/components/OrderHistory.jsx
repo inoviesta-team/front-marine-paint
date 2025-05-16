@@ -8,7 +8,7 @@ import { beUrl } from "@utils/url";
 
 export default function OrderHistory() {
   const urlParams = new URLSearchParams(window.location.search);
-  const statusDefault = urlParams.get("statusDefault") || "PROCESSING";
+  const statusDefault = urlParams.get("statusDefault") || "PENDING";
   
   const [selectedOrder, setSelectedOrder] = useState({});
   const [orders, setOrder] = useState([]);
@@ -107,7 +107,7 @@ export default function OrderHistory() {
               })}
             </a>
           </div>
-        )) : <NotFound message="Order Tidak Ditemukan" />}
+        )) : <NotFound message={`Order ${orderStatus[status]} Tidak Ditemukan`} />}
       </div>
     </AccountLayout>
   );

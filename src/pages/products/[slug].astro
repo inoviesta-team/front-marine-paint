@@ -10,6 +10,7 @@ import ProductAddToCart from "./components/ProductAddToCart";
 import ProductReview from "./components/ProductReview";
 import ProductImageGallery from "./components/ProductImageGallery";
 import TabSection from "./components/TabSection";
+import { beUrl } from "@utils/url";
 
 export async function getStaticPaths() {
   try {
@@ -75,9 +76,9 @@ console.log("asasa product: ", product);
 ---
 
 <MainLayout
-  title={`${product.media.length} -  ${product.name} | Toko Koko Lie`}
+  title={`${product.name + " - "}${product.name} | Toko Koko Lie`}
   description={product.description}
-  image={product.image}
+  image={product.media && product.media.length > 0 && beUrl + product.media[0].filePath}
 >
   <main>
     <!-- Product Detail Section -->

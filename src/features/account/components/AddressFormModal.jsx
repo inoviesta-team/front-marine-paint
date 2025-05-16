@@ -143,9 +143,9 @@ export default function AddressFormModal({ addressObj = {}, showModal, handleClo
     addressType: "SHIPPING",
     country: "Indonesia",
     recipientName: addressObj?.id ? addressObj.recipientName  : user.name,
-    phone: addressObj?.phone || "",
-    address: addressObj?.address || "",
-    notes: addressObj?.notes || "",
+    phone: addressObj?.id ? addressObj.phone  : user.phoneNumber,
+    address: addressObj?.address ?? "",
+    notes: addressObj?.notes ?? "",
   });
 
   const handleInputAddressChange = (e) => {
@@ -173,7 +173,7 @@ export default function AddressFormModal({ addressObj = {}, showModal, handleClo
       isDefault
     }
 
-    console.log("requestData: ", requestData);
+    // console.log("requestData: ", requestData);
 
     if(addressObj?.id) {
       await updateAddress(addressObj.id, requestData)
@@ -393,10 +393,10 @@ export default function AddressFormModal({ addressObj = {}, showModal, handleClo
             </div>
 
             <div className="flex justify-end space-x-2 mt-3">
-              <MarineButton onClick={handleCloseModal} variant="tertiary">
+              <MarineButton className="rounded-lg" onClick={handleCloseModal} variant="tertiary">
                 Batal
               </MarineButton>
-              <MarineButton type="submit">Simpan</MarineButton>
+              <MarineButton className="rounded-lg" type="submit">Simpan</MarineButton>
             </div>
           </form>
         </div>

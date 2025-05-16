@@ -8,7 +8,8 @@ export default function UserEditProfile() {
 
   const [inputUser, setInputUser] = useState({
     name: user.name,
-    email: user.email
+    email: user.email,
+    phoneNumber: user.phoneNumber
   });
 
   const handleInputUserChange = (e) => {
@@ -32,7 +33,7 @@ export default function UserEditProfile() {
           </h2>
           <ValidationMessage  error={error} defaultMessage="Ubah profile gagal! Silahkan coba kembali"/>
           
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-1">
           <div>
             <label className="block text-sm text-slate-600 mb-1">
               Nama Lengkap
@@ -58,9 +59,21 @@ export default function UserEditProfile() {
               placeholder="Masukkan email kamu..."
             />
           </div>
+
+          <div>
+            <label className="block text-sm text-slate-600 mb-1">Telepon</label>
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={inputUser.phoneNumber}
+              onChange={handleInputUserChange}
+              className="w-full p-2 border rounded text-sm"
+              placeholder="Masukkan nomor telepon kamu..."
+            />
+          </div>
         </div>
         <div className="flex justify-end items-center mt-3">
-            <MarineButton type="submit">Ubah Profile</MarineButton>
+            <MarineButton className="rounded-lg" type="submit">Ubah Profile</MarineButton>
         </div>
       </form>
     </>

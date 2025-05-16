@@ -3,6 +3,7 @@ import MarineButton from "@components/ui/MarineButton";
 import AddressFormModal from "./AddressFormModal";
 import useAuthStore from "@features/auth/zustand/useAuthStore";
 import useAddressStore from "../zustand/useAddressStore";
+import NotFound from "@components/ui/NotFound";
 
 const dummyAddresses = [
   {
@@ -60,11 +61,11 @@ export default function UserAddress() {
           <h2 className="text-2xl font-semibold text-slate-700 mb-2 sm:mb-0">
             Daftar Alamat
           </h2>
-          <MarineButton onClick={handleOpenModal}>Tambah Alamat</MarineButton>
+          <MarineButton className="rounded-lg" onClick={handleOpenModal}>Tambah Alamat</MarineButton>
         </div>
 
         <div className="space-y-4">
-          {address.map((addr) => (
+          {address.length > 0 ? address.map((addr) => (
             <button
               onClick={() => handleEditAddressFormModal(addr)}
               key={addr.id}
@@ -100,7 +101,7 @@ export default function UserAddress() {
                 )}
               </div>
             </button>
-          ))}
+          )) : <NotFound message="Belum ada alamat" />}
         </div>
       </div>
 

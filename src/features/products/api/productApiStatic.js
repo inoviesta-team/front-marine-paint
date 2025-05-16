@@ -1,4 +1,6 @@
-const baseUrl = 'http://localhost:3000/api';
+import { beApiUrl } from "@utils/url";
+
+const baseUrl = beApiUrl;
 
 export async function getProducts(filterRequest = {}) {
   const categoryId = filterRequest.categoryId;
@@ -9,7 +11,7 @@ export async function getProducts(filterRequest = {}) {
   // console.log(localStorage.getItem("jwtToken"));
   
 
-  const response = await fetch(`http://localhost:3000/api/products?page=${page}&limit=${limit}&brandId=${brandId}&categoryId=${categoryId}`, {
+  const response = await fetch(`${baseUrl}/products?page=${page}&limit=${limit}&brandId=${brandId}&categoryId=${categoryId}`, {
     method: "GET",
     headers: {
       'Content-Type': 'application/json'

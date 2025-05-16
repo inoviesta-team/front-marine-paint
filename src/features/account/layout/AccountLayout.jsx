@@ -1,4 +1,5 @@
 import useAuthStore from "@features/auth/zustand/useAuthStore";
+import { Mail, Phone } from "lucide-react";
 import React from "react";
 
 export default function AccountLayout({ children }) {
@@ -7,7 +8,7 @@ export default function AccountLayout({ children }) {
   const url = new URL(window.location.href).pathname;
 
   return (
-    <div className="font-sans min-h-screen bg-gray-50 py-3 container mx-auto px-4 md:px-14 relative z-10">
+    <div className="font-sans min-h-[80vh] bg-gray-50 py-3 md:py-8 container mx-auto px-4 md:px-14 relative z-10">
       <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
         <div className="lg:sticky lg:top-16 w-full lg:w-1/4 relative mx-auto lg:max-w-xl min-w-0 break-words bg-white mb-6 shadow-lg rounded-xl">
           <div className="p-4">
@@ -35,9 +36,12 @@ export default function AccountLayout({ children }) {
               <h3 className="text-xl text-slate-700 font-bold leading-normal mb-1">
                 {user.name}
               </h3>
-              <div className="text-xs mt-0 mb-2 text-slate-400 font-bold uppercase">
-                {user.email}
-              </div>
+              <p className="flex items-center gap-1 text-sm mt-0 mb-1 text-slate-400 font-bold">
+              <Mail size={16}/><span>{user.email}</span>
+              </p>
+              <p className="flex items-center gap-1 text-sm mt-0 mb-2 text-slate-400 font-bold">
+                <Phone size={16} /> <span>{user.phoneNumber}</span>
+              </p>
             </div>
             <nav className="space-y-4 md:px-1">
               <a

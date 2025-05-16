@@ -34,19 +34,21 @@ const useAuthStore = create(
           const res = await authApi.login(request);
           await localStorage.setItem("jwtToken", res?.data?.data?.token);
           useAuthStore.getState().checkAuth();
+          // useAddressStore.getState().getAddress()
         } catch (err) {
           set({ error: err || 'Login failed', loading: false });
           throw err;
         }
       },
 
-      register: async (userData) => {
+      register: async (request) => {
         set({ loading: true, error: null });
         try {
-          const res = await authApi.register(userData);
-          
-          set({ user: res?.data?.data?.user, isAuthenticated: true, loading: false });
+          const res = await authApi.register(request);
           await localStorage.setItem("jwtToken", res?.data?.data?.token);
+          useAuthStore.getState().checkAuth();
+          // set({ user: res?.data?.data?.user, isAuthenticated: true, loading: false });
+          // useAddressStore.getState().getAddress()
           return res;
         } catch (err) {
           set({ error: err || 'Registration failed', loading: false });
@@ -54,11 +56,21 @@ const useAuthStore = create(
         }
       },
 
-      editProfile: async (data) => {
+      editProfile: async (request) => {
         set({ loading: true, error: null });
         try {
-          const res = await authApi.editProfile(data);
+          const res = await authApi.editProfile(request);
           useAuthStore.getState().checkAuth();
+        } catch (err) {
+          set({ error: err || 'Edit profile failed', loading: false });
+          throw err;
+        }
+      },
+
+      changePassword: async (request) => {
+        try {
+          await authApi.changePassword(request);
+          // useAuthStore.getState().checkAuth();
         } catch (err) {
           set({ error: err || 'Edit profile failed', loading: false });
           throw err;

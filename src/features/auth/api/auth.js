@@ -34,7 +34,17 @@ export const authApi = {
 
       return res;
     } catch (error) {
-      console.log("LOGIN ERR: ", error);
+      console.log("EDIT PROFILE ERR: ", error);
+    }
+  },
+
+  changePassword: async (data) => {
+    try {
+      const res = axiosInstance.put("/auth/me", data);
+
+      return res;
+    } catch (error) {
+      console.log("CHANGE PASSWORD ERR: ", error);
     }
   },
 

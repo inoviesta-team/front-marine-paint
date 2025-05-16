@@ -1,3 +1,4 @@
+import ValidationMessage from "@components/ui/ValidationMessage";
 import {
   ArrowRight,
   Eye,
@@ -9,7 +10,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import useAuthStore from "./zustand/useAuthStore";
-import ValidationMessage from "@components/ui/ValidationMessage";
 
 export default function LoginForm() {
   const [isClient, setIsClient] = useState(false);
@@ -47,12 +47,16 @@ export default function LoginForm() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <div className="flex-grow container mx-auto px-4 md:px-8 py-12 flex flex-col md:flex-row gap-8">
+      <div className="flex-grow lg:container mx-auto px-4  py-12 flex flex-col lg:flex-row gap-8">
         {/* Left side */}
-        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-marine-darkBlue to-marine-blue rounded-2xl overflow-hidden shadow-xl relative"></div>
+
+        {/* <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-marine-darkBlue to-marine-blue rounded-2xl overflow-hidden shadow-xl relative"></div> */}
+        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-marine-darkBlue to-marine-blue rounded-2xl overflow-hidden shadow-xl relative">
+          <img src="/images/ship-wallpaper.png" alt="Kokolie Mart" className="object-cover" />
+        </div>
 
         {/* Right side */}
-        <div className="md:w-1/2 flex flex-col items-center">
+        <div className="lg:w-1/2 flex flex-col items-center">
           {/* Tabs */}
           <div className="mb-8 flex bg-gray-100 p-1 rounded-xl gap-1 w-full max-w-md">
             <a

@@ -40,7 +40,18 @@ export default function UserChangePassword() {
       return;
     }
 
-    // await editProfile(inputUser);
+    const request = {
+      name: user.name,
+      email: user.email,
+      phoneNumber: user?.phoneNumber,
+      password: inputUser.newPassword
+    }
+
+    await editProfile(request);
+    setInputUser({
+      newPassword: "",
+      confirmNewPassword: "",
+    })
     setError(null);
   };
 
@@ -56,7 +67,7 @@ export default function UserChangePassword() {
       </h2>
       <ValidationMessage
         error={error}
-        defaultMessage="Ubah profile gagal! Silahkan coba kembali"
+        defaultMessage="Ganti password gagal! Silahkan coba kembali"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
@@ -99,7 +110,7 @@ export default function UserChangePassword() {
         </div>
       </div>
       <div className="flex justify-end items-center mt-3">
-        <MarineButton type="submit">Ubah Profile</MarineButton>
+        <MarineButton className="rounded-lg" type="submit">Ubah Password</MarineButton>
       </div>
     </form>
   );
