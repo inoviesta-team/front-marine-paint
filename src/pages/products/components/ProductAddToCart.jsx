@@ -91,7 +91,7 @@ export default function ProductAddToCart({ product }) {
             <MarineButton
               variant="tertiary"
               size="md"
-              className="rounded-lg flex justify-center"
+              className="w-full sm:w-auto rounded-lg flex justify-center"
               disabled={product.stockStatus === "out-of-stock"}
               type="button"
             >

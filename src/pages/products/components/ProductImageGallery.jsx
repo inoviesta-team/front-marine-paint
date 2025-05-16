@@ -27,9 +27,9 @@ export default function ProductImageGallery({ productId, productImages = [] }) {
   return (
     <div className="w-full">
       {/* Main Image with navigation */}
-      <div className="relative mb-4 border border-gray-200 rounded-lg overflow-hidden h-80 sm:h-96 flex items-center justify-center bg-white">
+      <div className="relative mb-4 border border-gray-300 rounded-lg overflow-hidden h-80 sm:h-96 flex items-center justify-center bg-white">
         {
-          selectedImage.mediaType === "IMAGE" ? (
+          (!selectedImage || selectedImage == {} || selectedImage?.mediaType === "IMAGE") ? (
             <img
           src={
             selectedImage
