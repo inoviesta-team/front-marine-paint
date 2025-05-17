@@ -13,7 +13,7 @@ export default function MarineArticleCard({
   isShrink = false
 }) {
   return (
-    <div className={`${isShrink && "flex-shrink-0 min-w-80 max-w-80"} group h-full`}>
+    <div className={`${isShrink && "flex-shrink-0 min-w-72 max-w-72"} group h-full`}>
       <div className="marine-card overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-all duration-300">
         {/* Enhanced image section with hover effect */}
         <div className="relative h-52 overflow-hidden">

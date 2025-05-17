@@ -17,7 +17,7 @@ export default function MarineHeader() {
 
   const navLinks = [
     { href: "/", label: "Beranda" },
-    // { href: "/about-us", label: "Tentang Kami" },
+    { href: "/about-us", label: "Tentang Kami" },
     { href: "/products", label: "Produk" },
     // { href: "/projects", label: "Projek" },
     { href: "/articles", label: "Artikel" },
