@@ -1,0 +1,14 @@
+---
+import OrderPreview from "@features/order/components/OrderPreview";
+import MainLayout from "@layouts/MainLayout.astro";
+import AuthGuard from "src/middleware/AuthGuard";
+---
+
+<MainLayout
+  title="Checkout | Toko Koko Lie"
+  description="Halaman checkout Toko Koko Lie. Lengkapi formulir dibawah untuk memesan produk cat marine yang Anda butuhkan."
+>
+  <AuthGuard client:only="react">
+    <OrderPreview client:only="react"/>
+  </AuthGuard>
+</MainLayout>

@@ -1,0 +1,39 @@
+---
+import MarineLayout from "@layouts/MarineLayout.astro";
+import MarineHeader from "@components/layout/MarineHeader";
+import MarineFooter from "@components/layout/MarineFooter";
+import MarineButton from "@components/ui/MarineButton";
+import MarineArticleCard from "@components/article/MarineArticleCard";
+import { marineApi } from "@api/marineApi";
+import MainLayout from "@layouts/MainLayout.astro";
+
+// Fetch data for the page
+let articles = [];
+try {
+    articles = await marineApi.getArticles({ limit: 6 });
+} catch (error) {
+    console.error('Failed to fetch articles:', error);
+    // We'll use an empty array as a fallback
+}
+const pageTitle = "Artikel Terbaru - Toko Koko Lie";
+const pageDescription = "Dapatkan informasi terbaru dan tips berguna untuk memilih dan merawat cat kapal Anda";
+---
+
+<MainLayout title={pageTitle} description={pageDescription}>
+  <main class="container mx-auto py-8 px-4 md:px-14">
+    <div class="relative z-10 text-center max-w-3xl mx-auto mb-16">
+      <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Artikel Terbaru</h2>
+      <p class="font-sans text-gray-600 text-lg">Dapatkan informasi terbaru dan tips berguna untuk memilih dan merawat cat kapal Anda</p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {articles.map((article) => (
+        <MarineArticleCard key={article.id} article={article} />
+      ))}
+    </div>
+    <div class="flex justify-center mt-12 mb-6">
+      <MarineButton as="a" href="/articles" variant="tertiary" size="lg" className="font-sans shadow-md hover:shadow-lg transition-all duration-300">
+        Lihat Semua Artikel
+      </MarineButton>
+    </div>
+  </main>
+</MainLayout>

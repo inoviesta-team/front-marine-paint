@@ -1,0 +1,414 @@
+---
+import FloatingWhatsAppButton from "@components/ui/FloatingWhatsAppButton";
+import {
+  getProducts,
+  productApiStatic,
+} from "@features/products/api/productApiStatic";
+import MainLayout from "@layouts/MainLayout.astro";
+import { valueUtil } from "@utils/valueUtil";
+import ProductAddToCart from "./components/ProductAddToCart";
+import ProductReview from "./components/ProductReview";
+import ProductImageGallery from "./components/ProductImageGallery";
+import TabSection from "./components/TabSection";
+import { beUrl } from "@utils/url";
+
+export async function getStaticPaths() {
+  try {
+    const response = await getProducts({
+      page: 1,
+      limit: 100,
+      categoryId: "",
+      brandId: "",
+    });
+
+    // console.log("response: ", response);
+    // console.log("response: ", response?.data?.validationErrors);
+
+    const products = response?.data?.products || [];
+
+    return products?.map((product) => ({
+      params: { slug: product.slug },
+      props: { product },
+    }));
+  } catch (error) {
+    console.error("Error fetching products for static paths:", error);
+    return [];
+  }
+}
+
+const { product } = Astro.props;
+
+let relatedProducts = [];
+try {
+  if (product.categoryId) {
+    const relatedResponse = await productApiStatic.getProducts({
+      page: 1,
+      limit: 4,
+      categoryId: "",
+      brandId: "",
+    });
+    relatedProducts = relatedResponse?.data?.products || [];
+    relatedProducts = relatedProducts.filter((p) => p.id !== product.id);
+  }
+} catch (error) {
+  console.error("Error fetching related products:", error);
+}
+
+console.log("asasa product: ", product);
+
+// const tabs = [
+//   { id: "details", label: "Details" },
+//   // { id: "specification", label: "Specification" },
+//   // { id: "application", label: "Application" },
+//   { id: "reviews", label: "Reviews" }
+// ];
+
+// const productImages = [
+//   {
+//     src: product.image || '/images/products/placeholder.png',
+//     alt: product.name
+//   },
+//   ...(product.images?.map((img, index) => ({
+//     src: img,
+//     alt: `${product.name} - View ${index + 2}`
+//   })) || [])
+// ];
+---
+
+<MainLayout
+  title={`${product.name + " - "}${product.name} | Toko Koko Lie`}
+  description={product.description}
+  >
+  <!-- image={product.media && product.media.length > 0 && beUrl + product.media[0].filePath} -->
+  <main>
+    <!-- Product Detail Section -->
+    <section class="sm:py-4 bg-white">
+      <div class="mx-auto sm:py-4 px-4 md:px-14 relative z-10">
+        <!-- BREADCRUMB -->
+        <div class="py-3">
+          <div class="container mx-auto px-2 py-3 relative z-10">
+            <nav class="flex" aria-label="Breadcrumb">
+              <ol class="flex items-center space-x-1 text-sm font-sans">
+                <li>
+                  <a
+                    href="/"
+                    class="text-marine-blue hover:text-marine-darkBlue"
+                    >Beranda</a
+                  >
+                </li>
+                <li class="flex items-center">
+                  <span class="text-gray-500 mx-1">/</span>
+                  <a
+                    href="/products"
+                    class="text-marine-blue hover:text-marine-darkBlue"
+                    >Produk</a
+                  >
+                </li>
+                <!-- <li class="flex items-center">
+                  <span class="text-gray-500 mx-1">/</span>
+                  <a href={`/products?categoryId=${product.categoryId}`} class="text-marine-blue hover:text-marine-darkBlue capitalize">
+                    {product.categoryName || 'Category'}
+                  </a>
+                </li> -->
+                <li class="flex items-center">
+                  <span class="text-gray-500 mx-1">/</span>
+                  <span class="text-gray-600" aria-current="page">
+                    {product.name}
+                  </span>
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Product Images -->
+          <div>
+            <ProductImageGallery
+              productId={product?.id}
+              productImages={product.media}
+              client:load
+            />
+          </div>
+
+          <!-- Product Info -->
+          <div>
+            <h1
+              class="font-sans font-bold text-marine-darkBlue/85 text-2xl sm:text-4xl mb-3"
+            >
+              {product.name}
+            </h1>
+
+            <!-- Ratings -->
+            <div class="flex items-center mb-1">
+              <div class="flex text-[#FFA52F]">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill={"currentColor"}
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="mr-1"
+                >
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                  ></polygon>
+                </svg>
+              </div>
+              <span class="ml-1 text-base text-gray-600">
+                {product.avgRating?.toFixed(1) || "0.0"} ({
+                  product.ratingCount || 0
+                }
+                {product.ratingCount === 1 ? "Rating" : "Ratings"})
+              </span>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-4">
+              <div class="flex items-end gap-2">
+                <span
+                  class="font-sans font-bold text-xl sm:text-2xl text-marine-darkBlue/85"
+                >
+                  Rp {valueUtil.formatPriceRupiah(product.price)}
+                </span>
+
+                <span class="font-sans text-[#697886] line-through text-base">
+                  Rp {
+                    valueUtil.formatPriceRupiah(
+                      product.price + (product.price * 40) / 100
+                    )
+                  }
+                </span>
+
+                <span class="font-sans text-[#697886] text-sm font-medium">
+                  Hemat 40%
+                </span>
+              </div>
+            </div>
+
+            <!-- Stock Status -->
+            <!-- {product.stockStatus && (
+              <div class="mb-4">
+                <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  product.stockStatus === 'in-stock' ? 'bg-green-100 text-green-800' :
+                  product.stockStatus === 'low-stock' ? 'bg-yellow-100 text-yellow-800' :
+                  'bg-red-100 text-red-800'
+                }`}>
+                  {product.stockStatus === 'in-stock' ? 'In Stock' :
+                   product.stockStatus === 'low-stock' ? 'Low Stock' :
+                   'Out of Stock'}
+                </span>
+              </div>
+            )} -->
+
+            <!-- Description -->
+            <!-- <div class="mb-6">
+              <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-2">Description</h3>
+              <p class="font-sans text-gray-600 whitespace-pre-line">
+                {product.description}
+              </p>
+            </div> -->
+
+            <!-- Key Features -->
+            <!-- {product.features && product.features.length > 0 && (
+              <div class="mb-6">
+                <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-2">Key Features</h3>
+                <ul class="list-disc list-inside font-sans text-gray-600">
+                  {product.features.map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            )} -->
+
+              {
+                product?.brand?.id && (
+                  <div class="mb-2.5">
+                    <h3 class="text-marine-darkBlue/70 text-sm">Brand</h3>
+                    <div class="flex items-center justify-start gap-1">
+                      <img
+                        src={product.brand.logoPath}
+                        alt={product.brand.name}
+                        class="w-12"
+                      />
+                      <p class="font-sans text-gray-600 whitespace-pre-line">
+                        {product.brand.name}
+                      </p>
+                    </div>
+                  </div>
+                )
+              }
+
+              {
+                product?.categories.length > 0 && (
+                  <div class="mb-6">
+                    <h3 class="text-marine-darkBlue/70 text-sm">Kategori</h3>
+                    <p class="font-sans text-gray-600 whitespace-pre-line">
+                      {product.categories.map((item, index) => (
+                        <Fragment key={`Category-${index}`}>
+                          {index > 0 && ", "}
+                          {item.category.name}
+                        </Fragment>
+                      ))}
+                    </p>
+                  </div>
+                )
+              }
+
+            <!-- Quantity -->
+            <ProductAddToCart product={product} client:only="react" />
+
+            <div class="my-4">
+              <p class="text-[#697886]">Tersedia juga pembelian via</p>
+              <div class="flex items-center justify-start">
+                <a href="#">
+                  <img src="/images/icon/tokopedia.png" alt="Tokopedia" />
+                </a>
+                <a href="#">
+                  <img src="/images/icon/shopee.png" alt="Shopee" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="py-8 px-4 md:px-14 bg-white">
+      <TabSection client:load>
+        <Fragment slot="details">
+          <!-- Details Content -->
+          <div>
+            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">
+              Deskripsi Produk
+            </h3>
+            {
+              product.description ? (
+                <div class="prose prose-sm font-sans text-gray-700">
+                  {product.description}
+                </div>
+              ) : (
+                <p class="font-sans text-gray-700">-</p>
+              )
+            }
+          </div>
+        </Fragment>
+        <!-- <Fragment slot="specification">
+          <div>
+            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Specifications</h3>
+            {product.specifications ? (
+              <table class="w-full border-collapse">
+                <tbody>
+                  {Object.entries(product.specifications).map(([key, value]) => (
+                    <tr class="border-b border-gray-200">
+                      <td class="py-3 font-sans font-medium text-marine-darkBlue w-1/3">{key}</td>
+                      <td class="py-3 font-sans text-gray-700">{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p class="font-sans text-gray-600">No specifications available.</p>
+            )}
+          </div>
+        </Fragment>
+        <Fragment slot="application">
+          <div>
+            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">Application Instructions</h3>
+            {product.applicationInstructions ? (
+              <div class="prose prose-sm font-sans text-gray-700">
+                {product.applicationInstructions}
+              </div>
+            ) : (
+              <p class="font-sans text-gray-600">Application instructions will be provided with the product.</p>
+            )}
+          </div>
+        </Fragment> -->
+        <Fragment slot="reviews">
+          <!-- Reviews Content -->
+          <div>
+            <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-4">
+              Ulasan Pelanggan
+            </h3>
+            <ProductReview client:load productId={product.id} />
+          </div>
+        </Fragment>
+      </TabSection>
+    </section>
+
+    <!-- Related Products -->
+    {
+      relatedProducts.length > 0 && (
+        <section class="py-16 bg-white">
+          <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
+            <h2 class="font-sans font-bold text-marine-darkBlue text-2xl mb-8">
+              Related Products
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {relatedProducts.map((relatedProduct) => (
+                <a href={`/products/${relatedProduct.id}`} class="group">
+                  <div class="marine-card p-5 flex flex-col hover:border-marine-blue shadow-sm hover:shadow-md transition-all duration-300 rounded-xl overflow-hidden h-full">
+                    {/* Product image */}
+                    <div class="h-48 rounded-lg overflow-hidden mb-4 relative">
+                      <div class="absolute inset-0 bg-gradient-to-t from-marine-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
+
+                      {relatedProduct.image ? (
+                        <img
+                          src={relatedProduct.image}
+                          alt={relatedProduct.name}
+                          class="h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-700"
+                        />
+                      ) : (
+                        <div class="h-full w-full bg-marine-blue/10 flex items-center justify-center">
+                          <span class="text-marine-blue/60 font-sans">
+                            Product Image
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Category tag */}
+                    {relatedProduct.categoryName && (
+                      <div class="mb-2">
+                        <span class="inline-block px-2 py-1 bg-marine-blue/10 rounded-full text-marine-blue text-xs font-sans">
+                          {relatedProduct.categoryName}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Product title */}
+                    <h3 class="font-sans font-bold text-marine-darkBlue text-lg mb-1 group-hover:text-marine-blue transition-colors duration-300">
+                      {relatedProduct.name}
+                    </h3>
+
+                    {/* Short description */}
+                    {relatedProduct.description && (
+                      <p class="font-sans text-gray-600 text-sm mb-3 line-clamp-2">
+                        {relatedProduct.description}
+                      </p>
+                    )}
+
+                    {/* Price */}
+                    <div class="mt-auto">
+                      <p class="font-sans font-bold text-lg text-marine-blue">
+                        {typeof relatedProduct.price === "number"
+                          ? `Rp${relatedProduct.price.toLocaleString()}`
+                          : relatedProduct.price}
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+  </main>
+</MainLayout>

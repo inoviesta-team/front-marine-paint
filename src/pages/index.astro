@@ -1,16 +1,16 @@
 ---
-import MarineLayout from "@layouts/MarineLayout.astro";
-import MarineHeader from "@components/layout/MarineHeader";
-import MarineFooter from "@components/layout/MarineFooter";
-import MarineButton from "@components/ui/MarineButton";
+import { marineApi } from "@api/marineApi";
+import MarineArticleCard from "@components/article/MarineArticleCard";
+import MarineContactForm from "@components/contact/MarineContactForm";
 import MarineProductCard from "@components/product/MarineProductCard";
 import MarineProjectCard from "@components/project/MarineProjectCard";
-import MarineArticleCard from "@components/article/MarineArticleCard";
-import MarineValueCard from "@components/value/MarineValueCard";
 import MarineTestimonialCard from "@components/testimonial/MarineTestimonialCard";
-import MarineContactForm from "@components/contact/MarineContactForm";
-import FloatingWhatsAppButton from "@components/ui/FloatingWhatsAppButton";
-import { marineApi } from "@api/marineApi";
+import MarineButton from "@components/ui/MarineButton";
+import MarineValueCard from "@components/value/MarineValueCard";
+import { productApiStatic } from "@features/products/api/productApiStatic";
+import { articleApiStatic } from "@features/article/api/articleApiStatic";
+import MainLayout from "@layouts/MainLayout.astro";
+import { ArrowRight } from "lucide-react";
 
 // Fetch data for the page
 let products = [];
@@ -21,13 +21,19 @@ let partners = [];
 
 try {
   // Fetch products
-  products = await marineApi.getProducts({ limit: 5 });
+  const responseProducts = await productApiStatic.getProducts({
+    limit: 10
+  });
+  // console.log("responseProducts: ", responseProducts?.data?.products || []);
+  products = await responseProducts?.data?.products || [];
   
   // Fetch projects
   projects = await marineApi.getProjects({ limit: 4 });
   
   // Fetch articles
-  articles = await marineApi.getArticles({ limit: 3 });
+  const responseArticles = await articleApiStatic.getArtciles()
+  console.log("responseArticles: ", responseArticles || []);
+  articles = await responseArticles;
   
   // Fetch testimonials
   testimonials = await marineApi.getTestimonials();
@@ -39,35 +45,33 @@ try {
 }
 ---
 
-<MarineLayout
+<MainLayout
   title="Toko Koko Lie - Marine Paint Solutions"
   description="Toko Koko Lie menyediakan cat marine terpercaya untuk ketahanan maksimal. Official partner of Ashdaq Paint."
 >
-  <MarineHeader client:load />
-  
   <!-- Hero Section with improved contrast and visual appeal -->
-  <section class="relative pt-16 pb-24 overflow-hidden">
+  <section class="relative overflow-hidden">
     <!-- Dark overlay for better text contrast -->
-    <div class="absolute inset-0 bg-gradient-to-r from-marine-darkBlue to-marine-blue opacity-90 z-0"></div>
+    <!-- <div class="absolute inset-0 opacity-90 z-0"></div> -->
     <!-- Enhanced wave pattern background -->
-    <div class="absolute inset-0 bg-[url('/images/ocean-pattern.svg')] opacity-15 z-0 mix-blend-overlay"></div>
+    <!-- <div class="absolute inset-0 rounded-xl opacity-15 z-0 mix-blend-overlay"></div> -->
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div class="mx-auto relative z-10">
+      <div class="bg-[url('/images/hero-image.png')] rounded-b-[30px] sm:rounded-b-[50px] bg-cover bg-center md:bg-center py-12 md:pt-32 md:pb-24 px-4 md:px-14 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div class="space-y-8">
           <!-- Improved brand highlight with accent color -->
-          <div class="inline-block bg-marine-lightBlue/20 px-4 py-1 rounded-full">
+          <!-- <div class="inline-block bg-marine-lightBlue/20 px-4 py-1 rounded-full">
             <h3 class="font-sans font-bold text-white text-lg">TOKO KOKO LIE</h3>
-          </div>
+          </div> -->
           
           <div class="space-y-6">
             <!-- Enhanced heading with better typography -->
-            <h1 class="font-sans font-extrabold text-white text-4xl md:text-5xl lg:text-6xl drop-shadow-md leading-tight">
-              Solusi Terbaik untuk <span class="text-marine-lightBlue">Kebutuhan Cat Kapal</span> Anda
+            <h1 class="font-sans font-extrabold text-white text-4xl md:text-5xl lg:text-5xl drop-shadow-md leading-tight">
+              Solusi Terbaik untuk <span class="text-white">Kebutuhan Cat Kapal</span> Anda
             </h1>
             
             <!-- Improved subheading with better readability -->
-            <p class="font-sans text-gray-100 text-xl max-w-xl">
+            <p class="font-sans font-medium text-gray-100 text-xl max-w-xl">
               Kami menyediakan berbagai jenis cat marine berkualitas tinggi untuk semua jenis kapal dan aplikasi maritim.
             </p>
           </div>
@@ -77,11 +81,11 @@ try {
             <MarineButton
               as="a" 
               href="/products" 
-              variant="primary"
+              variant="tertiary"
               size="lg"
-              className="shadow-lg hover:shadow-xl transition-all duration-300"
+              className="w-full sm:w-auto text-center shadow-lg rounded-xl hover:shadow-xl transition-all duration-300 sm:flex sm:items-center gap-2"
             >
-              Belanja Sekarang
+              <span>Belanja Sekarang</span> <ArrowRight className="hidden sm:inline"/>
             </MarineButton>
             
             <!-- Fixed contrast issue with the "Hubungi kami" button -->
@@ -90,30 +94,26 @@ try {
               href="/contact-us" 
               variant="tertiary"
               size="lg"
-              className="bg-white text-marine-darkBlue hover:bg-gray-100 flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="w-full sm:w-auto text-center  rounded-xl sm:flex sm:items-center gap-2 shadow-lg  transition-all duration-300"
             >
-              <span>Hubungi kami</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="currentColor"/>
+              <span>Konsultasi <span class="hidden sm:inline">via</span> Whatsapp</span>
+              <svg
+              class="hidden sm:inline"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+                />
               </svg>
             </MarineButton>
           </div>
         </div>
         
         <!-- Enhanced hero image section with shadow and rounded corners -->
-        <div class="relative mt-10 lg:mt-0">
-          <div class="relative rounded-lg overflow-hidden shadow-2xl border-4 border-white/20">
-            <img 
-              src="https://media.istockphoto.com/id/480919874/photo/merchant-container-ship.jpg?s=612x612&w=0&k=20&c=vkg5P34LBqiMhXZmVZZd8AEK34CzPH_qA1lre3z8z6Q=" 
-              alt="Hero Image" 
-              class="w-full h-full object-cover" 
-            />
-            <!-- Overlay gloss effect -->
-            <div class="absolute inset-0 bg-gradient-to-tr from-marine-lightBlue/10 to-transparent"></div>
-          </div>
-          <!-- Decorative element -->
-          <div class="absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-marine-lightBlue/20 z-0"></div>
-        </div>
       </div>
     </div>
   </section>
@@ -124,21 +124,23 @@ try {
     <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-gradient-to-br from-marine-lightBlue/10 to-marine-blue/5"></div>
     <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-gradient-to-tr from-marine-blue/10 to-marine-lightBlue/5"></div>
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="container mx-auto px-4 md:px-14 relative z-10">
       <!-- Enhanced section header with subheading -->
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
+        <!-- <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
           PRODUK UNGGULAN
-        </div>
+        </div> -->
         <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Cat Marine Terbaik untuk Kapal Anda</h2>
         <p class="font-sans text-gray-600 text-lg">Pilihan produk cat marine berkualitas tinggi dengan daya tahan maksimal terhadap air laut dan cuaca ekstrem</p>
       </div>
       
       <!-- Enhanced product grid with hover effects -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-        {products.map((product) => (
-          <MarineProductCard product={product} />
+      <div class="overflow-x-auto">
+        <div class="flex gap-6 p-2">
+          {products.map((product) => (
+          <MarineProductCard client:only="react" product={product} />
         ))}
+        </div>
       </div>
       
       <!-- Enhanced CTA button -->
@@ -147,26 +149,26 @@ try {
           as="a" 
           href="/products" 
           variant="tertiary"
-          size="lg"
-          className="font-sans shadow-md hover:shadow-lg transition-all duration-300"
+          size="md"
+          className="font-sans rounded-xl py-2 shadow-md hover:shadow-lg transition-all duration-300"
         >
-          Lihat Semua Produk
+          Lihat Semua
         </MarineButton>
       </div>
     </div>
   </section>
 
   <!-- Value Proposition Section -->
-  <section class="py-24 relative overflow-hidden">
+  <section class="pt-2 relative overflow-hidden">
     <!-- Enhanced background with better visual appeal -->
-    <div class="absolute inset-0 bg-gradient-to-br from-marine-blue/5 to-marine-lightBlue/10 z-0"></div>
-    <div class="absolute inset-0 bg-[url('/images/wave-pattern.svg')] opacity-10 z-0 mix-blend-multiply"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-marine-blue/5 to-marine-lightBlue/5 z-0"></div>
+    <div class="absolute inset-0 bg-[url('/images/abstract-pattern.png')] bg-center bg-cover opacity-75 z-0 mix-blend-multiply"></div>
     
     <!-- Decorative elements -->
-    <div class="absolute top-20 left-10 w-32 h-32 rounded-full bg-marine-lightBlue/10 z-0 animate-pulse"></div>
-    <div class="absolute bottom-20 right-10 w-40 h-40 rounded-full bg-marine-blue/10 z-0"></div>
+    <div class="absolute top-20 left-10 w-32 h-32 rounded-full bg-marine-lightBlue/5 z-0 animate-pulse"></div>
+    <div class="absolute bottom-20 right-10 w-40 h-40 rounded-full bg-marine-blue/5 z-0"></div>
     
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
       <!-- Enhanced section header -->
       <div class="text-center max-w-3xl mx-auto mb-16">
         <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Mengapa Memilih Kami?</h2>
@@ -175,10 +177,10 @@ try {
       
       <!-- Enhanced grid layout with improved visual design -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <MarineValueCard title="Produk Berkualitas" iconNumber={1} description="Cat marine terbaik dengan daya tahan maksimal terhadap air laut dan cuaca" />
-        <MarineValueCard title="Pengiriman Cepat" iconNumber={2} description="Layanan pengiriman cepat ke seluruh wilayah Indonesia" />
-        <MarineValueCard title="Konsultasi Gratis" iconNumber={3} description="Tim ahli kami siap membantu Anda memilih produk yang tepat" />
-        <MarineValueCard title="Dukungan Teknis" iconNumber={4} description="Bantuan teknis untuk aplikasi dan perawatan cat marine" />
+        <MarineValueCard title="Produk Berkualitas" icon={"shield.png"} description="Cat marine terbaik dengan daya tahan maksimal terhadap air laut dan cuaca" />
+        <MarineValueCard title="Pengiriman Cepat" icon={"anchor.png"} description="Layanan pengiriman cepat ke seluruh wilayah Indonesia" />
+        <MarineValueCard title="Konsultasi Gratis" icon={"infinity.png"} description="Tim ahli kami siap membantu Anda memilih produk yang tepat" />
+        <MarineValueCard title="Dukungan Teknis" icon={"ts.png"} description="Bantuan teknis untuk aplikasi dan perawatan cat marine" />
       </div>
     </div>
   </section>
@@ -186,17 +188,25 @@ try {
   <!-- Projects Section -->
   <section class="py-16 bg-white relative overflow-hidden">
     <div class="absolute -top-20 -left-20 w-40 h-40 rounded-full bg-marine-accent opacity-5"></div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <h2 class="font-mono font-bold text-marine-blue text-3xl text-center mb-12">Projects</h2>
+    <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
+      <h2 class="font-sans font-bold text-marine-blue text-3xl text-center mb-12">Projek Kami</h2>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="overflow-x-auto">
+        <div class="flex gap-6 p-2">
         {projects.map((project) => (
-          <MarineProjectCard project={project} />
+          <MarineProjectCard isShrink={true} project={project} />
         ))}
       </div>
+      </div>
       
-      <div class="flex justify-center mt-8">
-        <MarineButton as="a" href="/projects" variant="tertiary" className="border-marine-blue text-marine-blue hover:bg-marine-blue/10">
+      <div class="flex justify-center mt-12">
+        <MarineButton 
+          as="a" 
+          href="/products" 
+          variant="tertiary"
+          size="md"
+          className="font-sans rounded-xl py-2 shadow-md hover:shadow-lg transition-all duration-300"
+        >
           Lihat Semua
         </MarineButton>
       </div>
@@ -213,21 +223,24 @@ try {
     <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-white to-transparent z-0"></div>
     <div class="absolute top-20 right-10 w-40 h-40 rounded-full bg-marine-lightBlue/10 z-0"></div>
     
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
       <!-- Enhanced section header -->
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
+        <!-- <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
           TESTIMONI PELANGGAN
-        </div>
+        </div> -->
         <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Apa Kata Mereka Tentang Kami</h2>
         <p class="font-sans text-gray-600 text-lg">Kami bangga dengan kepercayaan pelanggan terhadap produk dan layanan kami</p>
       </div>
       
       <!-- Enhanced testimonial cards with better layout -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {testimonials.map((testimonial) => (
-          <MarineTestimonialCard testimonial={testimonial} />
-        ))}
+      <div class="overflow-x-auto">
+        <div class="flex gap-4 sm:gap-6 p-2">
+
+          {testimonials.map((testimonial) => (
+            <MarineTestimonialCard testimonial={testimonial} />
+          ))}
+          </div>
       </div>
       
       <!-- Trust badges section -->
@@ -236,13 +249,13 @@ try {
           <h3 class="font-sans font-medium text-marine-darkBlue text-xl">Dipercaya Oleh:</h3>
         </div>
         <div class="flex flex-wrap justify-center gap-8 items-center">
-          <div class="w-32 h-16 bg-white rounded-lg shadow-sm flex items-center justify-center p-2">
+          <div class="w-40 h-24 flex items-center justify-center">
             <img src="/images/partners/partner_1.svg" alt="Partner 1" class="max-h-full max-w-full" />
           </div>
-          <div class="w-32 h-16 bg-white rounded-lg shadow-sm flex items-center justify-center p-2">
+          <div class="w-40 h-24 flex items-center justify-center">
             <img src="/images/partners/partner_2.svg" alt="Partner 2" class="max-h-full max-w-full" />
           </div>
-          <div class="w-32 h-16 bg-white rounded-lg shadow-sm flex items-center justify-center p-2">
+          <div class="w-40 h-24 flex items-center justify-center">
             <img src="/images/partners/partner_3.svg" alt="Partner 3" class="max-h-full max-w-full" />
           </div>
         </div>
@@ -259,21 +272,23 @@ try {
     <div class="absolute inset-0 bg-[url('/images/ship-pattern.svg')] opacity-5 z-0 mix-blend-multiply"></div>
     <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent z-0"></div>
     
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
       <!-- Enhanced section header -->
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
+        <!-- <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
           ARTIKEL TERBARU
-        </div>
+        </div> -->
         <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Tips & Informasi Seputar Cat Marine</h2>
         <p class="font-sans text-gray-600 text-lg">Dapatkan informasi terbaru dan tips berguna untuk memilih dan merawat cat kapal Anda</p>
       </div>
       
       <!-- Enhanced article cards with better layout -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="overflow-x-auto">
+        <div class="flex gap-6 p-2">
         {articles.map((article) => (
-          <MarineArticleCard article={article} />
+          <MarineArticleCard isShrink={true} article={article} />
         ))}
+      </div>
       </div>
       
       <!-- Enhanced CTA button -->
@@ -282,10 +297,10 @@ try {
           as="a" 
           href="/articles" 
           variant="tertiary"
-          size="lg"
-          className="font-sans shadow-md hover:shadow-lg transition-all duration-300"
+          size="md"
+          className="font-sans rounded-xl py-2 shadow-md hover:shadow-lg transition-all duration-300"
         >
-          Lihat Semua Artikel
+          Lihat Semua
         </MarineButton>
       </div>
     </div>
@@ -297,12 +312,12 @@ try {
     <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-gray-50 to-transparent"></div>
     <div class="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-marine-blue/5"></div>
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
       <!-- Enhanced section header -->
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
+        <!-- <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
           KONTAK KAMI
-        </div>
+        </div> -->
         <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Butuh Informasi Lebih Lanjut?</h2>
         <p class="font-sans text-gray-600 text-lg">Kami siap membantu Anda dengan segala pertanyaan tentang produk dan layanan kami</p>
       </div>
@@ -355,14 +370,22 @@ try {
         <!-- Map section with enhanced styling -->
         <div class="relative">
           <div class="absolute inset-0 bg-gradient-to-br from-marine-blue/30 to-marine-lightBlue/30 rounded-xl z-10 opacity-20"></div>
-          <div class="rounded-xl shadow-xl overflow-hidden h-full flex items-center justify-center border-4 border-white">
-            <img src="/images/map.svg" alt="Map" class="w-full h-full object-cover" />
+          <div class="rounded-xl shadow-xl overflow-hidden h-full flex items-center justify-center">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.666427022623!2d106.82457787487954!3d-6.175392393812006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sMonumen%20Nasional!5e0!3m2!1sid!2sid!4v1746970162103!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
           
           <!-- Address overlay -->
           <div class="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg z-20">
-            <h4 class="font-sans font-bold text-marine-darkBlue text-lg mb-1">Toko Koko Lie</h4>
-            <p class="font-sans text-gray-700 text-sm">Jl. Lorem Ipsum No. 123, Jakarta, Indonesia</p>
+            <div class="flex justify-start items-center gap-2">
+              <!-- <MapPin size={32} color="#dc2626" /> -->
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="#ED4242"/>
+              </svg>
+              <div>
+                <h4 class="font-sans font-bold text-marine-darkBlue text-lg">Koko Lie</h4>
+                <p class="font-sans text-gray-700 text-sm">Jl. Lorem Ipsum No. 123, Jakarta, Indonesia</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -370,8 +393,6 @@ try {
   </section>
 
   <!-- Floating WhatsApp Button -->
-  <FloatingWhatsAppButton client:load />
+  <!-- <FloatingWhatsAppButton client:load /> -->
 
-  <!-- Footer -->
-  <MarineFooter client:visible />
-</MarineLayout>
+</MainLayout>

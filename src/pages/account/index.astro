@@ -1,0 +1,17 @@
+---
+import UserAddress from "@features/account/components/UserAddress";
+import AccountLayout from "@features/account/layout/AccountLayout";
+import MainLayout from "@layouts/MainLayout.astro";
+import AuthGuard from "src/middleware/AuthGuard";
+---
+
+<MainLayout
+  title="Alamat | Toko Koko Lie"
+  description="Halaman alamat Toko Koko Lie. Lihat daftar alamat yang Anda simpan dan ubah alamat Anda jika perlu."
+>
+  <AuthGuard client:only="react" >
+    <AccountLayout client:only="react" >
+      <UserAddress client:only="react" />
+    </AccountLayout>
+  </AuthGuard>
+</MainLayout>

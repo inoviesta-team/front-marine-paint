@@ -1,0 +1,14 @@
+---
+import OrderDetailPage from '@features/order/components/OrderDetailPage'
+import MainLayout from "@layouts/MainLayout.astro";
+import AuthGuard from "src/middleware/AuthGuard";
+---
+
+<MainLayout
+  title="Order Detail | Toko Koko Lie"
+  description="Lihat detail order Anda di Toko Koko Lie. Kami memberikan kemudahan untuk Anda memantau status order Anda secara online."
+>
+  <AuthGuard client:only="react">
+    <OrderDetailPage client:only="react" />
+  </AuthGuard>
+</MainLayout>

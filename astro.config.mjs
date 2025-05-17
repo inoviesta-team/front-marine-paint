@@ -14,6 +14,9 @@ export default defineConfig({
   ],
   output: 'static', // Default is static, but explicitly setting it for clarity
   vite: {
+    preview: {
+      allowedHosts: ["https://049f-182-2-165-157.ngrok-free.app/"],
+    },
     css: {
       postcss: {
         plugins: [
@@ -25,6 +28,7 @@ export default defineConfig({
     },
     resolve: {
       alias: {
+        '@features': path.resolve('./src/features'),
         '@components': path.resolve('./src/components'),
         '@layouts': path.resolve('./src/layouts'),
         '@utils': path.resolve('./src/utils'),

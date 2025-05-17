@@ -1,0 +1,20 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+import ProjectGallery from "./components/ProjectGallery";
+
+export async function getStaticPaths() {
+  const projects = [{ id: 1, slug: 'project-1' }];
+  
+  return projects.map(project => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+---
+
+<MainLayout
+  title="Toko Koko Lie - Marine Paint Solutions"
+  description="Toko Koko Lie menyediakan cat marine terpercaya untuk ketahanan maksimal. Official partner of Ashdaq Paint."
+>
+    <ProjectGallery client:load/>
+</MainLayout>

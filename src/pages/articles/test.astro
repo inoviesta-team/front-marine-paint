@@ -1,0 +1,37 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+---
+
+<MainLayout title={"test"}>
+    <article class="wp-article">
+      <h1 set:html={"test"} />
+      <Fragment set:html={`<h1>Judul Utama (H1)</h1>\n
+      <h2>Subjudul Pertama (H2)</h2>\n
+      <p>Ini adalah paragraf pertama. <span style=\"color:red\">Teks ini berwarna merah</span> dan <strong>teks ini ditebalkan</strong>.</p>\n
+      <h3>Subjudul Kedua (H3)</h3>\n
+      <p>Paragraf kedua dengan sebuah <a href='https://example.com'>tautan</a> dan sebuah <label for='input1'>Label Input</label>.</p>\n
+      <input id='input1' type='text' placeholder='Masukkan sesuatu' />\n
+      <h4>Subjudul Ketiga (H4)</h4>\n
+      <p>Berikut adalah sebuah gambar:</p>\n
+      <img src='https://img.freepik.com/premium-vector/beautiful-calm-night-mountain-with-moonlight_104785-1378.jpg?semt=ais_hybrid&w=740' alt='Contoh Gambar' />\n
+      <h5>Subjudul Keempat (H5)</h5>\n
+      <p>Contoh daftar tidak berurutan:</p>\n
+      <ul>\n
+        <li>Item 1</li>\n
+        <li>Item 2</li>\n
+        <li>Item 3</li>\n
+      </ul>\n
+      <h6>Subjudul Kelima (H6)</h6>\n
+      <p>Contoh daftar berurutan:</p>\n
+      <ol>\n
+        <li>Langkah pertama</li>\n
+        <li>Langkah kedua</li>\n
+        <li>Langkah ketiga</li>\n
+      </ol>\n
+      <p>Berikut adalah blockquote:</p>\n
+      <blockquote>Ini adalah kutipan inspiratif dari seseorang yang bijak.</blockquote>\n
+      <p>Dan berikut adalah sebuah kode inline: <code>console.log('Hello World')</code></p>\n
+      <p>Serta blok kode:</p>\n
+      <pre><code>function hello() {\n  console.log('Hello World');\n}</code></pre>`} />
+    </article>
+  </MainLayout>

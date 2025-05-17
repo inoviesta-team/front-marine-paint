@@ -3,6 +3,33 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+  
+  /* Custom scrollbar styles */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track-piece {
+    background: var(--marine-bg-light);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--marine-blue);
+    border-radius: 100px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--marine-accent);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: var(--marine-bg-light);
+  }
+}
+
 /* Custom base styles */
 @layer base {
   :root {

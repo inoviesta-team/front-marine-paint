@@ -1,6 +1,7 @@
 /**
  * Marine Paint API service
  */
+import axiosInstance from './axiosInstance';
 import { marineProducts, marineProjects, marineArticles, marineTestimonials, marinePartners } from './marineMockData';
 
 export const marineApi = {
@@ -76,25 +77,11 @@ export const marineApi = {
   /**
    * Get all projects
    */
-  getProjects: async (params = {}) => {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    let filteredProjects = [...marineProjects];
-    
-    // Filter by type if specified
-    if (params.type) {
-      filteredProjects = filteredProjects.filter(project => 
-        project.type === params.type
-      );
-    }
-    
-    // Limit results if specified
-    if (params.limit && typeof params.limit === 'number') {
-      filteredProjects = filteredProjects.slice(0, params.limit);
-    }
-    
-    return filteredProjects;
+  getProjects: async (filterRequest = {}) => {
+    // const products = await axiosInstance.get("/products", filterRequest);
+    const products = marineProjects;
+
+    return products;
   },
 
   /**
@@ -160,7 +147,7 @@ export const marineApi = {
       filteredTestimonials = filteredTestimonials.slice(0, params.limit);
     }
     
-    return filteredTestimonials;
+    return [...filteredTestimonials, ...filteredTestimonials];
   },
 
   /**

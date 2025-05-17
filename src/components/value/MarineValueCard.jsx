@@ -1,12 +1,13 @@
 import React from 'react';
 
-export default function MarineValueCard({ title, description, iconNumber = 1 }) {
+export default function MarineValueCard({ title, description, icon }) {
   return (
-    <div className="marine-card p-8 hover:border-marine-blue hover:translate-y-[-5px] transition-all duration-300 group">
+    // <div className="marine-card p-8 hover:border-marine-blue hover:translate-y-[-5px] transition-all duration-300 group">
+    <div className="p-8 hover:translate-y-[-5px] transition-all duration-300 group">
       {/* Enhanced icon container with gradient background */}
-      <div className="w-20 h-20 flex items-center justify-center mb-6 mx-auto bg-gradient-to-br from-marine-blue/20 to-marine-lightBlue/20 rounded-full p-4 group-hover:scale-110 transition-transform duration-300 shadow-md">
+      <div className="w-20 h-20 flex items-center justify-center mb-6 mx-auto rounded-full group-hover:scale-110 transition-transform duration-300">
         <img 
-          src={`/images/value/value_${iconNumber}.svg`} 
+          src={`/images/icon/${icon}`} 
           alt={title}
           className="w-full h-full object-contain"
         />

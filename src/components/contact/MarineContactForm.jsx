@@ -169,7 +169,7 @@ export default function MarineContactForm() {
             type="submit" 
             variant="primary"
             size="lg"
-            className="px-8 shadow-md hover:shadow-lg"
+            className="rounded-xl px-8 shadow-md hover:shadow-lg"
             loading={isSubmitting}
           >
             {isSubmitting ? 'Mengirim...' : 'Kirim Pesan'}
