@@ -11,6 +11,7 @@ import { productApiStatic } from "@features/products/api/productApiStatic";
 import { articleApiStatic } from "@features/article/api/articleApiStatic";
 import MainLayout from "@layouts/MainLayout.astro";
 import { ArrowRight } from "lucide-react";
+import { linkSocial } from "@utils/social";
 
 // Fetch data for the page
 let products = [];
@@ -100,7 +101,7 @@ try {
             <!-- Fixed contrast issue with the "Hubungi kami" button -->
             <MarineButton
               as="a"
-              href="/contact-us"
+              href={linkSocial.whatsapp}
               variant="tertiary"
               size="lg"
               className="w-full sm:w-auto text-center  rounded-xl sm:flex sm:items-center gap-2 shadow-lg  transition-all duration-300"
@@ -125,6 +126,63 @@ try {
         </div>
 
         <!-- Enhanced hero image section with shadow and rounded corners -->
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-white relative overflow-hidden">
+    <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
+      <div class="grid gap-8 lg:grid-cols-2 sm:mx-auto">
+        <div class="flex flex-col justify-center">
+          <div class="flex">
+            <div>
+              <h2
+                class="font-sans font-bold text-marine-darkBlue text-4xl mb-4"
+              >
+                Tentang Toko Koko Lie
+              </h2>
+              <p class="font-sans text-gray-600 text-lg">
+                Toko Koko Lie adalah destinasi utama bagi Anda yang mencari
+                solusi cat marine berkualitas tinggi. Sebagai partner resmi dari
+                Ashdaq Paint, Toko Koko Lie menawarkan berbagai macam produk cat
+                yang dirancang khusus untuk memenuhi kebutuhan kapal, baik untuk
+                keperluan komersial maupun pribadi. Kami berkomitmen untuk
+                menyediakan cat dengan daya tahan luar biasa terhadap air laut
+                dan cuaca ekstrem, memastikan kapal Anda terlindungi dengan
+                optimal.
+                <br />
+                <br />
+                Keunggulan kami tidak berhenti di produk yang kami tawarkan; kami
+                juga menjamin proses pengiriman yang cepat dan aman ke seluruh wilayah
+                Indonesia. Hal ini memastikan bahwa Anda mendapatkan produk yang
+                Anda butuhkan tepat waktu, tanpa harus menunggu lama.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-5">
+          <img
+            class="object-cover w-full h-56 col-span-2 rounded-xl shadow-md"
+            src="/images/ship-wallpaper-2.png"
+            alt="Toko Koko Lie"
+          />
+          <div class="bg-white grid place-items-center w-full h-48 rounded-xl shadow-md p-2">
+
+            <img
+            class="w-48"
+            src="/images/logo.png"
+            alt="Toko Koko Lie"
+            />
+          </div>
+          <div class="bg-white grid place-items-center w-full h-48 rounded-xl shadow-md p-2">
+
+            <img
+            class="w-48"
+            src="/images/ashdaq-paint-logo.png"
+            alt="Ashdaq Paint"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -480,7 +538,7 @@ try {
                   </svg>
                 </div>
                 <span class="font-sans text-sm text-gray-600"
-                  >admin@gmail.com</span
+                  >{linkSocial.email.key}</span
                 >
               </div>
 
@@ -501,7 +559,7 @@ try {
                   </svg>
                 </div>
                 <span class="font-sans text-sm text-gray-600"
-                  >+628123456789</span
+                  >{linkSocial.phone.key}</span
                 >
               </div>
 
@@ -531,30 +589,24 @@ try {
 
         <!-- Map section with enhanced styling -->
         <div class="relative">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-marine-blue/30 to-marine-lightBlue/30 rounded-xl z-10 opacity-20"
-          >
-          </div>
-          <div
-            class="rounded-xl shadow-xl overflow-hidden h-full flex items-center justify-center"
-          >
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.666427022623!2d106.82457787487954!3d-6.175392393812006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sMonumen%20Nasional!5e0!3m2!1sid!2sid!4v1746970162103!5m2!1sid!2sid"
-              width="100%"
-              height="100%"
-              style="border:0;"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"></iframe>
-          </div>
+          <iframe
+            class="min-h-96 z-50 rounded-xl shadow-xl overflow-hidden h-full flex items-center justify-center"
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d253882.5287981797!2d106.873423!3d-6.1421850000000004!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5ad53bbb9cb%3A0x222b9ccf95ba07b9!2sAgung%20Perkasa%203!5e0!3m2!1sid!2sid!4v1747488999141!5m2!1sid!2sid"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
 
           <!-- Address overlay -->
           <div
-            class="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg z-20"
+            class="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg z-20"
           >
             <div class="flex justify-start items-center gap-2">
               <!-- <MapPin size={32} color="#dc2626" /> -->
               <svg
+                class="hidden sm:inline"
                 width="40"
                 height="40"
                 viewBox="0 0 24 24"
@@ -567,10 +619,10 @@ try {
               </svg>
               <div>
                 <h4 class="font-sans font-bold text-marine-darkBlue text-lg">
-                  Koko Lie
+                  Toko Koko Lie
                 </h4>
                 <p class="font-sans text-gray-700 text-sm">
-                  Jl. Lorem Ipsum No. 123, Jakarta, Indonesia
+                  {linkSocial.address.key}
                 </p>
               </div>
             </div>

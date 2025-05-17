@@ -4,6 +4,7 @@ import MarineHeader from "@components/layout/MarineHeader";
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import "../styles/wp-article.css";
+import { linkSocial } from "@utils/social";
 
 // SEO Props
 interface Props {
@@ -103,10 +104,10 @@ try {
       {
         isShowWhatsapp && (
           <a
-            href="https://wa.me/628123456789"
+            href={linkSocial.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            class="z-[1] fixed bottom-6 right-6 flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white shadow-lg hover:bg-green-700 transition-colors duration-200"
+            class="z-[1] fixed bottom-6 right-6 flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white hover:text-white shadow-lg hover:bg-green-700 transition-colors duration-200"
           >
             <span class="font-sans">Hubungi kami</span>
             <svg
