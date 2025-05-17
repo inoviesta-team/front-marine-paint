@@ -5,10 +5,10 @@ import AuthGuard from "src/middleware/AuthGuard";
 ---
 
 <MainLayout
-  title="Login | ShopAstro"
-  description="Log in to your ShopAstro account"
+  title="Order Detail | Toko Koko Lie"
+  description="Lihat detail order Anda di Toko Koko Lie. Kami memberikan kemudahan untuk Anda memantau status order Anda secara online."
 >
-  <AuthGuard client:only="react" redirect='/account/login' >
+  <AuthGuard client:only="react">
     <OrderDetailPage client:only="react" />
   </AuthGuard>
 </MainLayout>

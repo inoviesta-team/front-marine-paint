@@ -38,6 +38,9 @@ export default function ProductImageGallery({ productId, productImages = [] }) {
           }
           alt={selectedImage?.fileName}
           className="w-full h-full object-contain transition-all duration-300"
+          onError={(e) => {
+            e.target.src = "/images/no-image.png"
+          }}
         />
           ) : (
             <video
@@ -73,6 +76,9 @@ export default function ProductImageGallery({ productId, productImages = [] }) {
                 src={beUrl + image.filePath}
                 alt={`Product image ${image.fileName}`}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.src = "/images/no-image.png"
+                }}
               />
                 ) : (
                   <video

@@ -35,7 +35,7 @@ export default function OrderHistory() {
 
   return (
     <AccountLayout>
-      <h2 className="text-2xl font-semibold mb-4">History Order</h2>
+      <h2 className="text-2xl font-semibold mb-4">Riwayat Order</h2>
 
       {/* Filter tabs */}
       <div className="overflow-x-auto mb-6 pb-3">
@@ -90,6 +90,9 @@ export default function OrderHistory() {
                   src={image?.id ? beUrl + image.filePath : "/images/no-image.png"}
                   alt={item.product.name}
                   className="w-20 h-20 rounded-xl object-cover shadow"
+                  onError={(e) => {
+                    e.target.src = "/images/no-image.png"
+                  }}
                 />
                 <div className="flex-1">
                   <p className="line-clamp-1 text-sm sm:text-md font-medium text-marine-darkBlue">

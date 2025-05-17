@@ -26,7 +26,7 @@ export default function MarineHeader() {
   ];
 
   return (
-    <header className="lg:sticky top-0 z-50 bg-white py-4 sm:py-3 shadow-md">
+    <header className="bg-white py-4 sm:py-3 shadow-md">
       <div className="mx-auto px-4 sm:px-6 lg:px-16">
         <div className="flex justify-between items-center">
           {/* Logo */}

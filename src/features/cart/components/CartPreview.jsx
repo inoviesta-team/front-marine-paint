@@ -72,27 +72,27 @@ export default function CartPreview() {
   
 
   return (
-    <div class="container mx-auto py-8 px-4 md:px-14">
-      <div class="mb-8">
-        <h1 class="font-sans font-bold text-marine-darkBlue text-3xl">
+    <div className="container mx-auto py-8 px-4 md:px-14">
+      <div className="mb-8">
+        <h1 className="font-sans font-bold text-marine-darkBlue text-3xl">
           Keranjang Belanja Anda
         </h1>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2">
-          <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div class="hidden lg:grid grid-cols-12 gap-4 py-4 px-6 border-b border-gray-200 bg-gray-50">
-              <div class="col-span-6 font-sans font-bold text-marine-darkBlue">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="hidden lg:grid grid-cols-12 gap-4 py-4 px-6 border-b border-gray-200 bg-gray-50">
+              <div className="col-span-6 font-sans font-bold text-marine-darkBlue">
                 Produk
               </div>
-              <div class="col-span-2 font-sans font-bold text-marine-darkBlue text-center">
+              <div className="col-span-2 font-sans font-bold text-marine-darkBlue text-center">
                 Harga
               </div>
-              <div class="col-span-2 font-sans font-bold text-marine-darkBlue text-center">
+              <div className="col-span-2 font-sans font-bold text-marine-darkBlue text-center">
                 Jumlah
               </div>
-              <div class="col-span-2 font-sans font-bold text-marine-darkBlue text-right">
+              <div className="col-span-2 font-sans font-bold text-marine-darkBlue text-right">
                 Total
               </div>
             </div>
@@ -109,23 +109,26 @@ export default function CartPreview() {
                     checked={selectedCarts.filter((selectedCart) => selectedCart.id === item.id).length > 0}
                     onChange={() => handleSelectCart(item)}
                   />
-                  <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-                    <button onClick={() => handleSelectCart(item)} class="col-span-6">
-                      <div class="flex items-center">
-                        <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                    <button onClick={() => handleSelectCart(item)} className="col-span-6">
+                      <div className="flex items-center">
+                        <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                           <img
                             src={image?.filePath ? beUrl + image.filePath : "/images/no-image.png"}
                             alt={item.product.name}
-                            class="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.src = "/images/no-image.png"
+                            }}
+                            className="w-full h-full object-cover"
                           />
                         </div>
-                        <div class="ml-4">
-                          <h3 class="font-sans font-bold text-marine-darkBlue">
+                        <div className="ml-4">
+                          <h3 className="text-left font-sans font-bold text-marine-darkBlue">
                             {item.product.name}
                           </h3>
                           <button
                             onClick={() => deleteCart(item.id)}
-                            class="font-sans text-sm text-red-500 hover:text-red-700 flex items-center mt-1"
+                            className="font-sans text-sm text-red-500 hover:text-red-700 flex items-center mt-1"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +140,7 @@ export default function CartPreview() {
                               stroke-width="2"
                               stroke-linecap="round"
                               stroke-linejoin="round"
-                              class="mr-1"
+                              className="mr-1"
                             >
                               <path d="M3 6h18"></path>
                               <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
@@ -149,11 +152,11 @@ export default function CartPreview() {
                       </div>
                     </button>
 
-                    <button onClick={() => handleSelectCart(item)} class="col-span-2 font-sans text-gray-700 text-center">
+                    <button onClick={() => handleSelectCart(item)} className="col-span-2 font-sans text-gray-700 text-center">
                       Rp {item.product.price.toLocaleString()}
                     </button>
 
-                    <div class="col-span-2 flex justify-center">
+                    <div className="col-span-2 flex justify-center">
                       <CartQuantitySelector
                         initial={item.quantity}
                         min={1}
@@ -162,7 +165,7 @@ export default function CartPreview() {
                       />
                     </div>
 
-                    <button onClick={() => handleSelectCart(item)} class="hidden lg:block col-span-2 font-sans font-bold text-marine-darkBlue text-right">
+                    <button onClick={() => handleSelectCart(item)} className="hidden lg:block col-span-2 font-sans font-bold text-marine-darkBlue text-right">
                       Rp
                       {(item.product.price * item.quantity).toLocaleString()}
                     </button>
@@ -171,8 +174,8 @@ export default function CartPreview() {
                 })}
               </div>
             ) : (
-              <div class="py-12 px-6 text-center">
-                <div class="mb-6">
+              <div className="py-12 px-6 text-center">
+                <div className="mb-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="64"
@@ -183,17 +186,17 @@ export default function CartPreview() {
                     stroke-width="1"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="mx-auto text-gray-400"
+                    className="mx-auto text-gray-400"
                   >
                     <circle cx="9" cy="21" r="1"></circle>
                     <circle cx="20" cy="21" r="1"></circle>
                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                   </svg>
                 </div>
-                <h3 class="font-sans font-bold text-marine-darkBlue text-xl mb-2">
+                <h3 className="font-sans font-bold text-marine-darkBlue text-xl mb-2">
                   Keranjang Anda kosong
                 </h3>
-                <p class="font-sans text-gray-600 mb-6">
+                <p className="font-sans text-gray-600 mb-6">
                   Sepertinya Anda belum menambahkan produk apa pun.
                 </p>
                 <MarineButton
@@ -201,6 +204,7 @@ export default function CartPreview() {
                   href="/products"
                   variant="primary"
                   size="md"
+                  className="hover:text-white"
                   client:load
                 >
                   Jelajahi Produk
@@ -208,19 +212,19 @@ export default function CartPreview() {
               </div>
             )}
 
-            <div class="hidden lg:flex py-4 border-t border-gray-200 flex-wrap gap-4 justify-end items-center bg-gray-50">
-              {/* <div class="flex items-center">
+            <div className="hidden lg:flex py-4 border-t border-gray-200 flex-wrap gap-4 justify-end items-center bg-gray-50">
+              {/* <div className="flex items-center">
                 <input
                   type="text"
                   placeholder="Kode Kupon"
-                  class="w-48 h-10 border border-gray-300 rounded-lg px-4 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-marine-blue"
+                  className="w-48 h-10 border border-gray-300 rounded-lg px-4 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-marine-blue"
                 />
-                <button class="ml-2 h-10 px-4 bg-marine-blue text-white rounded-lg font-sans font-bold hover:bg-marine-darkBlue transition-colors">
+                <button className="ml-2 h-10 px-4 bg-marine-blue text-white rounded-lg font-sans font-bold hover:bg-marine-darkBlue transition-colors">
                   Terapkan
                 </button>
               </div> */}
 
-              <a href="/products" class="h-10 px-4 bg-white border border-gray-300 text-marine-darkBlue rounded-lg font-sans hover:text-marine-darkBlue transition-colors flex items-center">
+              <a href="/products" className="h-10 px-4 bg-white border border-gray-300 text-marine-darkBlue rounded-lg font-sans hover:text-marine-darkBlue transition-colors flex items-center">
                 <ShoppingCart className="mr-2" size={18} />
                 Lanjutkan Belanja
               </a>
@@ -228,43 +232,43 @@ export default function CartPreview() {
           </div>
         </div>
 
-        <div class="lg:col-span-1">
-          <div class="lg:sticky lg:top-2 bg-white rounded-xl shadow-sm overflow-hidden">
-            <div class="hidden lg:block py-4 px-6 border-b border-gray-200 bg-gray-50">
-              <h2 class="font-sans font-bold text-marine-darkBlue text-lg -mb-1">
+        <div className="lg:col-span-1">
+          <div className="lg:sticky lg:top-2 bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="hidden lg:block py-4 px-6 border-b border-gray-200 bg-gray-50">
+              <h2 className="font-sans font-bold text-marine-darkBlue text-lg -mb-1">
                 Ringkasan Pesanan
               </h2>
             </div>
 
-            <div class="p-6">
-              {/* <div class="flex justify-between mb-3">
-                <span class="font-sans text-gray-600">Subtotal</span>
-                <span class="font-sans font-medium text-marine-darkBlue">
+            <div className="p-6">
+              {/* <div className="flex justify-between mb-3">
+                <span className="font-sans text-gray-600">Subtotal</span>
+                <span className="font-sans font-medium text-marine-darkBlue">
                   Rp{subtotal.toLocaleString()}
                 </span>
               </div> */}
 
-              {/* <div class="flex justify-between mb-3">
-                <span class="font-sans text-gray-600">Diskon (10%)</span>
-                <span class="font-sans font-medium text-green-600">
+              {/* <div className="flex justify-between mb-3">
+                <span className="font-sans text-gray-600">Diskon (10%)</span>
+                <span className="font-sans font-medium text-green-600">
                   -Rp{discount.toLocaleString()}
                 </span>
               </div> */}
 
-              {/* <div class="flex justify-between mb-4">
-                <span class="font-sans text-gray-600">Biaya Pengiriman</span>
-                <span class="font-sans font-medium text-marine-darkBlue">
+              {/* <div className="flex justify-between mb-4">
+                <span className="font-sans text-gray-600">Biaya Pengiriman</span>
+                <span className="font-sans font-medium text-marine-darkBlue">
                   Rp{deliveryFee.toLocaleString()}
                 </span>
               </div> */}
 
-              {/* <div class="border-t border-gray-200 my-4"></div> */}
+              {/* <div className="border-t border-gray-200 my-4"></div> */}
 
-              <div class="flex justify-between mb-6">
-                <span class="text-xl font-sans font-bold text-marine-darkBlue">
+              <div className="flex justify-between mb-6">
+                <span className="text-xl font-sans font-bold text-marine-darkBlue">
                   Total
                 </span>
-                <span class="font-sans font-bold text-marine-darkBlue text-xl">
+                <span className="font-sans font-bold text-marine-darkBlue text-xl">
                   Rp{subtotal.toLocaleString()}
                 </span>
               </div>
@@ -279,10 +283,10 @@ export default function CartPreview() {
                 Checkout
               </MarineButton>
 
-              <div class="mt-4 text-center">
+              <div className="mt-4 text-center">
                 <a
                   href="/products"
-                  class="block lg:hidden font-sans text-marine-blue hover:text-marine-darkBlue inline-flex items-center"
+                  className="inline-flex lg:hidden font-sans text-marine-blue hover:text-marine-darkBlue items-center"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -294,7 +298,7 @@ export default function CartPreview() {
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="mr-2"
+                    className="mr-2"
                   >
                     <path d="M19 12H5"></path>
                     <path d="M12 19l-7-7 7-7"></path>

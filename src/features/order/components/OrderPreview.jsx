@@ -2,7 +2,7 @@ import MarineButton from "@components/ui/MarineButton";
 import useAddressStore from "@features/account/zustand/useAddressStore";
 import CartQuantitySelector from "@features/cart/components/CartQuantitySelector";
 import useCartStore from "@features/cart/zustand/useCartStore";
-import { ShoppingCart } from "lucide-react";
+import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { orderApi } from "../api/orderApi";
 import { valueUtil } from "@utils/valueUtil";
@@ -135,12 +135,14 @@ export default function OrderPreview() {
     //   notes: inputUser.notes,
     // };
 
-    console.log("req: ", request);
     const resOrder = await orderApi.createOrder(request);
 
+    
     const orderId = resOrder?.data?.data?.id || "";
     const orderJsonData = resOrder?.data?.data || {};
-
+    
+    console.log("resOrder: ", resOrder);
+    console.log("orderJsonData: ", orderJsonData);
     window.location.href = `/order/order-detail?orderId=${orderId}&orderJson=${JSON.stringify(
       orderJsonData
     )}`;
@@ -191,6 +193,9 @@ export default function OrderPreview() {
                                     : "/images/no-image.png"
                                 }
                                 alt={item.product.name}
+                                onError={(e) => {
+                                  e.target.src = "/images/no-image.png"
+                                }}
                                 className="w-full h-full object-cover"
                               />
                             </div>
@@ -301,6 +306,7 @@ export default function OrderPreview() {
                   href="/products"
                   variant="primary"
                   size="md"
+                  className="hover:text-white"
                   client:load
                 >
                   Jelajahi Produk
@@ -319,6 +325,10 @@ export default function OrderPreview() {
                   Terapkan
                 </button>
               </div> */}
+              <a href="/cart" className="h-10 px-4 bg-white border border-gray-300 text-marine-darkBlue rounded-lg font-sans hover:text-marine-darkBlue transition-colors flex items-center">
+                              <ArrowLeft className="mr-2" size={18} />
+                              Kembali
+                            </a>
             </div>
           </div>
         </div>
@@ -485,7 +495,7 @@ export default function OrderPreview() {
                   selectedCart.map((cart) => (
                     <div
                       key={cart.id}
-                      className="flex justify-between items-center"
+                      className="flex flex-wrap justify-between items-center"
                     >
                       <p className="space-x-1">
                         <span className="capitalize">{cart.product.name}</span>{" "}
@@ -531,6 +541,29 @@ export default function OrderPreview() {
               >
                 Buat Pesanan
               </MarineButton>
+              <div className="mt-4 text-center">
+                <a
+                  href="/cart"
+                  className="inline-flex lg:hidden font-sans text-marine-blue hover:text-marine-darkBlue items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    className="mr-2"
+                  >
+                    <path d="M19 12H5"></path>
+                    <path d="M12 19l-7-7 7-7"></path>
+                  </svg>
+                  Kembali
+                </a>
+              </div>
             </div>
           </div>
         </div>

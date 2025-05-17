@@ -77,7 +77,7 @@ export default function AccountLayout({ children }) {
                 } p-3 rounded-md block`}
                 href="/order"
               >
-                History Order
+                Riwayat Order
               </a>
               <a
                 className={`${

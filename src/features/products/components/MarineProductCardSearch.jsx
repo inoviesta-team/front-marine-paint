@@ -18,6 +18,9 @@ export default function MarineProductCardSearch({ product }) {
               src={media.length > 0 ? beUrl + media[0].filePath : "/images/no-image.png"}
               alt={product.name}
               className="h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-700"
+              onError={(e) => {
+                e.target.src = "/images/no-image.png"
+              }}
             />
           {/* ) : (
             <div className="h-full w-full bg-marine-blue/10 flex items-center justify-center">

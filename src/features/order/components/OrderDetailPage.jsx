@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { orderApi } from "../api/orderApi";
 import { paymentApi } from "../api/paymentApi";
 import { orderStatus } from "../util/orderStatus";
+import { beUrl } from "@utils/url";
 
 export default function OrderDetailPage() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -157,12 +158,16 @@ export default function OrderDetailPage() {
           <div className="space-y-6">
             {orderJsonData?.orderItems?.map((item, index) => {
               const rating = checkAlreadyRated(item.productId);
+              const image = item?.product?.media.length > 0 && (item?.product?.media.find((image) => image.isMain == true) || item?.product?.media[0]);
               return (
                 <div key={index} className="flex items-center gap-4">
                   <img
-                    src={"https://i.pravatar.cc/150"}
-                    alt={item.product.name}
+                    src={image?.id ? beUrl + image.filePath : "/images/no-image.png"}
+                                      alt={item.product.name}
                     className="w-20 h-20 rounded-xl object-cover shadow"
+                    onError={(e) => {
+                      e.target.src = "/images/no-image.png"
+                    }}
                   />
                   <div className="flex-1">
                     <p className="line-clamp-1 text-sm sm:text-md font-medium text-marine-darkBlue">
