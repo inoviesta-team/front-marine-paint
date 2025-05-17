@@ -7,8 +7,10 @@ import MarineProjectCard from "@components/project/MarineProjectCard";
 import MarineTestimonialCard from "@components/testimonial/MarineTestimonialCard";
 import MarineButton from "@components/ui/MarineButton";
 import MarineValueCard from "@components/value/MarineValueCard";
+import { productApiStatic } from "@features/products/api/productApiStatic";
+import { articleApiStatic } from "@features/article/api/articleApiStatic";
 import MainLayout from "@layouts/MainLayout.astro";
-import { ArrowRight, Map, MapPin } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 // Fetch data for the page
 let products = [];
@@ -19,13 +21,19 @@ let partners = [];
 
 try {
   // Fetch products
-  products = await marineApi.getProducts({ limit: 5 });
+  const responseProducts = await productApiStatic.getProducts({
+    limit: 10
+  });
+  // console.log("responseProducts: ", responseProducts?.data?.products || []);
+  products = await responseProducts?.data?.products || [];
   
   // Fetch projects
   projects = await marineApi.getProjects({ limit: 4 });
   
   // Fetch articles
-  articles = await marineApi.getArticles({ limit: 3 });
+  const responseArticles = await articleApiStatic.getArtciles()
+  console.log("responseArticles: ", responseArticles || []);
+  articles = await responseArticles;
   
   // Fetch testimonials
   testimonials = await marineApi.getTestimonials();
@@ -130,7 +138,7 @@ try {
       <div class="overflow-x-auto">
         <div class="flex gap-6 p-2">
           {products.map((product) => (
-          <MarineProductCard product={product} />
+          <MarineProductCard client:only="react" product={product} />
         ))}
         </div>
       </div>

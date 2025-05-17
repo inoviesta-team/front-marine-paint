@@ -1,16 +1,19 @@
 ---
 import MainLayout from '@layouts/MainLayout.astro';
+import { wpJsonUrl } from '@utils/url';
+import { valueUtil } from '@utils/valueUtil';
+import { Clock } from 'lucide-react';
 
 
 const { slug } = Astro.params;
 
-let res = await fetch(`https://wp.kokoliemart.com/wp-json/wp/v2/posts?slug=${slug}`);
+let res = await fetch(`${wpJsonUrl}/v2/posts?slug=${slug}`);
 let [post] = await res.json();
 
 // The getStaticPaths() is required for static Astro sites.
 // If using SSR, you will not need this function.
 export async function getStaticPaths() {
-  let data = await fetch("https://wp.kokoliemart.com/wp-json/wp/v2/posts");
+  let data = await fetch(`${wpJsonUrl}/v2/posts`);
   let posts = await data.json();
 
   return posts.map((post) => ({
@@ -19,8 +22,9 @@ export async function getStaticPaths() {
   }));
 }
 ---
-<MainLayout title={post.title.rendered}>
-  <article class="wp-article">
+<MainLayout title={post.title.rendered} description={post.excerpt.rendered} >
+  <article class="wp-article min-h-screen">
+    <p class="flex items-center gap-1"><Clock size={16} color='#155da2' /> <span>{valueUtil.calculateTimeDistance(post.date)}</span></p>
     <h1 set:html={post.title.rendered} />
     <Fragment set:html={post.content.rendered} />
   </article>
