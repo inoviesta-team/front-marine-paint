@@ -63,10 +63,10 @@ export default function MarineFooter() {
             <div className="mb-4">
               <span className="font-sans font-bold text-white md:text-right -mb-4">Online Shop</span>
               <div className="flex items-center md:justify-end mt-2">
-                <a href={linkSocial.tokopedia}>
+                <a target='_blank' href={linkSocial.tokopedia}>
                   <img src="/images/icon/tokopedia.png" alt="Toko Koko Lie - Tokopedia" />
                 </a>
-                <a href={linkSocial.shopee}>
+                <a target='_blank' href={linkSocial.shopee}>
                   <img src="/images/icon/shopee.png" alt="Toko Koko Lie - Shopee" />
                 </a>
               </div>
@@ -77,7 +77,7 @@ export default function MarineFooter() {
         <div className="pt-6">
           <div className="flex flex-col items-center mb-4">
             <a href={linkSocial.ashdaq.value} target="_blank" rel="noopener noreferrer" className="text-white hover:text-white mb-2 flex items-center text-md">
-              <span className="mr-1">Official Paint Partner of</span>
+              <span className="mr-1">Official Partner of</span>
               <strong>{linkSocial.ashdaq.key}</strong>
             </a>
           </div>

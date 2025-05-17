@@ -1,3 +1,5 @@
+export const feUrl = "https://kokoliemart.com/"
+
 export const fePathUrl = {
     home: "/",
     login: "/account/login",

@@ -54,7 +54,7 @@ const pageDescription = "Kontak kami untuk mendapatkan informasi lebih lanjut te
           <!-- Quick contact methods -->
           <div class="mt-8 pt-6 border-t border-gray-100">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="flex items-center">
+              <a target="_blank" href={`mailto:${linkSocial.email.value}`} class="flex items-center">
                 <div
                   class="w-10 h-10 rounded-full bg-marine-blue/10 flex items-center justify-center mr-3"
                 >
@@ -73,9 +73,9 @@ const pageDescription = "Kontak kami untuk mendapatkan informasi lebih lanjut te
                 <span class="font-sans text-sm text-gray-600"
                   >{linkSocial.email.key}</span
                 >
-              </div>
+              </a>
 
-              <div class="flex items-center">
+              <a target="_blank" href={`${linkSocial.phone.value}`} class="flex items-center">
                 <div
                   class="w-10 h-10 rounded-full bg-marine-blue/10 flex items-center justify-center mr-3"
                 >
@@ -94,9 +94,9 @@ const pageDescription = "Kontak kami untuk mendapatkan informasi lebih lanjut te
                 <span class="font-sans text-sm text-gray-600"
                   >{linkSocial.phone.key}</span
                 >
-              </div>
+              </a>
 
-              <div class="flex items-center">
+              <a target="_blank" href={`${linkSocial.address.value}`} class="flex items-center">
                 <div
                   class="w-10 h-10 rounded-full bg-marine-blue/10 flex items-center justify-center mr-3"
                 >
@@ -115,7 +115,7 @@ const pageDescription = "Kontak kami untuk mendapatkan informasi lebih lanjut te
                 <span class="font-sans text-sm text-gray-600"
                   >Jakarta, Indonesia</span
                 >
-              </div>
+              </a>
             </div>
           </div>
         </div>

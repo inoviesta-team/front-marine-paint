@@ -5,6 +5,7 @@ import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import "../styles/wp-article.css";
 import { linkSocial } from "@utils/social";
+import { feUrl } from "@utils/url";
 
 // SEO Props
 interface Props {
@@ -26,11 +27,11 @@ let canonicalURL;
 try {
   canonicalURL = new URL(
     Astro.url.pathname,
-    Astro.site || "http://localhost:4321"
+    Astro.site || feUrl
   );
 } catch (error) {
   // Fallback to just using the pathname
-  canonicalURL = new URL("http://localhost:4321" + Astro.url.pathname);
+  canonicalURL = new URL(feUrl + Astro.url.pathname);
 }
 
 // Process image URLs
@@ -74,7 +75,7 @@ try {
     <meta property="twitter:image" content={twitterImageUrl} />
 
     <!-- Favicon -->
-    <link rel="icon" href="/images/logo-white.png" type="image/svg+xml" />
+    <link rel="icon" href="/images/logo-with-bg/bg-white.png" type="image/svg+xml" />
 
     <!-- Navigation Scripting -->
     <script>

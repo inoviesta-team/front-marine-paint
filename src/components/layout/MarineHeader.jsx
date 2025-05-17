@@ -40,7 +40,7 @@ export default function MarineHeader() {
           </div>
 
           {/* Hamburger Button (mobile only) */}
-          <div className="lg:hidden">
+          <div className="mt-2 lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-marine-blue focus:outline-none"
@@ -205,9 +205,9 @@ function UserDropdown() {
         >
           <div className="flex justify-start items-center">
             <img
-              src="https://i.pravatar.cc/150"
-              alt="User avatar"
-              className="w-10 h-10 rounded-full mr-2"
+              src="/images/user-default.png"
+              alt={user.name}
+              className="w-10 h-10 rounded-full mr-2 shadow border border-gray-200"
             />
             <div className="text-start">
               <p className="font-sans text-sm font-bold text-marine-blue">

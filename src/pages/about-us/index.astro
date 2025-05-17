@@ -1,5 +1,6 @@
 ---
 import MainLayout from "@layouts/MainLayout.astro";
+import { linkSocial } from "@utils/social";
 ---
 
 <MainLayout
@@ -7,59 +8,59 @@ import MainLayout from "@layouts/MainLayout.astro";
   description="Toko Koko Lie menyediakan cat marine terpercaya untuk ketahanan maksimal. Official partner of Ashdaq Paint."
 >
 <section class="py-2 sm:py-24 bg-white relative overflow-hidden">
-    <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
-      <div class="grid gap-8 lg:grid-cols-2 sm:mx-auto">
-        <div class="flex flex-col justify-center">
-          <div class="flex">
-            <div>
-              <h2
-                class="font-sans font-bold text-marine-darkBlue text-4xl mb-4"
-              >
-                Tentang <br class="inline sm:hidden"> Toko Koko Lie
-              </h2>
-              <p class="font-sans text-gray-600 text-lg">
-                Toko Koko Lie adalah destinasi utama bagi Anda yang mencari
-                solusi cat marine berkualitas tinggi. Sebagai partner resmi dari
-                Ashdaq Paint, Toko Koko Lie menawarkan berbagai macam produk cat
-                yang dirancang khusus untuk memenuhi kebutuhan kapal, baik untuk
-                keperluan komersial maupun pribadi. Kami berkomitmen untuk
-                menyediakan cat dengan daya tahan luar biasa terhadap air laut
-                dan cuaca ekstrem, memastikan kapal Anda terlindungi dengan
-                optimal.
-                <br />
-                <br />
-                Keunggulan kami tidak berhenti di produk yang kami tawarkan; kami
-                juga menjamin proses pengiriman yang cepat dan aman ke seluruh wilayah
-                Indonesia. Hal ini memastikan bahwa Anda mendapatkan produk yang
-                Anda butuhkan tepat waktu, tanpa harus menunggu lama.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-5">
-          <img
-            class="object-cover w-full h-56 col-span-2 rounded-xl shadow-md"
-            src="/images/ship-wallpaper-2.png"
-            alt="Toko Koko Lie"
-          />
-          <div class="bg-white grid place-items-center w-full h-36 sm:h-48 rounded-xl shadow-md p-5">
-
-            <img
-            class="w-24 sm:w-48"
-            src="/images/logo.png"
-            alt="Toko Koko Lie"
-            />
-          </div>
-          <div class="bg-white grid place-items-center w-full h-36 sm:h-48 rounded-xl shadow-md p-5">
-
-            <img
-            class="w-24 sm:w-48"
-            src="/images/ashdaq-paint-logo.png"
-            alt="Ashdaq Paint"
-            />
+  <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
+    <div class="grid gap-8 lg:grid-cols-2 sm:mx-auto">
+      <div class="flex flex-col justify-center">
+        <div class="flex">
+          <div>
+            <h2
+              class="font-sans font-bold text-marine-darkBlue text-4xl mb-4"
+            >
+              Tentang <br class="inline sm:hidden"> Toko Koko Lie
+            </h2>
+            <p class="font-sans text-gray-600 text-lg">
+              Toko Koko Lie adalah destinasi utama bagi Anda yang mencari
+              solusi cat marine berkualitas tinggi. Sebagai partner resmi dari
+              Ashdaq Paint, Toko Koko Lie menawarkan berbagai macam produk cat
+              yang dirancang khusus untuk memenuhi kebutuhan kapal, baik untuk
+              keperluan komersial maupun pribadi. Kami berkomitmen untuk
+              menyediakan cat dengan daya tahan luar biasa terhadap air laut
+              dan cuaca ekstrem, memastikan kapal Anda terlindungi dengan
+              optimal.
+              <br />
+              <br />
+              Keunggulan kami tidak berhenti di produk yang kami tawarkan; kami
+              juga menjamin proses pengiriman yang cepat dan aman ke seluruh wilayah
+              Indonesia. Hal ini memastikan bahwa Anda mendapatkan produk yang
+              Anda butuhkan tepat waktu, tanpa harus menunggu lama.
+            </p>
           </div>
         </div>
       </div>
+      <div class="grid grid-cols-2 gap-5">
+        <img
+          class="object-cover w-full h-56 col-span-2 rounded-xl shadow-md"
+          src="/images/ship-wallpaper-2.png"
+          alt="Toko Koko Lie"
+        />
+        <a href="/" class="bg-white grid place-items-center w-full h-36 sm:h-48 rounded-xl shadow-md p-5">
+
+          <img
+          class="w-24 sm:w-48"
+          src="/images/logo.png"
+          alt="Toko Koko Lie"
+          />
+        </a>
+        <a href={linkSocial.ashdaq.value} target="_blank" class="bg-white grid place-items-center w-full h-36 sm:h-48 rounded-xl shadow-md p-5">
+
+          <img
+          class="w-24 sm:w-48"
+          src="/images/ashdaq-paint-logo.png"
+          alt="Ashdaq Paint"
+          />
+        </a>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 </MainLayout>
