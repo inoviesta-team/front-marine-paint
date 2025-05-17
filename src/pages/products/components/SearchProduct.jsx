@@ -84,7 +84,7 @@ export default function SearchProduct() {
     // }
   };
 
-  const [searchValue] = useDebounce(inputFilter.search, 1000);
+  const [searchValue] = useDebounce(inputFilter.search, 850);
 
   const [sortOrder, setSortOrder] = useState("asc");
   const sortBy = [
