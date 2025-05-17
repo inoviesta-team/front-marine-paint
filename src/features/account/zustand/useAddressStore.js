@@ -46,10 +46,10 @@ const useAddressStore = create(
                     throw err;
                 }
             },
-            deleteAddress: async (addressId, request) => {
+            deleteAddress: async (addressId) => {
                 set({ loading: true, error: null });
                 try {
-                    const res = await addressApi.deleteAddress(addressId, request);
+                    const res = await addressApi.deleteAddress(addressId);
                     get().getAddress();
                 } catch (err) {
                     set({ error: err.message || 'Delete address failed', loading: false });

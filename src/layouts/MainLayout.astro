@@ -6,6 +6,8 @@ import "../styles/global.css";
 import "../styles/wp-article.css";
 import { linkSocial } from "@utils/social";
 import { feUrl } from "@utils/url";
+import LoadingOverlay from "@components/ui/LoadingOverlay";
+import { only } from "node:test";
 
 // SEO Props
 interface Props {
@@ -103,6 +105,8 @@ try {
     <main class="relative flex-grow" transition:animate="fade">
       <slot />
     </main>
+
+    <LoadingOverlay client:only="react" />
 
     {
       isShowWhatsapp && (

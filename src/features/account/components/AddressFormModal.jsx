@@ -1,16 +1,21 @@
 import MarineButton from "@components/ui/MarineButton";
-import { MapPin, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { dataWilayahIndonesiaApi } from "../api/dataWilayahIndonesiaApi";
+import useAuthStore from "@features/auth/zustand/useAuthStore";
+import { MapPin, Trash2, X } from "lucide-react";
+import { useState } from "react";
 import indonesiaCities from "../../../../public/json/indonesiaCities.json";
 import indonesiaProvinces from "../../../../public/json/indonesiaProvinces.json";
 import useAddressStore from "../zustand/useAddressStore";
-import useAuthStore from "@features/auth/zustand/useAuthStore";
 
-export default function AddressFormModal({ addressObj = {}, showModal, handleCloseModal }) {
-  const [isDefault, setIsDefault] = useState(addressObj?.id ? addressObj.isDefault : false);
-  const { createAddress, updateAddress } = useAddressStore();
-  const { user } = useAuthStore()
+export default function AddressFormModal({
+  addressObj = {},
+  showModal,
+  handleCloseModal,
+}) {
+  const [isDefault, setIsDefault] = useState(
+    addressObj?.id ? addressObj.isDefault : false
+  );
+  const { createAddress, updateAddress, deleteAddress } = useAddressStore();
+  const { user } = useAuthStore();
 
   let provincesData = Object.entries(indonesiaProvinces).map(
     ([id, province]) => ({
@@ -24,43 +29,63 @@ export default function AddressFormModal({ addressObj = {}, showModal, handleClo
   );
 
   // SELECTED DATA
-  const selectedProvinceData = addressObj?.province && provincesData.filter((data, _) => data.province === addressObj?.province)[0].id || ""
-  const selectedProvinceNameData = addressObj?.province || ""
-  const selectedRegencyData = addressObj?.city || ""
-  const selectedPostalCodeData = addressObj?.postalCode || ""
-  const selectedDistrictData = addressObj?.id ?
-    indonesiaCities.filter((data, _) => data.postal_code === selectedPostalCodeData)[0]?.sub_district : ""
+  const selectedProvinceData =
+    (addressObj?.province &&
+      provincesData.filter(
+        (data, _) => data.province === addressObj?.province
+      )[0].id) ||
+    "";
+  const selectedProvinceNameData = addressObj?.province || "";
+  const selectedRegencyData = addressObj?.city || "";
+  const selectedPostalCodeData = addressObj?.postalCode || "";
+  const selectedDistrictData = addressObj?.id
+    ? indonesiaCities.filter(
+        (data, _) => data.postal_code === selectedPostalCodeData
+      )[0]?.sub_district
+    : "";
 
   // DATA JSON
-  const regencyAddrObj = addressObj?.id ? [
-    ...new Set(
-      indonesiaCities
-        .filter((data, _) => data.province_code === selectedProvinceData)
-        .map((data, _) => data.city)
-    ),
-  ].sort() : []
+  const regencyAddrObj = addressObj?.id
+    ? [
+        ...new Set(
+          indonesiaCities
+            .filter((data, _) => data.province_code === selectedProvinceData)
+            .map((data, _) => data.city)
+        ),
+      ].sort()
+    : [];
 
-  const districtAddrObj = addressObj?.id ? [
-    ...new Set(
-      indonesiaCities
-        .filter((data, _) => data.city === selectedRegencyData)
-        .map((data, _) => data.sub_district)
-    ),
-  ].sort() : []
+  const districtAddrObj = addressObj?.id
+    ? [
+        ...new Set(
+          indonesiaCities
+            .filter((data, _) => data.city === selectedRegencyData)
+            .map((data, _) => data.sub_district)
+        ),
+      ].sort()
+    : [];
 
-  const postalAddrObj = addressObj?.id ? [
-    ...new Set(
-      indonesiaCities
-        .filter((data, _) => data.sub_district === selectedDistrictData)
-        .map((data, _) => data.postal_code)
-    ),
-  ].sort() : []
+  const postalAddrObj = addressObj?.id
+    ? [
+        ...new Set(
+          indonesiaCities
+            .filter((data, _) => data.sub_district === selectedDistrictData)
+            .map((data, _) => data.postal_code)
+        ),
+      ].sort()
+    : [];
 
-  const [selectedProvince, setSelectedProvince] = useState(selectedProvinceData);
-  const [selectedProvinceName, setSelectedProvinceName] = useState(selectedProvinceNameData);
+  const [selectedProvince, setSelectedProvince] =
+    useState(selectedProvinceData);
+  const [selectedProvinceName, setSelectedProvinceName] = useState(
+    selectedProvinceNameData
+  );
   const [selectedRegency, setSelectedRegency] = useState(selectedRegencyData);
-  const [selectedDistrict, setSelectedDistrict] = useState(selectedDistrictData);
-  const [selectedPostalCode, setSelectedPostalCode] = useState(selectedPostalCodeData);
+  const [selectedDistrict, setSelectedDistrict] =
+    useState(selectedDistrictData);
+  const [selectedPostalCode, setSelectedPostalCode] = useState(
+    selectedPostalCodeData
+  );
 
   const [provinces, setProvinces] = useState(provincesData);
   // console.log("provinces: ", provinces);
@@ -142,8 +167,8 @@ export default function AddressFormModal({ addressObj = {}, showModal, handleClo
   const [inputAddress, setInputAddress] = useState({
     addressType: "SHIPPING",
     country: "Indonesia",
-    recipientName: addressObj?.id ? addressObj.recipientName  : user.name,
-    phone: addressObj?.id ? addressObj.phone  : user.phoneNumber,
+    recipientName: addressObj?.id ? addressObj.recipientName : user.name,
+    phone: addressObj?.id ? addressObj.phone : user.phoneNumber,
     address: addressObj?.address ?? "",
     notes: addressObj?.notes ?? "",
   });
@@ -160,7 +185,24 @@ export default function AddressFormModal({ addressObj = {}, showModal, handleClo
   // console.log("selectedDistrict: ", selectedDistrict);
   // console.log("selectedPostalCode: ", selectedPostalCode);
   // console.log("inputAddress: ", inputAddress);
-  
+
+  const setToDefault = () => {
+    setInputAddress({
+      addressType: "SHIPPING",
+      country: "Indonesia",
+      recipientName: "",
+      phone: "",
+      address: "",
+      notes: "",
+    });
+    setSelectedProvince("");
+    setSelectedProvinceName("");
+    setSelectedRegency("");
+    setSelectedDistrict("");
+    setSelectedPostalCode("");
+    setIsDefault(false);
+    handleCloseModal();
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -170,40 +212,38 @@ export default function AddressFormModal({ addressObj = {}, showModal, handleClo
       province: selectedProvinceName,
       city: selectedRegency,
       postalCode: selectedPostalCode,
-      isDefault
-    }
+      isDefault,
+    };
 
     // console.log("requestData: ", requestData);
 
-    if(addressObj?.id) {
-      await updateAddress(addressObj.id, requestData)
+    if (addressObj?.id) {
+      await updateAddress(addressObj.id, requestData);
     } else {
-      await createAddress(requestData)
+      await createAddress(requestData);
     }
 
-    setInputAddress({
-      addressType: "SHIPPING",
-      country: "Indonesia",
-      recipientName: "",
-      phone: "",
-      address: "",
-      notes: "",
-    })
-    setSelectedProvince("")
-    setSelectedProvinceName("")
-    setSelectedRegency("")
-    setSelectedDistrict("")
-    setSelectedPostalCode("")
-    setIsDefault(false)
-    handleCloseModal()
+    setToDefault()
+  };
+
+  const handleDeleteAddress = async () => {
+    if(!addressObj?.id) return
+    const confirmDelete = window.confirm(`Apakah Anda yakin ingin menghapus alamat?`)
+    if(!confirmDelete) return
+
+    await deleteAddress(addressObj.id)
+
+    setToDefault()
   }
-  
 
   return (
     <>
       {showModal && (
         <div className="overflow-y-scroll xl:overflow-y-hidden fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-40 md:py-8">
-          <form onSubmit={handleSubmit} className="bg-white rounded-xl p-5 sm:p-6 w-full h-auto sm:h-auto max-w-3xl shadow-xl">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white rounded-xl p-5 sm:p-6 w-full h-auto sm:h-auto max-w-3xl shadow-xl"
+          >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold text-slate-700">
                 {addressObj?.id ? "Ubah Alamat" : "Tambah Alamat Baru"}
@@ -393,10 +433,24 @@ export default function AddressFormModal({ addressObj = {}, showModal, handleClo
             </div>
 
             <div className="flex justify-end space-x-2 mt-3">
-              <MarineButton className="rounded-lg" onClick={handleCloseModal} variant="tertiary">
+              {addressObj?.id && (
+                <button
+                  onClick={handleDeleteAddress}
+                  className="bg-white text-red-500 border-2 border-red-500 shadow-md px-2 rounded-lg"
+                >
+                  <Trash2 />
+                </button>
+              )}
+              <MarineButton
+                className="rounded-lg"
+                onClick={handleCloseModal}
+                variant="tertiary"
+              >
                 Batal
               </MarineButton>
-              <MarineButton className="rounded-lg" type="submit">Simpan</MarineButton>
+              <MarineButton className="rounded-lg" type="submit">
+                Simpan
+              </MarineButton>
             </div>
           </form>
         </div>
