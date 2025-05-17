@@ -1,20 +1,17 @@
 ---
-import FloatingWhatsAppButton from "@components/ui/FloatingWhatsAppButton";
 import {
-  getProducts,
-  productApiStatic,
+productApiStatic
 } from "@features/products/api/productApiStatic";
 import MainLayout from "@layouts/MainLayout.astro";
 import { valueUtil } from "@utils/valueUtil";
 import ProductAddToCart from "./components/ProductAddToCart";
-import ProductReview from "./components/ProductReview";
 import ProductImageGallery from "./components/ProductImageGallery";
+import ProductReview from "./components/ProductReview";
 import TabSection from "./components/TabSection";
-import { beUrl } from "@utils/url";
 
 export async function getStaticPaths() {
   try {
-    const response = await getProducts({
+    const response = await productApiStatic.getProducts({
       page: 1,
       limit: 100,
       categoryId: "",
