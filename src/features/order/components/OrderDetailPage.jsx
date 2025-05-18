@@ -26,7 +26,9 @@ export default function OrderDetailPage() {
     try {
       const res = await orderApi.getOrderById(orderId);
       if (res?.data?.status) {
-        setOrderData(res?.data?.data?.id ? res?.data?.data : res?.data?.data?.data);
+        setOrderData(
+          res?.data?.data?.id ? res?.data?.data : res?.data?.data?.data
+        );
       }
     } catch (error) {
       console.log("GET ORDER BY ID ERR: ", error);
@@ -68,6 +70,43 @@ export default function OrderDetailPage() {
     if (resCreatePayment?.data?.status) {
       window.location.href = resCreatePayment.data.data.invoice_url;
       return;
+    }
+  };
+
+  const handleInvoiceOrder = async () => {
+    if (
+      orderData.status === "PROCESSING" ||
+      orderData.status === "SHIPPED" ||
+      orderData.status === "DELIVERED"
+    ) {
+      const res = await orderApi.getInvoiceOrder(orderData.id);
+      if (res?.data.status) {
+        // console.log(res.data); // INI BASE 64 PDF
+        const base64Data = res?.data?.data?.data?.data; // asumsi ini base64 PDF string
+        const fileName = res?.data?.data?.data?.filename;
+
+        // Decode base64 ke binary
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "application/pdf" });
+
+        // Buat URL dari Blob
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${fileName}`;
+        document.body.appendChild(a);
+        a.click();
+
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      }
     }
   };
 
@@ -134,17 +173,32 @@ export default function OrderDetailPage() {
             </div>
           </div>
 
-          {orderData.status === "PENDING" && (
-            <div className="mt-6">
-              <button
-                onClick={handlePaymentOrder}
-                className="w-full md:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md shadow transition"
-              >
-                <FileText className="inline-block w-5 h-5 mr-1.5" />
-                Bayar Pesanan
-              </button>
-            </div>
-          )}
+          <div className="flex flex-wrap items-center' gap-2">
+            {orderData.status === "PENDING" && (
+              <div className="mt-6">
+                <button
+                  onClick={handlePaymentOrder}
+                  className="w-full md:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md shadow transition"
+                >
+                  <FileText className="inline-block w-5 h-5 mr-1.5" />
+                  Bayar Pesanan
+                </button>
+              </div>
+            )}
+            {(orderData.status === "DELIVERED" ||
+              orderData.status === "SHIPPED" ||
+              orderData.status === "PROCESSING") && (
+              <div className="mt-6">
+                <button
+                  onClick={handleInvoiceOrder}
+                  className="w-full md:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md shadow transition"
+                >
+                  <FileText className="inline-block w-5 h-5 mr-1.5" />
+                  Lihat Invoice
+                </button>
+              </div>
+            )}
+          </div>
 
           <div className="mt-8">
             <p className="text-gray-500 mb-2">Alamat Pengiriman</p>
@@ -158,15 +212,22 @@ export default function OrderDetailPage() {
           <div className="space-y-6">
             {orderJsonData?.orderItems?.map((item, index) => {
               const rating = checkAlreadyRated(item.productId);
-              const image = item?.product?.media?.length > 0 && (item?.product?.media.find((image) => image.isMain == true) || item?.product?.media[0]);
+              const image =
+                item?.product?.media?.length > 0 &&
+                (item?.product?.media.find((image) => image.isMain == true) ||
+                  item?.product?.media[0]);
               return (
                 <div key={index} className="flex items-center gap-4">
                   <img
-                    src={image?.id ? beUrl + image.filePath : "/images/no-image.png"}
-                                      alt={item.product.name}
+                    src={
+                      image?.id
+                        ? beUrl + image.filePath
+                        : "/images/no-image.png"
+                    }
+                    alt={item.product.name}
                     className="w-20 h-20 rounded-xl object-cover shadow"
                     onError={(e) => {
-                      e.target.src = "/images/no-image.png"
+                      e.target.src = "/images/no-image.png";
                     }}
                   />
                   <div className="flex-1">
