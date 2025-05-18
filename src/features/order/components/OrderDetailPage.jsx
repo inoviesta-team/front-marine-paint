@@ -3,7 +3,7 @@ import { ratingApi } from "@features/rating/api/ratingApi";
 import RatingProductFormModal from "@features/rating/components/RatingProductFormModal";
 import { Rating } from "@smastrom/react-rating";
 import { valueUtil } from "@utils/valueUtil";
-import { FileText } from "lucide-react";
+import { Download, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 import { orderApi } from "../api/orderApi";
 import { paymentApi } from "../api/paymentApi";
@@ -73,7 +73,7 @@ export default function OrderDetailPage() {
     }
   };
 
-  const handleInvoiceOrder = async () => {
+  const handleInvoiceOrder = async (download = false) => {
     if (
       orderData.status === "PROCESSING" ||
       orderData.status === "SHIPPED" ||
@@ -81,34 +81,41 @@ export default function OrderDetailPage() {
     ) {
       const res = await orderApi.getInvoiceOrder(orderData.id);
       if (res?.data.status) {
-        // console.log(res.data); // INI BASE 64 PDF
-        const base64Data = res?.data?.data?.data?.data; // asumsi ini base64 PDF string
-        const fileName = res?.data?.data?.data?.filename;
-
+        const base64Data = res?.data?.data?.data?.data; // base64 string tanpa prefix
+        const fileName = res?.data?.data?.data?.filename || `invoice-${orderData.id}.pdf`;
+  
         // Decode base64 ke binary
         const byteCharacters = atob(base64Data);
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {
           byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
-
+  
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: "application/pdf" });
-
+  
         // Buat URL dari Blob
         const url = window.URL.createObjectURL(blob);
-
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${fileName}`;
-        document.body.appendChild(a);
-        a.click();
-
-        a.remove();
+  
+        if (download) {
+          // Download PDF
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        } else {
+          // Preview PDF di tab baru
+          window.open(url, "_blank");
+        }
+  
+        // Hapus URL setelah digunakan
         window.URL.revokeObjectURL(url);
       }
     }
   };
+  
 
   useEffect(() => {
     getOrderData();
@@ -188,14 +195,15 @@ export default function OrderDetailPage() {
             {(orderData.status === "DELIVERED" ||
               orderData.status === "SHIPPED" ||
               orderData.status === "PROCESSING") && (
-              <div className="mt-6">
-                <button
-                  onClick={handleInvoiceOrder}
-                  className="w-full md:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md shadow transition"
-                >
+              <div className="mt-6 flex flex-wrap items-center gap-2">
+                <MarineButton onClick={() => handleInvoiceOrder(false)} variant="tertiary" className="rounded-lg">
                   <FileText className="inline-block w-5 h-5 mr-1.5" />
                   Lihat Invoice
-                </button>
+                </MarineButton>
+                <MarineButton onClick={() => handleInvoiceOrder(true)} className="rounded-lg">
+                  <Download className="inline-block w-5 h-5 mr-1.5" />
+                  Download Invoice
+                </MarineButton>
               </div>
             )}
           </div>
