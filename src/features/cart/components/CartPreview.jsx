@@ -1,16 +1,22 @@
 import MarineButton from "@components/ui/MarineButton";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useCartStore from "../zustand/useCartStore";
 import { ShoppingCart } from "lucide-react";
 import QuantitySelector from "src/pages/products/components/QuantitySelector";
 import CartQuantitySelector from "./CartQuantitySelector";
 import { productApi } from "@features/products/api/productApi";
-import { beUrl } from "@utils/url";
+import { beUrl, fePathUrl } from "@utils/url";
+import useModalStore from "@features/modal/zustand/useModalStore";
+import useAddressStore from "@features/account/zustand/useAddressStore";
 
 export default function CartPreview() {
+  const { address = [] } = useAddressStore()
+  const { showModal: showModalStore, hideModal: hideModalStore } = useModalStore();
   const { selectedCart, carts, getCarts, deleteCart, handleSelectedCart } = useCartStore();
   const [selectedCarts, setSelectedCarts] = useState(selectedCart);
   const [images, setImages] = useState([]);
+  const btnToAddAddress = useRef()
+  const btnToProducts = useRef()
   console.log("images: ", images);
   // console.log("selectedCart: ", selectedCart);
 
@@ -55,7 +61,45 @@ export default function CartPreview() {
 
 
   const handleCheckout = () => {
+    if(address.length <= 0) {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Anda belum menambah alamat",
+        "Anda belum menambah alamat, pastikan anda menambah alamat terlebih dahulu",
+        "Tambah Alamat",
+        () => {
+          btnToAddAddress.current.click()
+          hideModalStore()
+        }
+      )
+      return
+    }
+
+    if(carts.length <= 0) {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Anda belum menambah produk",
+        "Sepertinya anda belum menambah produk ke keranjang, pastikan anda menambah produk terlebih dahulu",
+        "Cari Produk",
+        () => {
+          btnToProducts.current.click()
+          hideModalStore()
+        }
+      )
+      return
+    }
+
     if(selectedCarts.length <= 0) {
+      showModalStore(
+        "INFO",
+        "DANGER",
+        "Pilih produk terlebih dahulu!",
+        "Anda belum memilih produk, pastikan anda memilih produk terlebih dahulu",
+        "Tutup",
+        null
+      )
       return
     }
 
@@ -73,6 +117,8 @@ export default function CartPreview() {
 
   return (
     <div className="container mx-auto py-8 px-4 md:px-14">
+      <a ref={btnToAddAddress} className='hidden' href={fePathUrl.address}></a>
+      <a ref={btnToProducts} className='hidden' href={fePathUrl.products}></a>
       <div className="mb-8">
         <h1 className="font-sans font-bold text-marine-darkBlue text-3xl">
           Keranjang Belanja Anda

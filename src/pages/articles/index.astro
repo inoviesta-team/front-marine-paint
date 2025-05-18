@@ -1,12 +1,7 @@
 ---
-import MarineLayout from "@layouts/MarineLayout.astro";
-import MarineHeader from "@components/layout/MarineHeader";
-import MarineFooter from "@components/layout/MarineFooter";
-import MarineButton from "@components/ui/MarineButton";
 import MarineArticleCard from "@components/article/MarineArticleCard";
-import { marineApi } from "@api/marineApi";
-import MainLayout from "@layouts/MainLayout.astro";
 import { articleApiStatic } from "@features/article/api/articleApiStatic";
+import MainLayout from "@layouts/MainLayout.astro";
 
 let articles = [];
 try {

@@ -40,5 +40,14 @@ export const orderApi = {
         } catch (error) {
             console.log("CREATE ORDER ERR: ", error);
         }
+    },
+
+    getInvoiceOrder: async (orderId, download = false) => {
+        try {
+            const res = await axiosInstance.get(`/orders/${orderId}/invoice?download=${download}`);
+            return res;
+        } catch (error) {
+            console.log("GET INVOICE ORDER BY ID ERR: ", error);
+        }
     }
 }

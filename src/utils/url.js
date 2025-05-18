@@ -2,8 +2,10 @@ export const feUrl = "https://kokoliemart.com/"
 
 export const fePathUrl = {
     home: "/",
+    products: "/products",
     login: "/account/login",
     register: "/account/register",
+    address: "/account/address",
 }
 
 // export const beApiUrl = "http://localhost:3000/api"

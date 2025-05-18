@@ -4,44 +4,25 @@ import AddressFormModal from "./AddressFormModal";
 import useAuthStore from "@features/auth/zustand/useAuthStore";
 import useAddressStore from "../zustand/useAddressStore";
 import NotFound from "@components/ui/NotFound";
-
-const dummyAddresses = [
-  {
-    id: 1,
-    addressType: "Rumah",
-    isDefault: true,
-    recipientName: "Budi Santoso",
-    phone: "081234567890",
-    address: "Jl. Merdeka No. 123",
-    city: "Jakarta",
-    province: "DKI Jakarta",
-    postalCode: "12345",
-    country: "Indonesia",
-    notes: "Depan minimarket",
-  },
-  {
-    id: 2,
-    addressType: "Kantor",
-    isDefault: false,
-    recipientName: "Budi Santoso",
-    phone: "081298765432",
-    address: "Jl. Sudirman No. 45",
-    city: "Jakarta",
-    province: "DKI Jakarta",
-    postalCode: "67890",
-    country: "Indonesia",
-    notes: "",
-  },
-];
+import useModalStore from "@features/modal/zustand/useModalStore";
 
 export default function UserAddress() {
   const { address = [] } = useAddressStore()
   const [showModal, setShowModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState({});
+  const { showModal: showModalStore, hideModal: hideModalStore } = useModalStore();
 
   const handleOpenModal = () => {
-    if(address.length >= 8) {
-      alert("Anda telah mencapai batas maksimal alamat (8), silahkan hapus alamat terlebih dahulu !")
+    if(address.length >= 10) {
+      
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Limit Alamat",
+        "Anda telah mencapai limit alamat, hapus alamat sebelum menambahkan alamat baru",
+        "Tutup",
+        null
+      )
       return
     }
 

@@ -10,11 +10,14 @@ import useAuthStore from "@features/auth/zustand/useAuthStore";
 import { paymentApi } from "../api/paymentApi";
 import { productApi } from "@features/products/api/productApi";
 import { beUrl } from "@utils/url";
+import useModalStore from "@features/modal/zustand/useModalStore";
 
 export default function OrderPreview() {
   const { user } = useAuthStore();
   const { address = [], mainAddress } = useAddressStore();
   const { selectedCart, getCarts, deleteCart } = useCartStore();
+  const { showModal: showModalStore, hideModal: hideModalStore } =
+    useModalStore();
   const [selectedAddress, setSelectedAddress] = useState(mainAddress || {});
   const [selectedAddressId, setSelectedAddressId] = useState(
     mainAddress.id || ""
@@ -29,7 +32,7 @@ export default function OrderPreview() {
   const totalPriceProduct = selectedCart.reduce(
     (total, item) => total + item.product.price * item.quantity,
     0
-  )
+  );
 
   const [subtotal, setSubtotal] = useState(totalPriceProduct);
   const [images, setImages] = useState([]);
@@ -113,8 +116,31 @@ export default function OrderPreview() {
     getShippings();
   }, [selectedAddressId]);
 
-
   const handleSubmitOrder = async () => {
+    if (!selectedAddressId || selectedAddressId == "") {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Anda belum memilih alamat",
+        "Pastikan anda memilih alamat terlebih dahulu",
+        "Tutup",
+        null
+      );
+      return;
+    }
+
+    if (!selectedShipping?.id) {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Anda belum memilih metode pengiriman",
+        "Pastikan anda memilih metode pengiriman terlebih dahulu",
+        "Tutup",
+        null
+      );
+      return;
+    }
+
     const orderItems = selectedCart.map((item) => ({
       productId: item.product.id,
       quantity: item.quantity,
@@ -137,15 +163,26 @@ export default function OrderPreview() {
 
     const resOrder = await orderApi.createOrder(request);
 
-    
     const orderId = resOrder?.data?.data?.id || "";
     const orderJsonData = resOrder?.data?.data || {};
-    
+
     console.log("resOrder: ", resOrder);
     console.log("orderJsonData: ", orderJsonData);
-    window.location.href = `/order/order-detail?orderId=${orderId}&orderJson=${JSON.stringify(
-      orderJsonData
-    )}`;
+
+    showModalStore(
+      "INFO",
+      "SUCCESS",
+      "Pesanan / Order Berhasil Dibuat",
+      // "Pastikan kamu membayar pesanan / order ini",
+      null,
+      "Lanjutkan",
+      () => {
+        hideModalStore();
+        window.location.href = `/order/order-detail?orderId=${orderId}&orderJson=${JSON.stringify(
+          orderJsonData
+        )}`;
+      }
+    );
   };
 
   return (
@@ -194,7 +231,7 @@ export default function OrderPreview() {
                                 }
                                 alt={item.product.name}
                                 onError={(e) => {
-                                  e.target.src = "/images/no-image.png"
+                                  e.target.src = "/images/no-image.png";
                                 }}
                                 className="w-full h-full object-cover"
                               />
@@ -325,10 +362,13 @@ export default function OrderPreview() {
                   Terapkan
                 </button>
               </div> */}
-              <a href="/cart" className="h-10 px-4 bg-white border border-gray-300 text-marine-darkBlue rounded-lg font-sans hover:text-marine-darkBlue transition-colors flex items-center">
-                              <ArrowLeft className="mr-2" size={18} />
-                              Kembali
-                            </a>
+              <a
+                href="/cart"
+                className="h-10 px-4 bg-white border border-gray-300 text-marine-darkBlue rounded-lg font-sans hover:text-marine-darkBlue transition-colors flex items-center"
+              >
+                <ArrowLeft className="mr-2" size={18} />
+                Kembali
+              </a>
             </div>
           </div>
         </div>

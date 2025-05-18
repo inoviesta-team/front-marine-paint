@@ -1,9 +1,11 @@
 import MarineButton from "@components/ui/MarineButton";
 import ValidationMessage from "@components/ui/ValidationMessage";
 import useAuthStore from "@features/auth/zustand/useAuthStore";
+import useModalStore from "@features/modal/zustand/useModalStore";
 import React, { useState } from "react";
 
 export default function UserEditProfile() {
+  const { showModal: showModalStore, hideModal: hideModalStore } = useModalStore();
   const { user, editProfile, error } = useAuthStore();
 
   const [inputUser, setInputUser] = useState({
@@ -23,6 +25,15 @@ export default function UserEditProfile() {
     e.preventDefault();
     
     await editProfile(inputUser);
+
+    showModalStore(
+      "INFO",
+      "SUCCESS",
+      "Ubah Profile Berhasil!",
+      null,
+      "Tutup",
+      null
+    )
   };
 
   return (
