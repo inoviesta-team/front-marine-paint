@@ -3,10 +3,10 @@ import { create } from 'zustand';
 const useModalStore = create(
   (set) => ({
     isShowModal: false,
-    modalType: 'INFO',
-    modalVariant: 'DEFAULT',
-    headMessage: 'Toko Koko Lie',
-    message: 'Halo Apa Kabar?',
+    modalType: "INFO",
+    modalVariant: "DEFAULT",
+    headMessage: "Toko Koko Lie",
+    message: "Halo Apa Kabar?",
     onConfirm: () => {},
 
     showModal: (
