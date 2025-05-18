@@ -12,10 +12,12 @@ import { articleApiStatic } from "@features/article/api/articleApiStatic";
 import MainLayout from "@layouts/MainLayout.astro";
 import { ArrowRight } from "lucide-react";
 import { linkSocial } from "@utils/social";
+import { brandApiStatic } from "@features/products/api/brandApiStatic";
 
 // Fetch data for the page
 let products = [];
 let projects = [];
+let brands = [];
 let articles = [];
 let testimonials = [];
 let partners = [];
@@ -31,9 +33,16 @@ try {
   // Fetch projects
   projects = await marineApi.getProjects({ limit: 4 });
 
+  // Fetch brands
+  const responseBrands = await brandApiStatic.getAllBrands({
+    limit: 100,
+  });
+  brands = (await responseBrands?.data?.brands) || [];
+  console.log("brands: ", brands);
+
   // Fetch articles
   const responseArticles = await articleApiStatic.getArtciles();
-  console.log("responseArticles: ", responseArticles || []);
+  // console.log("responseArticles: ", responseArticles || []);
   articles = await responseArticles;
 
   // Fetch testimonials
@@ -394,24 +403,29 @@ try {
       </div>
 
       <!-- Trust badges section -->
-      <div class="mt-16 pt-8 border-t border-gray-200">
-        <div class="text-center mb-8">
-          <h3 class="font-sans font-medium text-marine-darkBlue text-xl">
-            Dipercaya Oleh:
-          </h3>
-        </div>
-        <div class="flex flex-wrap justify-center gap-8 items-center">
-          <div
-            class="rounded-lg bg-white shadow w-40 h-24 flex items-center justify-center"
-          >
-            <img
-              src="/images/ashdaq-paint-logo.png"
-              alt="Ashdaq Paint"
-              class="max-h-full max-w-full"
-            />
+      {
+        brands.length > 0 && (
+          <div class="mt-16 pt-8 border-t border-gray-200">
+            <div class="text-center mb-8">
+              <h3 class="font-sans font-medium text-marine-darkBlue text-xl">
+                Dipercaya Oleh:
+              </h3>
+            </div>
+            <div class="flex flex-wrap justify-center gap-8 items-center">
+              {brands.map((brand) => (
+                <div class="rounded-lg bg-white shadow w-auto h-24 flex items-center justify-center">
+                  {/* <h1>{brand?.logoPath}</h1> */}
+                  <img
+                    src={brand?.logoPath}
+                    alt={brand?.name}
+                    class="max-h-full max-w-full"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        )
+      }
     </div>
   </section>
 
@@ -422,8 +436,8 @@ try {
     articles.length > 0 && (
       <section class="py-24 relative overflow-hidden">
         <div class="absolute inset-0 bg-gray-50 z-0" />
-        <div class="absolute inset-0 bg-[url('/images/ship-pattern.svg')] opacity-5 z-0 mix-blend-multiply"></div>
-        <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent z-0"></div>
+        <div class="absolute inset-0 bg-[url('/images/ship-pattern.svg')] opacity-5 z-0 mix-blend-multiply" />
+        <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent z-0" />
 
         <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
           <div class="text-center max-w-3xl mx-auto mb-16">
