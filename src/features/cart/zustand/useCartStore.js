@@ -10,6 +10,10 @@ const useCartStore = create(
       loading: false,
       error: null,
 
+      setDefaultCart: () => {
+        set({ loading: false, error: null, selectedCart: [], carts: [] });
+      },
+
       handleSelectedCart: (carts) => {
         set({ selectedCart: carts });
       },

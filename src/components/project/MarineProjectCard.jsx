@@ -1,7 +1,17 @@
 import MarineButton from '@components/ui/MarineButton';
 import React from 'react';
 
-export default function MarineProjectCard({ project = { name: 'KM BUANA', type: 'Ship' }, isShrink = false }) {
+export default function MarineProjectCard({ project = {
+  id: "1",
+  name: "KM BUANA",
+  type: "Ship",
+  description:
+    "Pengecatan ulang kapal nelayan tradisional di Pelabuhan Muara Baru.",
+  // image: "/images/projects/project_1.png",
+  image:
+    "https://ashdaq.com/wp-content/uploads/2025/02/PHOTO-2024-09-05-17-28-35.jpg",
+  date: "2023-10-15",
+}, isShrink = false }) {
   return (
     <div className={`${isShrink && "flex-shrink-0 max-w-80"} marine-card overflow-hidden group`}>
       <div className="relative h-48 overflow-hidden">
@@ -22,13 +32,13 @@ export default function MarineProjectCard({ project = { name: 'KM BUANA', type: 
         <div>
           <h3 className="font-sans font-bold text-marine-darkBlue text-xl mb-1">{project.name}</h3>
           {/* <p className="font-sans font-bold text-marine-blue">{project.type}</p> */}
-          <p className="font-sans text-neutral-600/90 line-clamp-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae, adipisci!</p>
+          <p className="font-sans text-neutral-600/90 line-clamp-1">{project.description}</p>
         </div>
       </div>
       <div className="px-4 py-4">
       <MarineButton
-          as="a" 
-          href="/products" 
+          // as="a" 
+          // href="/products" 
           variant="tertiary"
           size="md"
           className="border-marine-blue/50 text-marine-blue/85 font-sans w-full text-center  rounded-xl py-2 transition-all duration-300"

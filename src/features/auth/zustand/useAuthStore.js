@@ -23,8 +23,10 @@ const useAuthStore = create(
           useCartStore.getState().getCarts();
         } catch (err) {
           // console.error('Failed to load user:', err);
-          authApi.logout();
+
+          // useAuthStore.getState().logout();
           set({ user: null, isAuthenticated: false, loading: false });
+          authApi.logout();
         }
       },
 
@@ -79,9 +81,10 @@ const useAuthStore = create(
 
       // Logout user
       logout: async () => {
+        set({ loading: true, error: null });
         authApi.logout();
         await localStorage.removeItem("jwtToken");
-        set({ user: null, isAuthenticated: false });
+        set({ user: null, isAuthenticated: false, loading: false });
       },
 
       // Reset error state

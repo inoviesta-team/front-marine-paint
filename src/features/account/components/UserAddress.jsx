@@ -39,7 +39,14 @@ export default function UserAddress() {
   const [showModal, setShowModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState({});
 
-  const handleOpenModal = () => setShowModal(true);
+  const handleOpenModal = () => {
+    if(address.length >= 8) {
+      alert("Anda telah mencapai batas maksimal alamat (8), silahkan hapus alamat terlebih dahulu !")
+      return
+    }
+
+    setShowModal(true);
+  }
 
   const handleCloseModal = () => {
     setSelectedAddress({});

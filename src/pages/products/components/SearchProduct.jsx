@@ -84,7 +84,7 @@ export default function SearchProduct() {
     // }
   };
 
-  const [searchValue] = useDebounce(inputFilter.search, 1000);
+  const [searchValue] = useDebounce(inputFilter.search, 850);
 
   const [sortOrder, setSortOrder] = useState("asc");
   const sortBy = [
@@ -302,11 +302,12 @@ export default function SearchProduct() {
 
       <div className="flex justify-between items-start gap-x-8 gap-y-10">
         <div
+          style={{ zIndex: 999 }}
           className={`${
             showFilter
-              ? "block overflow-y-scroll lg:overflow-y-hidden"
+              ? "block overflow-y-scroll lg:overflow-y-hidden z-[999]"
               : "hidden lg:block"
-          } p-5 lg:px-0 bg-white lg:bg-gray-50 fixed inset-0 z-50 w-full lg:w-1/4 lg:sticky`}
+          } p-5 lg:px-0 bg-white lg:bg-gray-50 fixed inset-0 z-[999] w-full lg:w-1/4 lg:sticky`}
         >
           <div className="flex justify-between items-center mb-2">
             <h3 className="text-xl font-bold text-gray-900">Filter Produk</h3>

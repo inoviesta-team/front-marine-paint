@@ -11,6 +11,7 @@ import { productApiStatic } from "@features/products/api/productApiStatic";
 import { articleApiStatic } from "@features/article/api/articleApiStatic";
 import MainLayout from "@layouts/MainLayout.astro";
 import { ArrowRight } from "lucide-react";
+import { linkSocial } from "@utils/social";
 
 // Fetch data for the page
 let products = [];
@@ -22,26 +23,26 @@ let partners = [];
 try {
   // Fetch products
   const responseProducts = await productApiStatic.getProducts({
-    limit: 10
+    limit: 10,
   });
   // console.log("responseProducts: ", responseProducts?.data?.products || []);
-  products = await responseProducts?.data?.products || [];
-  
+  products = (await responseProducts?.data?.products) || [];
+
   // Fetch projects
   projects = await marineApi.getProjects({ limit: 4 });
-  
+
   // Fetch articles
-  const responseArticles = await articleApiStatic.getArtciles()
+  const responseArticles = await articleApiStatic.getArtciles();
   console.log("responseArticles: ", responseArticles || []);
   articles = await responseArticles;
-  
+
   // Fetch testimonials
   testimonials = await marineApi.getTestimonials();
-  
+
   // Fetch partners
   partners = await marineApi.getPartners();
 } catch (error) {
-  console.error('Failed to fetch data:', error);
+  console.error("Failed to fetch data:", error);
 }
 ---
 
@@ -50,55 +51,78 @@ try {
   description="Toko Koko Lie menyediakan cat marine terpercaya untuk ketahanan maksimal. Official partner of Ashdaq Paint."
 >
   <!-- Hero Section with improved contrast and visual appeal -->
-  <section class="relative overflow-hidden">
+  <section class="bg-white relative overflow-hidden">
     <!-- Dark overlay for better text contrast -->
     <!-- <div class="absolute inset-0 opacity-90 z-0"></div> -->
     <!-- Enhanced wave pattern background -->
     <!-- <div class="absolute inset-0 rounded-xl opacity-15 z-0 mix-blend-overlay"></div> -->
-    
+
     <div class="mx-auto relative z-10">
-      <div class="bg-[url('/images/hero-image.png')] rounded-b-[30px] sm:rounded-b-[50px] bg-cover bg-center md:bg-center py-12 md:pt-32 md:pb-24 px-4 md:px-14 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div
+        class="bg-[url('/images/hero-image.png')] rounded-b-[30px] sm:rounded-b-[50px] bg-cover bg-center md:bg-center py-12 md:pt-32 md:pb-24 px-4 md:px-14 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center bg-transparent"
+      >
         <div class="space-y-8">
           <!-- Improved brand highlight with accent color -->
           <!-- <div class="inline-block bg-marine-lightBlue/20 px-4 py-1 rounded-full">
             <h3 class="font-sans font-bold text-white text-lg">TOKO KOKO LIE</h3>
           </div> -->
-          
+
           <div class="space-y-6">
             <!-- Enhanced heading with better typography -->
-            <h1 class="font-sans font-extrabold text-white text-4xl md:text-5xl lg:text-5xl drop-shadow-md leading-tight">
-              Solusi Terbaik untuk <span class="text-white">Kebutuhan Cat Kapal</span> Anda
-            </h1>
-            
+            <div>
+              <h2
+                class="font-sans font-medium text-white text-lg md:text-xl drop-shadow-md mb-3"
+              >
+                Official Partner of <a
+                  href={linkSocial.ashdaq.value}
+                  target="_blank"
+                  class="font-semibold text-white hover:text-white"
+                  >Ashdaq Paint</a
+                >
+              </h2>
+              <h1
+                class="font-sans font-extrabold text-white text-4xl md:text-5xl lg:text-5xl drop-shadow-md leading-tight"
+              >
+                Solusi Terbaik untuk <span class="text-white"
+                  >Kebutuhan Cat Kapal</span
+                > Anda
+              </h1>
+            </div>
+
             <!-- Improved subheading with better readability -->
             <p class="font-sans font-medium text-gray-100 text-xl max-w-xl">
-              Kami menyediakan berbagai jenis cat marine berkualitas tinggi untuk semua jenis kapal dan aplikasi maritim.
+              Kami menyediakan berbagai jenis cat marine berkualitas tinggi
+              untuk semua jenis kapal dan aplikasi maritim.
             </p>
           </div>
-          
+
           <!-- Enhanced button section with improved visibility -->
           <div class="flex flex-wrap gap-4 pt-4">
             <MarineButton
-              as="a" 
-              href="/products" 
+              as="a"
+              href="/products"
               variant="tertiary"
               size="lg"
               className="w-full sm:w-auto text-center shadow-lg rounded-xl hover:shadow-xl transition-all duration-300 sm:flex sm:items-center gap-2"
             >
-              <span>Belanja Sekarang</span> <ArrowRight className="hidden sm:inline"/>
+              <span>Belanja Sekarang</span>
+              <!-- <ArrowRight className="hidden sm:inline" /> -->
+              <ArrowRight className="inline" />
             </MarineButton>
-            
+
             <!-- Fixed contrast issue with the "Hubungi kami" button -->
             <MarineButton
-              as="a" 
-              href="/contact-us" 
+              as="a"
+              href={linkSocial.whatsapp}
               variant="tertiary"
               size="lg"
               className="w-full sm:w-auto text-center  rounded-xl sm:flex sm:items-center gap-2 shadow-lg  transition-all duration-300"
             >
-              <span>Konsultasi <span class="hidden sm:inline">via</span> Whatsapp</span>
+              <span
+                >Konsultasi <span class="hidden sm:inline">via</span> Whatsapp</span
+              >
               <svg
-              class="hidden sm:inline"
+                class="inline"
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
@@ -107,13 +131,79 @@ try {
               >
                 <path
                   d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
-                />
+                ></path>
               </svg>
             </MarineButton>
           </div>
         </div>
-        
+
         <!-- Enhanced hero image section with shadow and rounded corners -->
+      </div>
+    </div>
+  </section>
+
+  <section class="py-2 sm:py-24 bg-white relative overflow-hidden">
+    <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
+      <div class="grid gap-8 lg:grid-cols-2 sm:mx-auto">
+        <div class="flex flex-col justify-center">
+          <div class="flex">
+            <div>
+              <h2
+                class="font-sans font-bold text-marine-darkBlue text-4xl mb-4"
+              >
+                Tentang <br class="inline sm:hidden" /> Toko Koko Lie
+              </h2>
+              <p class="font-sans text-gray-600 text-lg">
+                Toko Koko Lie adalah destinasi utama bagi Anda yang mencari
+                solusi cat marine berkualitas tinggi. Sebagai partner resmi dari
+                <a
+                  href={linkSocial.ashdaq.value}
+                  target="_blank"
+                  class="font-semibold text-marine-blue">Ashdaq Paint</a
+                >, Toko Koko Lie menawarkan berbagai macam produk cat yang
+                dirancang khusus untuk memenuhi kebutuhan kapal, baik untuk
+                keperluan komersial maupun pribadi. Kami berkomitmen untuk
+                menyediakan cat dengan daya tahan luar biasa terhadap air laut
+                dan cuaca ekstrem, memastikan kapal Anda terlindungi dengan
+                optimal.
+                <br />
+                <br />
+                Keunggulan kami tidak berhenti di produk yang kami tawarkan; kami
+                juga menjamin proses pengiriman yang cepat dan aman ke seluruh wilayah
+                Indonesia. Hal ini memastikan bahwa Anda mendapatkan produk yang
+                Anda butuhkan tepat waktu, tanpa harus menunggu lama.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-5">
+          <img
+            class="object-cover w-full h-56 col-span-2 rounded-xl shadow-md"
+            src="/images/ship-wallpaper-2.png"
+            alt="Toko Koko Lie"
+          />
+          <a
+            href="/"
+            class="bg-white grid place-items-center w-full h-36 sm:h-48 rounded-xl shadow-md p-5"
+          >
+            <img
+              class="w-24 sm:w-48"
+              src="/images/logo.png"
+              alt="Toko Koko Lie"
+            />
+          </a>
+          <a
+            href={linkSocial.ashdaq.value}
+            target="_blank"
+            class="bg-white grid place-items-center w-full h-36 sm:h-48 rounded-xl shadow-md p-5"
+          >
+            <img
+              class="w-24 sm:w-48"
+              src="/images/ashdaq-paint-logo.png"
+              alt="Ashdaq Paint"
+            />
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -121,33 +211,46 @@ try {
   <!-- Featured Products Section with enhanced visual design -->
   <section class="py-24 bg-white relative overflow-hidden">
     <!-- Decorative background elements -->
-    <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-gradient-to-br from-marine-lightBlue/10 to-marine-blue/5"></div>
-    <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-gradient-to-tr from-marine-blue/10 to-marine-lightBlue/5"></div>
-    
+    <div
+      class="absolute top-10 right-4 w-48 h-48 rounded-full bg-gradient-to-br from-marine-lightBlue/10 to-marine-blue/5"
+    >
+    </div>
+    <div
+      class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-gradient-to-tr from-marine-blue/10 to-marine-lightBlue/5"
+    >
+    </div>
+
     <div class="container mx-auto px-4 md:px-14 relative z-10">
       <!-- Enhanced section header with subheading -->
       <div class="text-center max-w-3xl mx-auto mb-16">
         <!-- <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
           PRODUK UNGGULAN
         </div> -->
-        <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Cat Marine Terbaik untuk Kapal Anda</h2>
-        <p class="font-sans text-gray-600 text-lg">Pilihan produk cat marine berkualitas tinggi dengan daya tahan maksimal terhadap air laut dan cuaca ekstrem</p>
+        <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">
+          Cat Marine Terbaik untuk Kapal Anda
+        </h2>
+        <p class="font-sans text-gray-600 text-lg">
+          Pilihan produk cat marine berkualitas tinggi dengan daya tahan
+          maksimal terhadap air laut dan cuaca ekstrem
+        </p>
       </div>
-      
+
       <!-- Enhanced product grid with hover effects -->
       <div class="overflow-x-auto">
         <div class="flex gap-6 p-2">
-          {products.map((product) => (
-          <MarineProductCard client:only="react" product={product} />
-        ))}
+          {
+            products.map((product) => (
+              <MarineProductCard client:only="react" product={product} />
+            ))
+          }
         </div>
       </div>
-      
+
       <!-- Enhanced CTA button -->
       <div class="flex justify-center mt-12">
-        <MarineButton 
-          as="a" 
-          href="/products" 
+        <MarineButton
+          as="a"
+          href="/products"
           variant="tertiary"
           size="md"
           className="font-sans rounded-xl py-2 shadow-md hover:shadow-lg transition-all duration-300"
@@ -161,48 +264,88 @@ try {
   <!-- Value Proposition Section -->
   <section class="pt-2 relative overflow-hidden">
     <!-- Enhanced background with better visual appeal -->
-    <div class="absolute inset-0 bg-gradient-to-br from-marine-blue/5 to-marine-lightBlue/5 z-0"></div>
-    <div class="absolute inset-0 bg-[url('/images/abstract-pattern.png')] bg-center bg-cover opacity-75 z-0 mix-blend-multiply"></div>
-    
+    <div
+      class="absolute inset-0 bg-gradient-to-br from-marine-blue/5 to-marine-lightBlue/5 z-0"
+    >
+    </div>
+    <div
+      class="absolute inset-0 bg-[url('/images/abstract-pattern.png')] bg-center bg-cover opacity-75 z-0 mix-blend-multiply"
+    >
+    </div>
+
     <!-- Decorative elements -->
-    <div class="absolute top-20 left-10 w-32 h-32 rounded-full bg-marine-lightBlue/5 z-0 animate-pulse"></div>
-    <div class="absolute bottom-20 right-10 w-40 h-40 rounded-full bg-marine-blue/5 z-0"></div>
-    
+    <div
+      class="absolute top-20 left-10 w-32 h-32 rounded-full bg-marine-lightBlue/5 z-0 animate-pulse"
+    >
+    </div>
+    <div
+      class="absolute bottom-20 right-10 w-40 h-40 rounded-full bg-marine-blue/5 z-0"
+    >
+    </div>
+
     <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
       <!-- Enhanced section header -->
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Mengapa Memilih Kami?</h2>
-        <p class="font-sans text-gray-600 text-lg">Kami menawarkan solusi cat marine terbaik dengan standar kualitas tinggi dan layanan pelanggan yang unggul</p>
+        <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">
+          Mengapa Memilih Kami?
+        </h2>
+        <p class="font-sans text-gray-600 text-lg">
+          Kami menawarkan solusi cat marine terbaik dengan standar kualitas
+          tinggi dan layanan pelanggan yang unggul
+        </p>
       </div>
-      
+
       <!-- Enhanced grid layout with improved visual design -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <MarineValueCard title="Produk Berkualitas" icon={"shield.png"} description="Cat marine terbaik dengan daya tahan maksimal terhadap air laut dan cuaca" />
-        <MarineValueCard title="Pengiriman Cepat" icon={"anchor.png"} description="Layanan pengiriman cepat ke seluruh wilayah Indonesia" />
-        <MarineValueCard title="Konsultasi Gratis" icon={"infinity.png"} description="Tim ahli kami siap membantu Anda memilih produk yang tepat" />
-        <MarineValueCard title="Dukungan Teknis" icon={"ts.png"} description="Bantuan teknis untuk aplikasi dan perawatan cat marine" />
+        <MarineValueCard
+          title="Produk Berkualitas"
+          icon={"shield.png"}
+          description="Cat marine terbaik dengan daya tahan maksimal terhadap air laut dan cuaca"
+        />
+        <MarineValueCard
+          title="Pengiriman Cepat"
+          icon={"anchor.png"}
+          description="Layanan pengiriman cepat ke seluruh wilayah Indonesia"
+        />
+        <MarineValueCard
+          title="Konsultasi Gratis"
+          icon={"infinity.png"}
+          description="Tim ahli kami siap membantu Anda memilih produk yang tepat"
+        />
+        <MarineValueCard
+          title="Dukungan Teknis"
+          icon={"ts.png"}
+          description="Bantuan teknis untuk aplikasi dan perawatan cat marine"
+        />
       </div>
     </div>
   </section>
 
   <!-- Projects Section -->
   <section class="py-16 bg-white relative overflow-hidden">
-    <div class="absolute -top-20 -left-20 w-40 h-40 rounded-full bg-marine-accent opacity-5"></div>
+    <div
+      class="absolute -top-20 -left-20 w-40 h-40 rounded-full bg-marine-accent opacity-5"
+    >
+    </div>
     <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
-      <h2 class="font-sans font-bold text-marine-blue text-3xl text-center mb-12">Projek Kami</h2>
-      
+      <h2
+        class="font-sans font-bold text-marine-blue text-3xl text-center mb-12"
+      >
+        Projek Kami
+      </h2>
+
       <div class="overflow-x-auto">
         <div class="flex gap-6 p-2">
-        {projects.map((project) => (
-          <MarineProjectCard isShrink={true} project={project} />
-        ))}
+          {
+            projects.map((project) => (
+              <MarineProjectCard isShrink={true} project={project} />
+            ))
+          }
+        </div>
       </div>
-      </div>
-      
+
       <div class="flex justify-center mt-12">
-        <MarineButton 
-          as="a" 
-          href="/products" 
+        <MarineButton
           variant="tertiary"
           size="md"
           className="font-sans rounded-xl py-2 shadow-md hover:shadow-lg transition-all duration-300"
@@ -216,47 +359,67 @@ try {
   <!-- Enhanced Testimonials Section with visual appeal -->
   <section class="py-24 relative overflow-hidden">
     <!-- Background elements for visual enhancement -->
-    <div class="absolute inset-0 bg-gradient-to-br from-marine-darkBlue/5 to-marine-blue/10 z-0"></div>
-    <div class="absolute inset-0 bg-[url('/images/wave-pattern.svg')] opacity-5 z-0 mix-blend-overlay"></div>
-    
+    <div
+      class="absolute inset-0 bg-gradient-to-br from-marine-darkBlue/5 to-marine-blue/10 z-0"
+    >
+    </div>
+    <div
+      class="absolute inset-0 bg-[url('/images/wave-pattern.svg')] opacity-5 z-0 mix-blend-overlay"
+    >
+    </div>
+
     <!-- Decorative elements -->
-    <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-white to-transparent z-0"></div>
-    <div class="absolute top-20 right-10 w-40 h-40 rounded-full bg-marine-lightBlue/10 z-0"></div>
-    
+    <div
+      class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-white to-transparent z-0"
+    >
+    </div>
+    <div
+      class="absolute top-20 right-10 w-40 h-40 rounded-full bg-marine-lightBlue/10 z-0"
+    >
+    </div>
+
     <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
       <!-- Enhanced section header -->
       <div class="text-center max-w-3xl mx-auto mb-16">
         <!-- <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
           TESTIMONI PELANGGAN
         </div> -->
-        <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Apa Kata Mereka Tentang Kami</h2>
-        <p class="font-sans text-gray-600 text-lg">Kami bangga dengan kepercayaan pelanggan terhadap produk dan layanan kami</p>
+        <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">
+          Apa Kata Mereka Tentang Kami
+        </h2>
+        <p class="font-sans text-gray-600 text-lg">
+          Kami bangga dengan kepercayaan pelanggan terhadap produk dan layanan
+          kami
+        </p>
       </div>
-      
+
       <!-- Enhanced testimonial cards with better layout -->
       <div class="overflow-x-auto">
         <div class="flex gap-4 sm:gap-6 p-2">
-
-          {testimonials.map((testimonial) => (
-            <MarineTestimonialCard testimonial={testimonial} />
-          ))}
-          </div>
+          {
+            testimonials.map((testimonial) => (
+              <MarineTestimonialCard testimonial={testimonial} />
+            ))
+          }
+        </div>
       </div>
-      
+
       <!-- Trust badges section -->
       <div class="mt-16 pt-8 border-t border-gray-200">
         <div class="text-center mb-8">
-          <h3 class="font-sans font-medium text-marine-darkBlue text-xl">Dipercaya Oleh:</h3>
+          <h3 class="font-sans font-medium text-marine-darkBlue text-xl">
+            Dipercaya Oleh:
+          </h3>
         </div>
         <div class="flex flex-wrap justify-center gap-8 items-center">
-          <div class="w-40 h-24 flex items-center justify-center">
-            <img src="/images/partners/partner_1.svg" alt="Partner 1" class="max-h-full max-w-full" />
-          </div>
-          <div class="w-40 h-24 flex items-center justify-center">
-            <img src="/images/partners/partner_2.svg" alt="Partner 2" class="max-h-full max-w-full" />
-          </div>
-          <div class="w-40 h-24 flex items-center justify-center">
-            <img src="/images/partners/partner_3.svg" alt="Partner 3" class="max-h-full max-w-full" />
+          <div
+            class="rounded-lg bg-white shadow w-40 h-24 flex items-center justify-center"
+          >
+            <img
+              src="/images/ashdaq-paint-logo.png"
+              alt="Ashdaq Paint"
+              class="max-h-full max-w-full"
+            />
           </div>
         </div>
       </div>
@@ -264,38 +427,51 @@ try {
   </section>
 
   <!-- Company Partners Section - Simplified and removed since already shown in testimonials -->
-  
+
   <!-- Related Articles Section with enhanced styling -->
   <section class="py-24 relative overflow-hidden">
     <!-- Enhanced background elements -->
     <div class="absolute inset-0 bg-gray-50 z-0"></div>
-    <div class="absolute inset-0 bg-[url('/images/ship-pattern.svg')] opacity-5 z-0 mix-blend-multiply"></div>
-    <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent z-0"></div>
-    
+    <div
+      class="absolute inset-0 bg-[url('/images/ship-pattern.svg')] opacity-5 z-0 mix-blend-multiply"
+    >
+    </div>
+    <div
+      class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent z-0"
+    >
+    </div>
+
     <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
       <!-- Enhanced section header -->
       <div class="text-center max-w-3xl mx-auto mb-16">
         <!-- <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
           ARTIKEL TERBARU
         </div> -->
-        <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Tips & Informasi Seputar Cat Marine</h2>
-        <p class="font-sans text-gray-600 text-lg">Dapatkan informasi terbaru dan tips berguna untuk memilih dan merawat cat kapal Anda</p>
+        <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">
+          Tips & Informasi Seputar Cat Marine
+        </h2>
+        <p class="font-sans text-gray-600 text-lg">
+          Dapatkan informasi terbaru dan tips berguna untuk memilih dan merawat
+          cat kapal Anda
+        </p>
       </div>
-      
+
       <!-- Enhanced article cards with better layout -->
       <div class="overflow-x-auto">
         <div class="flex gap-6 p-2">
-        {articles.map((article) => (
-          <MarineArticleCard isShrink={true} article={article} />
-        ))}
+          {
+            articles.map((article) => (
+              <MarineArticleCard isShrink={true} article={article} />
+            ))
+          }
+        </div>
       </div>
-      </div>
-      
+
       <!-- Enhanced CTA button -->
       <div class="flex justify-center mt-12">
-        <MarineButton 
-          as="a" 
-          href="/articles" 
+        <MarineButton
+          as="a"
+          href="/articles"
           variant="tertiary"
           size="md"
           className="font-sans rounded-xl py-2 shadow-md hover:shadow-lg transition-all duration-300"
@@ -309,81 +485,164 @@ try {
   <!-- Enhanced Contact Section with improved visuals -->
   <section class="py-24 bg-white relative overflow-hidden">
     <!-- Background elements for visual appeal -->
-    <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-gray-50 to-transparent"></div>
-    <div class="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-marine-blue/5"></div>
-    
+    <div
+      class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-gray-50 to-transparent"
+    >
+    </div>
+    <div
+      class="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-marine-blue/5"
+    >
+    </div>
+
     <div class="container mx-auto py-8 px-4 md:px-14 relative z-10">
       <!-- Enhanced section header -->
       <div class="text-center max-w-3xl mx-auto mb-16">
         <!-- <div class="inline-block px-3 py-1 bg-marine-blue/10 rounded-full text-marine-darkBlue text-sm font-sans font-medium mb-3">
           KONTAK KAMI
         </div> -->
-        <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Butuh Informasi Lebih Lanjut?</h2>
-        <p class="font-sans text-gray-600 text-lg">Kami siap membantu Anda dengan segala pertanyaan tentang produk dan layanan kami</p>
+        <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">
+          Butuh Informasi Lebih Lanjut?
+        </h2>
+        <p class="font-sans text-gray-600 text-lg">
+          Kami siap membantu Anda dengan segala pertanyaan tentang produk dan
+          layanan kami
+        </p>
       </div>
-      
+
       <!-- Enhanced contact form section with card styling -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div class="bg-white shadow-xl rounded-xl p-8 border border-gray-100">
           <!-- Contact text with better formatting -->
-          <h3 class="font-sans font-bold text-marine-darkBlue text-2xl mb-4">Kirim Pesan Kepada Kami</h3>
+          <h3 class="font-sans font-bold text-marine-darkBlue text-2xl mb-4">
+            Kirim Pesan Kepada Kami
+          </h3>
           <p class="font-sans text-gray-700 mb-8">
-            Tim kami akan merespon pertanyaan Anda secepat mungkin. Kami berkomitmen untuk memberikan solusi terbaik untuk kebutuhan cat kapal Anda.
+            Tim kami akan merespon pertanyaan Anda secepat mungkin. Kami
+            berkomitmen untuk memberikan solusi terbaik untuk kebutuhan cat
+            kapal Anda.
           </p>
-          
+
           <!-- Enhanced contact form with better styling -->
           <MarineContactForm client:load />
-          
+
           <!-- Quick contact methods -->
           <div class="mt-8 pt-6 border-t border-gray-100">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="flex items-center">
-                <div class="w-10 h-10 rounded-full bg-marine-blue/10 flex items-center justify-center mr-3">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="#15486b"/>
+              <a
+                target="_blank"
+                href={`mailto:${linkSocial.email.value}`}
+                class="flex items-center"
+              >
+                <div
+                  class="w-10 h-10 rounded-full bg-marine-blue/10 flex items-center justify-center mr-3"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z"
+                      fill="#15486b"></path>
                   </svg>
                 </div>
-                <span class="font-sans text-sm text-gray-600">admin@gmail.com</span>
-              </div>
-              
-              <div class="flex items-center">
-                <div class="w-10 h-10 rounded-full bg-marine-blue/10 flex items-center justify-center mr-3">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6.62 10.79C8.06 13.62 10.38 15.94 13.21 17.38L15.41 15.18C15.69 14.9 16.08 14.82 16.43 14.93C17.55 15.3 18.75 15.5 20 15.5C20.55 15.5 21 15.95 21 16.5V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="#15486b"/>
+                <span class="font-sans text-sm text-gray-600"
+                  >{linkSocial.email.key}</span
+                >
+              </a>
+
+              <a
+                target="_blank"
+                href={`${linkSocial.phone.value}`}
+                class="flex items-center"
+              >
+                <div
+                  class="w-10 h-10 rounded-full bg-marine-blue/10 flex items-center justify-center mr-3"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6.62 10.79C8.06 13.62 10.38 15.94 13.21 17.38L15.41 15.18C15.69 14.9 16.08 14.82 16.43 14.93C17.55 15.3 18.75 15.5 20 15.5C20.55 15.5 21 15.95 21 16.5V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z"
+                      fill="#15486b"></path>
                   </svg>
                 </div>
-                <span class="font-sans text-sm text-gray-600">+628123456789</span>
-              </div>
-              
-              <div class="flex items-center">
-                <div class="w-10 h-10 rounded-full bg-marine-blue/10 flex items-center justify-center mr-3">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="#15486b"/>
+                <span class="font-sans text-sm text-gray-600"
+                  >{linkSocial.phone.key}</span
+                >
+              </a>
+
+              <a
+                target="_blank"
+                href={`${linkSocial.address.value}`}
+                class="flex items-center"
+              >
+                <div
+                  class="w-10 h-10 rounded-full bg-marine-blue/10 flex items-center justify-center mr-3"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z"
+                      fill="#15486b"></path>
                   </svg>
                 </div>
-                <span class="font-sans text-sm text-gray-600">Jakarta, Indonesia</span>
-              </div>
+                <span class="font-sans text-sm text-gray-600"
+                  >Jakarta, Indonesia</span
+                >
+              </a>
             </div>
           </div>
         </div>
-        
+
         <!-- Map section with enhanced styling -->
         <div class="relative">
-          <div class="absolute inset-0 bg-gradient-to-br from-marine-blue/30 to-marine-lightBlue/30 rounded-xl z-10 opacity-20"></div>
-          <div class="rounded-xl shadow-xl overflow-hidden h-full flex items-center justify-center">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.666427022623!2d106.82457787487954!3d-6.175392393812006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sMonumen%20Nasional!5e0!3m2!1sid!2sid!4v1746970162103!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          </div>
-          
+          <iframe
+            class="min-h-96 z-50 rounded-xl shadow-xl overflow-hidden h-full flex items-center justify-center"
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d253882.5287981797!2d106.873423!3d-6.1421850000000004!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5ad53bbb9cb%3A0x222b9ccf95ba07b9!2sAgung%20Perkasa%203!5e0!3m2!1sid!2sid!4v1747488999141!5m2!1sid!2sid"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+
           <!-- Address overlay -->
-          <div class="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg z-20">
+          <div
+            class="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg z-20"
+          >
             <div class="flex justify-start items-center gap-2">
               <!-- <MapPin size={32} color="#dc2626" /> -->
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="#ED4242"/>
+              <svg
+                class="hidden sm:inline"
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z"
+                  fill="#ED4242"></path>
               </svg>
               <div>
-                <h4 class="font-sans font-bold text-marine-darkBlue text-lg">Koko Lie</h4>
-                <p class="font-sans text-gray-700 text-sm">Jl. Lorem Ipsum No. 123, Jakarta, Indonesia</p>
+                <h4 class="font-sans font-bold text-marine-darkBlue text-lg">
+                  Toko Koko Lie
+                </h4>
+                <p class="font-sans text-gray-700 text-sm">
+                  {linkSocial.address.key}
+                </p>
               </div>
             </div>
           </div>
@@ -394,5 +653,4 @@ try {
 
   <!-- Floating WhatsApp Button -->
   <!-- <FloatingWhatsAppButton client:load /> -->
-
 </MainLayout>

@@ -3,6 +3,7 @@ import { AuthProvider } from "@context/AuthContext";
 import { CartProvider } from "@context/CartContext";
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
+import { feUrl } from "@utils/url";
 
 // Add Roboto Mono font for design consistency with Figma
 
@@ -22,10 +23,10 @@ const {
 // Generate canonical URL
 let canonicalURL;
 try {
-  canonicalURL = new URL(Astro.url.pathname, Astro.site || 'http://localhost:4321');
+  canonicalURL = new URL(Astro.url.pathname, Astro.site || feUrl);
 } catch (error) {
   // Fallback to just using the pathname
-  canonicalURL = new URL('http://localhost:4321' + Astro.url.pathname);
+  canonicalURL = new URL(feUrl + Astro.url.pathname);
 }
 
 // Process image URLs

@@ -6,7 +6,7 @@ export default function MarineProductCard({ product }) {
   console.log("mediass: ", media);
   
   return (
-    <a href={`/products/${product?.slug}`} className="flex-shrink-0 max-w-72 group shadow-md rounded-xl">
+    <a href={`/products/${product?.slug}`} className="flex-shrink-0 min-w-64 max-w-64 group shadow-md rounded-xl">
       <div className="marine-card p-3.5 flex flex-col hover:border-marine-blue shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden h-full">
         {/* Enhanced image container with scaling effect */}
         <div className="h-40 md:h-48 rounded-lg overflow-hidden mb-4 relative">
