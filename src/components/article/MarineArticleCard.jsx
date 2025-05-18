@@ -12,6 +12,9 @@ export default function MarineArticleCard({
   },
   isShrink = false
 }) {
+  const image = article?.yoast_head_json?.schema?.["@graph"].find((item) => item["@type"] === "ImageObject");
+  // console.log("image: ", image);
+  
   return (
     <div className={`${isShrink && "flex-shrink-0 min-w-72 max-w-72"} group h-full`}>
       <div className="marine-card overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-all duration-300">
@@ -20,9 +23,12 @@ export default function MarineArticleCard({
           <div className="absolute inset-0 bg-gradient-to-t from-marine-darkBlue/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
 
           <img
-              src={"/images/no-image.png"}
+              src={image?.url ?? "/images/no-image.png"}
               alt={article.title}
               className="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+              onError={(e) => {
+                e.target.src = "/images/no-image.png"
+              }}
             />
           {/* {article.image ? (
             <img
