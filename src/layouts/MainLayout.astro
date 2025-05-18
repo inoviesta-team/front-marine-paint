@@ -1,4 +1,5 @@
 ---
+import GlobalModal from "@features/modal/components/GlobalModal";
 import MarineFooter from "@components/layout/MarineFooter";
 import MarineHeader from "@components/layout/MarineHeader";
 import { ClientRouter } from "astro:transitions";
@@ -107,6 +108,7 @@ try {
     </main>
 
     <LoadingOverlay client:only="react" />
+    <GlobalModal client:only="react" />
 
     {
       isShowWhatsapp && (
