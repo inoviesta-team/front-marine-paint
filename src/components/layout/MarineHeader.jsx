@@ -1,31 +1,31 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useAuth } from "@hooks/useAuth";
-import useAuthStore from "@features/auth/zustand/useAuthStore";
-import { History, LogOut, User } from "lucide-react";
-import MarineButton from "@components/ui/MarineButton";
-import useCartStore from "@features/cart/zustand/useCartStore";
+import React, { useEffect, useRef, useState } from 'react';
+import { useAuth } from '@hooks/useAuth';
+import useAuthStore from '@features/auth/zustand/useAuthStore';
+import { History, LogOut, User } from 'lucide-react';
+import MarineButton from '@components/ui/MarineButton';
+import useCartStore from '@features/cart/zustand/useCartStore';
 
 export default function MarineHeader() {
   const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // for mobile menu toggle
-  const [currentPath, setCurrentPath] = useState("/");
+  const [currentPath, setCurrentPath] = useState('/');
   const { user, isAuthenticated, logout } = useAuthStore();
   const { carts } = useCartStore();
 
   // Update current path when component mounts and on client-side navigation
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       setCurrentPath(window.location.pathname);
-      
+
       // Listen for Astro's page transitions
       const handlePageTransition = () => {
         setCurrentPath(window.location.pathname);
       };
-      
-      document.addEventListener("astro:page-load", handlePageTransition);
-      
+
+      document.addEventListener('astro:page-load', handlePageTransition);
+
       return () => {
-        document.removeEventListener("astro:page-load", handlePageTransition);
+        document.removeEventListener('astro:page-load', handlePageTransition);
       };
     }
   }, []);
@@ -35,46 +35,46 @@ export default function MarineHeader() {
   } catch (error) {}
 
   const navLinks = [
-    { href: "/", label: "Beranda" },
-    { href: "/about-us", label: "Tentang Kami" },
-    { href: "/products", label: "Produk" },
+    { href: '/', label: 'Beranda' },
+    { href: '/products', label: 'Produk' },
+    { href: '/about-us', label: 'Tentang Kami' },
     // { href: "/projects", label: "Projek" },
-    { href: "/articles", label: "Artikel" },
-    { href: "/contact-us", label: "Kontak Kami" },
-    { href: "/cart", label: "Keranjang", isCart: true },
+    { href: '/articles', label: 'Artikel' },
+    { href: '/contact-us', label: 'Kontak Kami' },
+    { href: '/cart', label: 'Keranjang', isCart: true }
   ];
 
   // Helper function to check if a link is active
   const isLinkActive = (href) => {
     // Exact match for home page
-    if (href === "/") {
-      return currentPath === "/";
+    if (href === '/') {
+      return currentPath === '/';
     }
     // For other pages, check if current path starts with the href
     return currentPath.startsWith(href);
   };
 
   const handleClickOutsides = (event) => {
-    if (!event.target.closest(".navbar")) {
+    if (!event.target.closest('.navbar')) {
       setIsOpen(false);
     }
   };
 
   useEffect(() => {
-    window.addEventListener("click", handleClickOutsides);
+    window.addEventListener('click', handleClickOutsides);
     return () => {
-      window.removeEventListener("click", handleClickOutsides);
+      window.removeEventListener('click', handleClickOutsides);
     };
   }, []);
 
   return (
-    <header className="bg-white py-4 sm:py-3 shadow-md navbar">
-      <div className="mx-auto px-4 sm:px-6 lg:px-16">
-        <div className="flex justify-between items-center">
+    <header className='bg-white py-4 sm:py-3 shadow-md navbar'>
+      <div className='mx-auto px-4 sm:px-6 lg:px-16'>
+        <div className='flex justify-between items-center'>
           {/* Logo */}
-          <div className="flex-shrink-0">
-            <a href="/" className="flex items-center">
-              <img src="/images/logo.png" alt="Koko Lie" className="w-20" />
+          <div className='flex-shrink-0'>
+            <a href='/' className='flex items-center'>
+              <img src='/images/logo.png' alt='Koko Lie' className='w-20' />
               {/* <span className="text-2xl font-bold text-marine-blue">
                 Toko Koko Lie
               </span> */}
@@ -82,30 +82,30 @@ export default function MarineHeader() {
           </div>
 
           {/* Hamburger Button (mobile only) */}
-          <div className="mt-2 lg:hidden">
+          <div className='mt-2 lg:hidden'>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-marine-blue focus:outline-none"
+              className='text-marine-blue focus:outline-none'
             >
               <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+                className='w-6 h-6'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
               >
                 {isOpen ? (
                   <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                     strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
+                    d='M6 18L18 6M6 6l12 12'
                   />
                 ) : (
                   <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                     strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
+                    d='M4 6h16M4 12h16M4 18h16'
                   />
                 )}
               </svg>
@@ -113,26 +113,28 @@ export default function MarineHeader() {
           </div>
 
           {/* Navigation - Desktop */}
-          <nav className="hidden lg:flex space-x-8">
+          <nav className='hidden lg:flex space-x-8'>
             {navLinks.map((link, index) =>
               link.isCart ? (
                 <a
                   key={index}
                   href={link.href}
-                  className={`font-sans ${isLinkActive(link.href) ? "font-bold" : "font-medium"} text-marine-blue hover:text-marine-darkBlue flex items-center`}
+                  className={`font-sans ${
+                    isLinkActive(link.href) ? 'font-bold' : 'font-medium'
+                  } text-marine-blue hover:text-marine-darkBlue flex items-center`}
                 >
                   <svg
-                    className="w-6 h-6 mr-1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    className='w-6 h-6 mr-1'
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
                       strokeWidth={1.5}
-                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                      d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'
                     />
                   </svg>
                   ({carts?.length || 0})
@@ -141,7 +143,9 @@ export default function MarineHeader() {
                 <a
                   key={index}
                   href={link.href}
-                  className={`font-sans ${isLinkActive(link.href) ? "font-bold" : "font-medium"} text-marine-blue hover:text-marine-darkBlue`}
+                  className={`font-sans ${
+                    isLinkActive(link.href) ? 'font-bold' : 'font-medium'
+                  } text-marine-blue hover:text-marine-darkBlue`}
                 >
                   {link.label}
                 </a>
@@ -150,37 +154,46 @@ export default function MarineHeader() {
           </nav>
 
           {/* Login Button */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className='hidden lg:flex items-center space-x-4'>
             {isClient && isAuthenticated ? (
               <UserDropdown />
             ) : (
-              <MarineButton variant="tertiary" className="rounded-xl" as="a" href="/account/login">Masuk</MarineButton>
+              <MarineButton
+                variant='tertiary'
+                className='rounded-xl'
+                as='a'
+                href='/account/login'
+              >
+                Masuk
+              </MarineButton>
             )}
           </div>
         </div>
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="lg:hidden mt-4 space-y-2">
+          <div className='lg:hidden mt-4 space-y-2'>
             {navLinks.map((link, index) =>
               link.isCart ? (
                 <a
                   key={index}
                   href={link.href}
-                  className={`block font-sans ${isLinkActive(link.href) ? "font-bold" : "font-medium"} text-marine-blue hover:text-marine-darkBlue flex items-center`}
+                  className={`block font-sans ${
+                    isLinkActive(link.href) ? 'font-bold' : 'font-medium'
+                  } text-marine-blue hover:text-marine-darkBlue flex items-center`}
                 >
                   <svg
-                    className="w-6 h-6 mr-1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    className='w-6 h-6 mr-1'
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
                       strokeWidth={1.5}
-                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                      d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'
                     />
                   </svg>
                   ({carts?.length || 0})
@@ -189,7 +202,9 @@ export default function MarineHeader() {
                 <a
                   key={index}
                   href={link.href}
-                  className={`block font-sans ${isLinkActive(link.href) ? "font-bold" : "font-medium"} text-marine-blue hover:text-marine-darkBlue`}
+                  className={`block font-sans ${
+                    isLinkActive(link.href) ? 'font-bold' : 'font-medium'
+                  } text-marine-blue hover:text-marine-darkBlue`}
                 >
                   {link.label}
                 </a>
@@ -200,7 +215,14 @@ export default function MarineHeader() {
             {isClient && isAuthenticated ? (
               <UserDropdown />
             ) : (
-              <MarineButton variant="tertiary" className="rounded-xl w-full lg:w-auto text-center" as="a" href="/account/login">Masuk</MarineButton>
+              <MarineButton
+                variant='tertiary'
+                className='rounded-xl w-full lg:w-auto text-center'
+                as='a'
+                href='/account/login'
+              >
+                Masuk
+              </MarineButton>
             )}
           </div>
         )}
@@ -231,31 +253,31 @@ function UserDropdown() {
   };
 
   useEffect(() => {
-    window.addEventListener("click", handleClickOutside);
+    window.addEventListener('click', handleClickOutside);
     return () => {
-      window.removeEventListener("click", handleClickOutside);
+      window.removeEventListener('click', handleClickOutside);
     };
   }, []);
 
   return (
-    <div className="">
-      <div className="w-full sm:w-auto relative inline-block text-left">
+    <div className=''>
+      <div className='w-full sm:w-auto relative inline-block text-left'>
         <button
           ref={dropdownButtonRef}
           onClick={toggleDropdown}
-          className="w-full sm:w-auto inline-flex justify-start gap-x-1.5 rounded-full bg-white pl-3 pr-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300"
+          className='w-full sm:w-auto inline-flex justify-start gap-x-1.5 rounded-full bg-white pl-3 pr-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300'
         >
-          <div className="flex justify-start items-center">
+          <div className='flex justify-start items-center'>
             <img
-              src="/images/user-default.png"
+              src='/images/user-default.png'
               alt={user.name}
-              className="w-10 h-10 rounded-full mr-2 shadow border border-gray-200"
+              className='w-10 h-10 rounded-full mr-2 shadow border border-gray-200'
             />
-            <div className="text-start">
-              <p className="font-sans text-sm font-bold text-marine-blue">
+            <div className='text-start'>
+              <p className='font-sans text-sm font-bold text-marine-blue'>
                 {user.name}
               </p>
-              <p className="font-sans text-xs font-normal text-marine-blue">
+              <p className='font-sans text-xs font-normal text-marine-blue'>
                 {user.email}
               </p>
             </div>
@@ -264,39 +286,39 @@ function UserDropdown() {
         <div
           ref={dropdownMenuRef}
           className={`z-50 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-xl bg-white ring-1 ring-black ring-opacity-5 ${
-            isDropdownOpen ? "" : "hidden"
+            isDropdownOpen ? '' : 'hidden'
           }`}
         >
           <div
-            className="py-2 p-2"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="dropdown-button"
+            className='py-2 p-2'
+            role='menu'
+            aria-orientation='vertical'
+            aria-labelledby='dropdown-button'
           >
             <a
-              href="/account"
-              className="flex w-full rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer"
-              role="menuitem"
+              href='/account'
+              className='flex w-full rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer'
+              role='menuitem'
             >
-              <User size={18} className="mr-2" />
+              <User size={18} className='mr-2' />
               Profile
             </a>
-            
+
             <a
-              href="/order"
-              className="flex w-full rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer"
-              role="menuitem"
+              href='/order'
+              className='flex w-full rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer'
+              role='menuitem'
             >
-              <History size={18} className="mr-2" />
+              <History size={18} className='mr-2' />
               Histori Transaksi
             </a>
 
             <button
               onClick={logout}
-              className="flex w-full rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer"
-              role="menuitem"
+              className='flex w-full rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer'
+              role='menuitem'
             >
-              <LogOut size={18} className="mr-2" />
+              <LogOut size={18} className='mr-2' />
               Logout
             </button>
           </div>
