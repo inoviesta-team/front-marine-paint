@@ -8,8 +8,27 @@ import useCartStore from "@features/cart/zustand/useCartStore";
 export default function MarineHeader() {
   const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // for mobile menu toggle
+  const [currentPath, setCurrentPath] = useState("/");
   const { user, isAuthenticated, logout } = useAuthStore();
   const { carts } = useCartStore();
+
+  // Update current path when component mounts and on client-side navigation
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+      
+      // Listen for Astro's page transitions
+      const handlePageTransition = () => {
+        setCurrentPath(window.location.pathname);
+      };
+      
+      document.addEventListener("astro:page-load", handlePageTransition);
+      
+      return () => {
+        document.removeEventListener("astro:page-load", handlePageTransition);
+      };
+    }
+  }, []);
 
   try {
     if (!isClient) setIsClient(true);
@@ -24,6 +43,16 @@ export default function MarineHeader() {
     { href: "/contact-us", label: "Kontak Kami" },
     { href: "/cart", label: "Keranjang", isCart: true },
   ];
+
+  // Helper function to check if a link is active
+  const isLinkActive = (href) => {
+    // Exact match for home page
+    if (href === "/") {
+      return currentPath === "/";
+    }
+    // For other pages, check if current path starts with the href
+    return currentPath.startsWith(href);
+  };
 
   return (
     <header className="bg-white py-4 sm:py-3 shadow-md">
@@ -77,7 +106,7 @@ export default function MarineHeader() {
                 <a
                   key={index}
                   href={link.href}
-                  className="font-sans font-bold text-marine-blue hover:text-marine-darkBlue flex items-center"
+                  className={`font-sans ${isLinkActive(link.href) ? "font-bold" : "font-medium"} text-marine-blue hover:text-marine-darkBlue flex items-center`}
                 >
                   <svg
                     className="w-6 h-6 mr-1"
@@ -99,7 +128,7 @@ export default function MarineHeader() {
                 <a
                   key={index}
                   href={link.href}
-                  className="font-sans font-bold text-marine-blue hover:text-marine-darkBlue"
+                  className={`font-sans ${isLinkActive(link.href) ? "font-bold" : "font-medium"} text-marine-blue hover:text-marine-darkBlue`}
                 >
                   {link.label}
                 </a>
@@ -125,7 +154,7 @@ export default function MarineHeader() {
                 <a
                   key={index}
                   href={link.href}
-                  className="block font-sans font-bold text-marine-blue hover:text-marine-darkBlue flex items-center"
+                  className={`block font-sans ${isLinkActive(link.href) ? "font-bold" : "font-medium"} text-marine-blue hover:text-marine-darkBlue flex items-center`}
                 >
                   <svg
                     className="w-6 h-6 mr-1"
@@ -147,7 +176,7 @@ export default function MarineHeader() {
                 <a
                   key={index}
                   href={link.href}
-                  className="block font-sans font-bold text-marine-blue hover:text-marine-darkBlue"
+                  className={`block font-sans ${isLinkActive(link.href) ? "font-bold" : "font-medium"} text-marine-blue hover:text-marine-darkBlue`}
                 >
                   {link.label}
                 </a>
