@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 const useModalStore = create(
   (set) => ({
-    isShowModal: true,
+    isShowModal: false,
     modalType: "INFO",
     modalVariant: "DEFAULT",
     headMessage: "Toko Koko Lie",
