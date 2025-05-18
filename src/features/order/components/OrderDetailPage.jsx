@@ -2,13 +2,14 @@ import MarineButton from "@components/ui/MarineButton";
 import { ratingApi } from "@features/rating/api/ratingApi";
 import RatingProductFormModal from "@features/rating/components/RatingProductFormModal";
 import { Rating } from "@smastrom/react-rating";
+import { beUrl } from "@utils/url";
 import { valueUtil } from "@utils/valueUtil";
-import { Download, FileText } from "lucide-react";
+import { ClipboardCopy, Download, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 import { orderApi } from "../api/orderApi";
 import { paymentApi } from "../api/paymentApi";
 import { orderStatus } from "../util/orderStatus";
-import { beUrl } from "@utils/url";
+import useModalStore from "@features/modal/zustand/useModalStore";
 
 export default function OrderDetailPage() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -19,6 +20,8 @@ export default function OrderDetailPage() {
   const orderJsonData = orderJson ? JSON.parse(orderJson) : {};
   // const [orderJsonData, setOrderJsonData] = useState(orderJson ? JSON.parse(orderJson) : {})
   const [loading, setLoading] = useState(true);
+  const { showModal: showModalStore, hideModal: hideModalStore } =
+    useModalStore();
 
   if (!orderId || !orderJson) return window.history.back();
 
@@ -82,21 +85,22 @@ export default function OrderDetailPage() {
       const res = await orderApi.getInvoiceOrder(orderData.id);
       if (res?.data.status) {
         const base64Data = res?.data?.data?.data?.data; // base64 string tanpa prefix
-        const fileName = res?.data?.data?.data?.filename || `invoice-${orderData.id}.pdf`;
-  
+        const fileName =
+          res?.data?.data?.data?.filename || `invoice-${orderData.id}.pdf`;
+
         // Decode base64 ke binary
         const byteCharacters = atob(base64Data);
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {
           byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
-  
+
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: "application/pdf" });
-  
+
         // Buat URL dari Blob
         const url = window.URL.createObjectURL(blob);
-  
+
         if (download) {
           // Download PDF
           const a = document.createElement("a");
@@ -109,13 +113,12 @@ export default function OrderDetailPage() {
           // Preview PDF di tab baru
           window.open(url, "_blank");
         }
-  
+
         // Hapus URL setelah digunakan
         window.URL.revokeObjectURL(url);
       }
     }
   };
-  
 
   useEffect(() => {
     getOrderData();
@@ -138,6 +141,17 @@ export default function OrderDetailPage() {
     setShowRateModal(true);
   };
 
+  const handleCopyResi = () => {
+    navigator.clipboard.writeText(orderData.trackingNumber);
+    showModalStore(
+      "INFO",
+      "SUCCESS",
+      "Resi Berhasil Disalin!",
+      orderData.trackingNumber,
+      "Tutup",
+      null
+    );
+  };
   // console.log("orderData: ", orderData);
 
   return (
@@ -160,6 +174,19 @@ export default function OrderDetailPage() {
                   {orderStatus[orderData.status]}
                 </p>
               </div>
+              {(orderData.status === "DELIVERED" ||
+                orderData.status === "SHIPPED") && (
+                <div>
+                  <p className="text-gray-500">No. Resi Pengiriman</p>
+                  <button
+                    onClick={handleCopyResi}
+                    className="flex items-center gap-1 font-semibold text-base text-marine-blue"
+                  >
+                    <span>{orderData?.trackingNumber}</span>{" "}
+                    <ClipboardCopy size={18} color="#252525" />
+                  </button>
+                </div>
+              )}
               <div>
                 <p className="text-gray-500">Total Pembayaran</p>
                 <p className="font-semibold">
@@ -196,11 +223,18 @@ export default function OrderDetailPage() {
               orderData.status === "SHIPPED" ||
               orderData.status === "PROCESSING") && (
               <div className="mt-6 flex flex-wrap items-center gap-2">
-                <MarineButton onClick={() => handleInvoiceOrder(false)} variant="tertiary" className="rounded-lg">
+                <MarineButton
+                  onClick={() => handleInvoiceOrder(false)}
+                  variant="tertiary"
+                  className="rounded-lg"
+                >
                   <FileText className="inline-block w-5 h-5 mr-1.5" />
                   Lihat Invoice
                 </MarineButton>
-                <MarineButton onClick={() => handleInvoiceOrder(true)} className="rounded-lg">
+                <MarineButton
+                  onClick={() => handleInvoiceOrder(true)}
+                  className="rounded-lg"
+                >
                   <Download className="inline-block w-5 h-5 mr-1.5" />
                   Download Invoice
                 </MarineButton>
