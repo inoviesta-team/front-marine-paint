@@ -101,7 +101,7 @@ try {
     </script>
   </head>
   <body class="min-h-screen bg-gray-50">
-    <MarineHeader client:load transition:persist />
+    <MarineHeader client:only="react" transition:persist />
 
     <main class="relative flex-grow" transition:animate="fade">
       <slot />
