@@ -5,12 +5,14 @@ import { useState } from "react";
 import indonesiaCities from "../../../../public/json/indonesiaCities.json";
 import indonesiaProvinces from "../../../../public/json/indonesiaProvinces.json";
 import useAddressStore from "../zustand/useAddressStore";
+import useModalStore from "@features/modal/zustand/useModalStore";
 
 export default function AddressFormModal({
   addressObj = {},
   showModal,
   handleCloseModal,
 }) {
+  const { showModal: showModalStore, hideModal: hideModalStore } = useModalStore();
   const [isDefault, setIsDefault] = useState(
     addressObj?.id ? addressObj.isDefault : false
   );
@@ -202,7 +204,7 @@ export default function AddressFormModal({
     setSelectedPostalCode("");
     setIsDefault(false);
     handleCloseModal();
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -223,18 +225,46 @@ export default function AddressFormModal({
       await createAddress(requestData);
     }
 
-    setToDefault()
+    setToDefault();
+    showModalStore(
+      "INFO",
+      "DEFAULT",
+      "Alamat Berhasil " + (addressObj?.id ? "Diubah" : "Ditambahkan"),
+      null,
+      "Tutup",
+      null
+    )
   };
 
   const handleDeleteAddress = async () => {
-    if(!addressObj?.id) return
-    const confirmDelete = window.confirm(`Apakah Anda yakin ingin menghapus alamat?`)
-    if(!confirmDelete) return
-
-    await deleteAddress(addressObj.id)
-
-    setToDefault()
-  }
+    try {
+      showModalStore(
+        "CONFIRM",
+        "DEFAULT",
+        "Hapus Alamat",
+        "Apakah Anda yakin ingin menghapus alamat?",
+        "Tutup",
+        async () => {
+          if (!addressObj?.id) return;
+  
+          await deleteAddress(addressObj.id);
+  
+          setToDefault();
+          // hideModalStore()
+          showModalStore(
+            "INFO",
+            "SUCCESS",
+            "Berhasil",
+            "Alamat berhasil dihapus",
+            "Tutup",
+            null
+          );
+        }
+      );
+    } catch (error) {
+      console.log("DELETE ADDRESS ERR");
+    }
+  };
 
   return (
     <>
@@ -435,6 +465,7 @@ export default function AddressFormModal({
             <div className="flex justify-end space-x-2 mt-3">
               {addressObj?.id && (
                 <button
+                  type="button"
                   onClick={handleDeleteAddress}
                   className="bg-white text-red-500 border-2 border-red-500 shadow-md px-2 rounded-lg"
                 >

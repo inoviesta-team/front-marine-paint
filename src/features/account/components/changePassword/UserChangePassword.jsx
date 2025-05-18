@@ -1,10 +1,12 @@
 import MarineButton from "@components/ui/MarineButton";
 import ValidationMessage from "@components/ui/ValidationMessage";
 import useAuthStore from "@features/auth/zustand/useAuthStore";
+import useModalStore from "@features/modal/zustand/useModalStore";
 import { Eye, EyeOff, Lock } from "lucide-react";
 import React, { useState } from "react";
 
 export default function UserChangePassword() {
+  const { showModal: showModalStore, hideModal: hideModalStore } = useModalStore();
   const { user, editProfile, error, setError } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [inputUser, setInputUser] = useState({
@@ -53,6 +55,15 @@ export default function UserChangePassword() {
       confirmNewPassword: "",
     })
     setError(null);
+
+    showModalStore(
+      "INFO",
+      "SUCCESS",
+      "Ubah Password Berhasil!",
+      null,
+      "Tutup",
+      null
+    )
   };
 
   console.log("error: ", error);

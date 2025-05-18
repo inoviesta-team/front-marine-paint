@@ -7,6 +7,7 @@ const useModalStore = create(
     modalVariant: "DEFAULT",
     headMessage: "Toko Koko Lie",
     message: "Halo Apa Kabar?",
+    customBtnMessage: "Tutup",
     onConfirm: () => {},
 
     showModal: (
@@ -14,6 +15,7 @@ const useModalStore = create(
       modalVariant = 'DEFAULT',
       headMessage = 'Toko Koko Lie',
       message = 'Halo Apa Kabar?',
+      customBtnMessage = "Tutup",
       onConfirm = () => {}
     ) => {
       set({
@@ -22,6 +24,7 @@ const useModalStore = create(
         modalVariant,
         headMessage,
         message,
+        customBtnMessage,
         onConfirm
       });
     },
@@ -33,6 +36,7 @@ const useModalStore = create(
         modalVariant: 'DEFAULT',
         headMessage: 'Toko Koko Lie',
         message: 'Halo Apa Kabar?',
+        customBtnMessage: "Tutup",
         onConfirm: () => {}
       });
     }
