@@ -58,7 +58,7 @@ export default function OrderDetailPage() {
 
   const handlePaymentOrder = async () => {
     const resGetPayment = await paymentApi.getPaymentByOrderId(orderId);
-    console.log("resGetPayment: ", resGetPayment);
+    // console.log("resGetPayment: ", resGetPayment);
 
     if (resGetPayment?.data?.status) {
       window.location.href = resGetPayment.data.data.payment_url;
@@ -131,7 +131,7 @@ export default function OrderDetailPage() {
     setShowRateModal(true);
   };
 
-  console.log("orderData: ", orderData);
+  // console.log("orderData: ", orderData);
 
   return (
     <>
