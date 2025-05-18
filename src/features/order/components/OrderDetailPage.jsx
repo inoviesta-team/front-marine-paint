@@ -158,7 +158,7 @@ export default function OrderDetailPage() {
           <div className="space-y-6">
             {orderJsonData?.orderItems?.map((item, index) => {
               const rating = checkAlreadyRated(item.productId);
-              const image = item?.product?.media.length > 0 && (item?.product?.media.find((image) => image.isMain == true) || item?.product?.media[0]);
+              const image = item?.product?.media?.length > 0 && (item?.product?.media.find((image) => image.isMain == true) || item?.product?.media[0]);
               return (
                 <div key={index} className="flex items-center gap-4">
                   <img

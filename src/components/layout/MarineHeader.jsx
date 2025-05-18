@@ -25,8 +25,21 @@ export default function MarineHeader() {
     { href: "/cart", label: "Keranjang", isCart: true },
   ];
 
+  const handleClickOutsides = (event) => {
+    if (!event.target.closest(".navbar")) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("click", handleClickOutsides);
+    return () => {
+      window.removeEventListener("click", handleClickOutsides);
+    };
+  }, []);
+
   return (
-    <header className="bg-white py-4 sm:py-3 shadow-md">
+    <header className="bg-white py-4 sm:py-3 shadow-md navbar">
       <div className="mx-auto px-4 sm:px-6 lg:px-16">
         <div className="flex justify-between items-center">
           {/* Logo */}
