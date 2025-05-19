@@ -70,6 +70,7 @@ export default function ProductAddToCart({ product }) {
           quantity={quantity}
           setQuantity={setQuantity}
           cart={cart}
+          setCart={setCart}
         />
       </div>
       <div className="flex flex-col sm:flex-row gap-4">

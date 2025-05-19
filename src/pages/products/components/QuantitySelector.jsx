@@ -1,4 +1,5 @@
 import useCartStore from '@features/cart/zustand/useCartStore';
+import useModalStore from '@features/modal/zustand/useModalStore';
 import { Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
 
@@ -10,9 +11,11 @@ export default function QuantitySelector({
   disabled = false,
   quantity,
   setQuantity,
-  cart
+  cart,
+  setCart
 }) {
-  const { updateCart } = useCartStore();
+  const { updateCart, deleteCart } = useCartStore();
+  const { showModal: showModalStore, hideModal: hideModalStore } = useModalStore();
 
   const handleUpdateCart = async (cartId, quantity) => {
     const requestUpdateCart = {
@@ -36,6 +39,29 @@ export default function QuantitySelector({
       setQuantity(newValue);
       if (onChange) onChange(newValue);
       if(cart?.id) await handleUpdateCart(cart.id, newValue)
+    } else if (cart?.id) {
+      showModalStore(
+        "CONFIRM",
+        "DEFAULT",
+        "Hapus produk dari keranjang belanja?",
+        null,
+        "Tutup",
+        async () => {
+          if (!cart?.id) return;
+  
+          await deleteCart(cart.id);
+          setCart(null)
+          // hideModalStore()
+          showModalStore(
+            "INFO",
+            "SUCCESS",
+            "Berhasil",
+            "Berhasil hapus produk dari keranjang belanja",
+            "Tutup",
+            null
+          );
+        }
+      )
     }
   };
   
@@ -61,12 +87,13 @@ export default function QuantitySelector({
       <button 
         type="button"
         className={`w-10 h-10 bg-white rounded-lg flex items-center justify-center border-2 border-gray-400 transition-colors ${
-          disabled || quantity <= min 
+          disabled || !cart?.id 
             ? 'cursor-not-allowed opacity-50' 
             : 'text-marine-darkBlue'
         }`}
+        // className={`w-10 h-10 bg-white rounded-lg flex items-center justify-center border-2 border-gray-400 transition-colors text-marine-darkBlue`}
         onClick={handleDecrement}
-        disabled={disabled || quantity <= min}
+        disabled={disabled || !cart?.id}
         aria-label="Decrease quantity"
       >
         <span className="text-xl font-bold"><Minus size={20} color='#15486b' /></span>
