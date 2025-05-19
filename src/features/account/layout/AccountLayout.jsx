@@ -89,13 +89,13 @@ export default function AccountLayout({ children }) {
               >
                 Ganti Password
               </a>
-              <button
+              {/* <button
                 onClick={logout}
                 className="p-3 rounded-md block text-red-500"
                 href="/account/change-password"
               >
                 Keluar / Logout
-              </button>
+              </button> */}
             </nav>
           </div>
         </div>

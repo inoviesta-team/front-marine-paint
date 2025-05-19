@@ -107,7 +107,7 @@ export default function SearchProduct() {
     limit: 20,
   });
 
-  const [showFilter, setShowFilter] = useState(true);
+  const [showFilter, setShowFilter] = useState(false);
   const handleShowFilter = () => {
     setShowFilter(!showFilter);
   };
