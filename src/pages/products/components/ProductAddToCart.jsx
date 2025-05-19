@@ -105,7 +105,7 @@ export default function ProductAddToCart({ product }) {
           href="/contact-us"
           variant="tertiary"
           size="md"
-          className="w-full sm:w-auto text-center rounded-lg text-marine-darkBlue sm:flex sm:items-center gap-2 transition-all duration-300"
+          className="w-full sm:w-auto text-center rounded-lg sm:flex sm:items-center gap-2 transition-all duration-300"
         >
           <span>Konsultasi via Whatsapp</span>
           <svg

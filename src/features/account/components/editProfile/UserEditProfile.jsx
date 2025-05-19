@@ -21,9 +21,63 @@ export default function UserEditProfile() {
     });
   };
 
+  const validateEditProfile = () => {
+    if(inputUser.name === user.name && inputUser.email === user.email && inputUser.phoneNumber === user.phoneNumber) {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Tidak ada perubahan data",
+        null,
+        "Tutup",
+        null
+      )
+      return false
+    }
+    
+    if(!inputUser.name || inputUser.name === "") {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Silahkan isi nama terlebih dahulu",
+        null,
+        "Tutup",
+        null
+      )
+      return false
+    }
+
+    if(!inputUser.email || inputUser.email === "") {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Silahkan isi email terlebih dahulu",
+        null,
+        "Tutup",
+        null
+      )
+      return false
+    }
+
+    if(!inputUser.phoneNumber || inputUser.phoneNumber === "") {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Silahkan isi nomor telepon terlebih dahulu",
+        null,
+        "Tutup",
+        null
+      )
+      return false
+    }
+
+    return true
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    if(!validateEditProfile()) return
+
     await editProfile(inputUser);
 
     showModalStore(

@@ -206,8 +206,98 @@ export default function AddressFormModal({
     handleCloseModal();
   };
 
+  const validateForm = () => {
+    if(!inputAddress.recipientName || inputAddress.recipientName == "") {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Silahkan isi nama penerima terlebih dahulu",
+        null,
+        "Tutup",
+        null
+      );
+      return false
+    }
+
+    if(!inputAddress.phone || inputAddress.phone == "") {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Silahkan isi nomor telepon terlebih dahulu",
+        null,
+        "Tutup",
+        null
+      );
+      return false
+    }
+
+    if(!inputAddress.address || inputAddress.address == "") {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Silahkan isi alamat terlebih dahulu",
+        null,
+        "Tutup",
+        null
+      );
+      return false
+    }
+
+    if(!selectedProvinceName || selectedProvinceName == "") {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Silahkan pilih provinsi terlebih dahulu",
+        null,
+        "Tutup",
+        null
+      );
+      return false
+    }
+
+    if(!selectedRegency || selectedRegency == "") {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Silahkan pilih kota terlebih dahulu",
+        null,
+        "Tutup",
+        null
+      );
+      return false
+    }
+
+    if(!selectedDistrict || selectedDistrict == "") {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Silahkan pilih kecamatan terlebih dahulu",
+        null,
+        "Tutup",
+        null
+      );
+      return false
+    }
+
+    if(!selectedPostalCode || selectedPostalCode == "") {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Silahkan pilih kode pos terlebih dahulu",
+        null,
+        "Tutup",
+        null
+      );
+      return false
+    }
+
+    return true
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if(!validateForm()) return
 
     const requestData = {
       ...inputAddress,

@@ -25,8 +25,52 @@ export default function UserChangePassword() {
     });
   };
 
+  const validateChangePassword = () => {
+    if(!inputUser.newPassword || inputUser.newPassword == "") {
+      showModalStore(
+          "INFO",
+          "DEFAULT",
+          "Silahkan isi password baru terlebih dahulu",
+          null,
+          "Tutup",
+          null
+        )
+        return false
+      }
+
+    if(!inputUser.confirmNewPassword || inputUser.confirmNewPassword == "") {
+      showModalStore(
+          "INFO",
+          "DEFAULT",
+          "Silahkan isi konfirmasi password terlebih dahulu",
+          null,
+          "Tutup",
+          null
+        )
+        return false
+      }
+      
+      if(inputUser.newPassword !== inputUser.confirmNewPassword) {
+        showModalStore(
+            "INFO",
+            "DEFAULT",
+            "Password baru dan konfirmasi password baru tidak sama",
+            null,
+            "Tutup",
+            null
+          )
+          return false
+        }
+
+        return true
+    }
+    
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if(!validateChangePassword()) return
 
     if (inputUser.newPassword !== inputUser.confirmNewPassword) {
       setError({

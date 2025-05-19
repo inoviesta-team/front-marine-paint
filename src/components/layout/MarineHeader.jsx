@@ -6,6 +6,7 @@ import MarineButton from '@components/ui/MarineButton';
 import useCartStore from '@features/cart/zustand/useCartStore';
 
 export default function MarineHeader() {
+  
   const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // for mobile menu toggle
   const [currentPath, setCurrentPath] = useState('/');
