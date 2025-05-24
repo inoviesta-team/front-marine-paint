@@ -9,75 +9,25 @@ import ProductImageGallery from "./components/ProductImageGallery";
 import ProductReview from "./components/ProductReview";
 import TabSection from "./components/TabSection";
 
-// export async function serverLoad({ params }) {
-//   try {
-//     const { slug } = params;
+export const prerender = false;
 
-//     const response = await productApiStatic.getProductBySlug(slug);
-//     const product = response?.data;
+const { slug } = Astro.params;
 
-//     if (!product) {
-//       return {
-//         status: 404,
-//         error: new Error("Produk tidak ditemukan."),
-//       };
-//     }
+let product = null;
+let error = null;
 
-//     return { props: { product } };
-//   } catch (error) {
-//     console.error("Gagal mengambil produk:", error);
-//     return {
-//       status: 500,
-//       error: new Error("Gagal memuat produk."),
-//     };
-//   }
-// }
-
-// const { product } = Astro.props;
-
-// Astro.response.headers.set("Cache-Control", "public, max-age=300, s-maxage=3600");
-Astro.response.headers.set("Cache-Control", "no-store");
-export async function getStaticPaths() {
-  try {
-    const response = await productApiStatic.getProducts({
-      page: 1,
-      limit: 100,
-      categoryId: "",
-      brandId: "",
-    });
-
-    // console.log("response: ", response);
-    // console.log("response: ", response?.data?.validationErrors);
-
-    const products = response?.data?.products || [];
-
-    return products?.map((product) => ({
-      params: { slug: product.slug },
-      props: { product },
-    }));
-  } catch (error) {
-    console.error("Error fetching products for static paths:", error);
-    return [];
-  }
-}
-let { product } = Astro.props;
-
-if (!product) {
-  return Astro.redirect('/404');
-}
-
-const updatedProductData = async () => {
-  try {
-    const response = await productApiStatic.getProductBySlug(product.slug);
-    product = response?.data;  
-  } catch (err) {
-    console.error('Error fetching product:', err);
-    error = err;
+try {
+  const response = await productApiStatic.getProductBySlug(slug);
+  product = response?.data
+  
+  if (!product) {
     return Astro.redirect('/404');
   }
+} catch (err) {
+  console.error('Error fetching product:', err);
+  error = err;
+  return Astro.redirect('/404');
 }
-
-await updatedProductData();
 
 
 let relatedProducts = [];
@@ -274,6 +224,7 @@ console.log("asasa product: ", product);
                       <img
                         src={product.brand.logoPath}
                         alt={product.brand.name}
+                        onerror="this.src='/images/no-image.png'"
                         class="w-12"
                       />
                       <p class="font-sans text-gray-600 whitespace-pre-line">

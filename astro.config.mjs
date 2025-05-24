@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
+import node from '@astrojs/node';
 import * as path from "path";
 
 // Import PostCSS plugins for Tailwind
@@ -14,6 +15,14 @@ export default defineConfig({
   // experimental: {
   //   clientPrerender: true,
   // },
+  adapter: node({
+    mode: 'standalone'
+  }),
+  build: {
+    server: './dist/server/',
+    client: './dist/client/',
+    serverEntry: 'entry.mjs'
+  },
   integrations: [
     react()
   ],
