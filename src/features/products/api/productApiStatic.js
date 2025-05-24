@@ -2,28 +2,19 @@ import { beApiUrl } from "@utils/url";
 
 const baseUrl = beApiUrl;
 
-// export async function getProducts(filterRequest = {}) {
-//   const categoryId = filterRequest.categoryId;
-//   const page = filterRequest.page;
-//   const limit = filterRequest.limit;
-//   const brandId = filterRequest.brandId;
-  
-//   // console.log(localStorage.getItem("jwtToken"));
-  
-
-//   const response = await fetch(`${baseUrl}/products?page=${page}&limit=${limit}&brandId=${brandId}&categoryId=${categoryId}`, {
-//     method: "GET",
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//   });
-//   const products = await response.json();
-  
-  
-//   return products;
-// }
-
 export const productApiStatic = {
+    getProductBySlug: async (slug) => {
+      const response = await fetch(`${baseUrl}/products/${slug}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        cache: "no-store"
+      });
+      const product = await response.json();
+      return product;
+    },
+    
     getProducts: async (filterRequest = {}) => {
       const queryParams = Object.keys(filterRequest)
       .filter(key => filterRequest[key])
@@ -44,6 +35,7 @@ export const productApiStatic = {
         headers: {
           'Content-Type': 'application/json'
         },
+        cache: "no-cache"
       });
       const products = await response.json();
       // console.log("products: ", products);

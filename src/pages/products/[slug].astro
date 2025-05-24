@@ -9,6 +9,34 @@ import ProductImageGallery from "./components/ProductImageGallery";
 import ProductReview from "./components/ProductReview";
 import TabSection from "./components/TabSection";
 
+// export async function serverLoad({ params }) {
+//   try {
+//     const { slug } = params;
+
+//     const response = await productApiStatic.getProductBySlug(slug);
+//     const product = response?.data;
+
+//     if (!product) {
+//       return {
+//         status: 404,
+//         error: new Error("Produk tidak ditemukan."),
+//       };
+//     }
+
+//     return { props: { product } };
+//   } catch (error) {
+//     console.error("Gagal mengambil produk:", error);
+//     return {
+//       status: 500,
+//       error: new Error("Gagal memuat produk."),
+//     };
+//   }
+// }
+
+// const { product } = Astro.props;
+
+// Astro.response.headers.set("Cache-Control", "public, max-age=300, s-maxage=3600");
+Astro.response.headers.set("Cache-Control", "no-store");
 export async function getStaticPaths() {
   try {
     const response = await productApiStatic.getProducts({
@@ -32,8 +60,25 @@ export async function getStaticPaths() {
     return [];
   }
 }
+let { product } = Astro.props;
 
-const { product } = Astro.props;
+if (!product) {
+  return Astro.redirect('/404');
+}
+
+const updatedProductData = async () => {
+  try {
+    const response = await productApiStatic.getProductBySlug(product.slug);
+    product = response?.data;  
+  } catch (err) {
+    console.error('Error fetching product:', err);
+    error = err;
+    return Astro.redirect('/404');
+  }
+}
+
+await updatedProductData();
+
 
 let relatedProducts = [];
 try {

@@ -9,10 +9,14 @@ import autoprefixer from "autoprefixer";
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'static',
+  // prefetch: true,
+  // experimental: {
+  //   clientPrerender: true,
+  // },
   integrations: [
     react()
   ],
-  output: 'static', // Default is static, but explicitly setting it for clarity
   vite: {
     preview: {
       allowedHosts: ["https://049f-182-2-165-157.ngrok-free.app/"],
