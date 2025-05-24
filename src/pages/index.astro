@@ -14,6 +14,8 @@ import { ArrowRight } from "lucide-react";
 import { linkSocial } from "@utils/social";
 import { brandApiStatic } from "@features/products/api/brandApiStatic";
 
+export const prerender = false;
+
 // Fetch data for the page
 let products = [];
 let projects = [];
@@ -68,7 +70,7 @@ try {
 
     <div class="mx-auto relative z-10">
       <div
-        class="bg-[url('/images/hero-image.png')] rounded-b-[30px] sm:rounded-b-[50px] bg-cover bg-center md:bg-center py-12 md:pt-32 md:pb-24 px-4 md:px-14 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center bg-transparent"
+        class="bg-[url('/images/wallpaper/hero-image.jpg')] rounded-b-[30px] sm:rounded-b-[50px] bg-cover bg-center md:bg-center py-12 md:pt-32 md:pb-24 px-4 md:px-14 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center bg-transparent"
       >
         <div class="space-y-8">
           <!-- Improved brand highlight with accent color -->
@@ -233,7 +235,7 @@ try {
         <div class="grid grid-cols-2 gap-5">
           <img
             class="object-cover w-full h-56 col-span-2 rounded-xl shadow-md"
-            src="/images/ship-wallpaper-2.png"
+            src="/images/wallpaper/ship-wallpaper-2.jpg"
             alt="Toko Koko Lie"
           />
           <a

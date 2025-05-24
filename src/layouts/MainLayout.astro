@@ -10,7 +10,6 @@ import { feUrl } from "@utils/url";
 import LoadingOverlay from "@components/ui/LoadingOverlay";
 import { only } from "node:test";
 
-// SEO Props
 interface Props {
   title?: string;
   description?: string;
@@ -25,7 +24,6 @@ const {
   isShowWhatsapp = true,
 } = Astro.props;
 
-// Generate canonical URL
 let canonicalURL;
 try {
   canonicalURL = new URL(
@@ -33,11 +31,9 @@ try {
     Astro.site || feUrl
   );
 } catch (error) {
-  // Fallback to just using the pathname
   canonicalURL = new URL(feUrl + Astro.url.pathname);
 }
 
-// Process image URLs
 let ogImageUrl = image;
 let twitterImageUrl = image;
 try {
@@ -46,7 +42,6 @@ try {
     twitterImageUrl = ogImageUrl;
   }
 } catch (error) {
-  // Fallback to just using the image path directly
   console.error("Error processing image URL:", error);
 }
 ---
@@ -82,7 +77,6 @@ try {
 
     <!-- Navigation Scripting -->
     <script>
-      // This script adds event listeners for the Astro view transitions lifecycle events
       document.addEventListener("astro:page-load", () => {
         console.log("Page loaded completely");
       });
@@ -90,11 +84,8 @@ try {
       document.addEventListener("astro:after-swap", () => {
         console.log("New page content swapped in");
 
-        // You could do any DOM updates here that should happen right after
-        // the new page content is loaded
       });
 
-      // This allows us to scroll to the top when navigating to a new page
       document.addEventListener("astro:before-swap", () => {
         window.scrollTo(0, 0);
       });
@@ -121,7 +112,6 @@ try {
           <span class="hidden sm:inline font-sans">Hubungi kami</span>
           <svg
             class="w-7 h-7 sm:w-5 sm:h-5"
-            xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
           >

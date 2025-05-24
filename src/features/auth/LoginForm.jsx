@@ -52,7 +52,7 @@ export default function LoginForm() {
 
         {/* <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-marine-darkBlue to-marine-blue rounded-2xl overflow-hidden shadow-xl relative"></div> */}
         <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-marine-darkBlue to-marine-blue rounded-2xl overflow-hidden shadow-xl relative">
-          <img src="/images/ship-wallpaper.png" alt="Kokolie Mart" className="object-cover" />
+          <img src="/images/wallpaper/ship-wallpaper.jpg" alt="Kokolie Mart" className="object-cover" />
         </div>
 
         {/* Right side */}

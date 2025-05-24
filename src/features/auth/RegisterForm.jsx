@@ -66,7 +66,7 @@ export default function RegisterForm() {
       <div className="flex-grow container mx-auto px-4 md:px-8 py-12 flex flex-col md:flex-row gap-8">
         {/* Left side - Decorative/Informative */}
         <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-marine-darkBlue to-marine-blue rounded-2xl overflow-hidden shadow-xl relative">
-          <img src="/images/ship-wallpaper.png" alt="Kokolie Mart" />
+          <img src="/images/wallpaper/ship-wallpaper.jpg" alt="Kokolie Mart" />
         </div>
 
         {/* Right side - Auth forms */}
