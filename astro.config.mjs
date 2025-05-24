@@ -1,30 +1,15 @@
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
-import node from '@astrojs/node';
+import vercel from "@astrojs/vercel";
 import * as path from "path";
-
-// Import PostCSS plugins for Tailwind
-import tailwindcss from "tailwindcss";
 import tailwindcssNesting from "tailwindcss/nesting";
+import tailwindcss from "tailwindcss";
 import autoprefixer from "autoprefixer";
 
-// https://astro.build/config
 export default defineConfig({
-  output: 'static',
-  // prefetch: true,
-  // experimental: {
-  //   clientPrerender: true,
-  // },
-  adapter: node({
-    mode: 'standalone'
-  }),
-  build: {
-    server: './dist/server/',
-    client: './dist/client/',
-    serverEntry: 'entry.mjs'
-  },
+  adapter: vercel(),
   integrations: [
-    react()
+    react(),
   ],
   vite: {
     preview: {
