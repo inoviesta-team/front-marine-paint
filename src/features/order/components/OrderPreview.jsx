@@ -11,11 +11,14 @@ import { paymentApi } from "../api/paymentApi";
 import { productApi } from "@features/products/api/productApi";
 import { beUrl } from "@utils/url";
 import useModalStore from "@features/modal/zustand/useModalStore";
+import { cartApi } from "@features/cart/api/cartApi";
 
 export default function OrderPreview() {
+  const [loading, setLoading] = useState(false);
   const { user } = useAuthStore();
   const { address = [], mainAddress } = useAddressStore();
-  const { selectedCart, getCarts, deleteCart } = useCartStore();
+  const { selectedCart, getCarts, deleteCart, handleSelectedCart } =
+    useCartStore();
   const { showModal: showModalStore, hideModal: hideModalStore } =
     useModalStore();
   const [selectedAddress, setSelectedAddress] = useState(mainAddress || {});
@@ -63,7 +66,7 @@ export default function OrderPreview() {
   const getShippings = async () => {
     if (!selectedAddressId || !selectedCart) return;
 
-    console.log("selectedCart: ", selectedCart);
+    // console.log("selectedCart: ", selectedCart);
 
     const totalWeight = selectedCart.reduce(
       (total, item) => total + item.product.weight,
@@ -141,6 +144,8 @@ export default function OrderPreview() {
       return;
     }
 
+    setLoading(true)
+
     const orderItems = selectedCart.map((item) => ({
       productId: item.product.id,
       quantity: item.quantity,
@@ -163,26 +168,39 @@ export default function OrderPreview() {
 
     const resOrder = await orderApi.createOrder(request);
 
-    const orderId = resOrder?.data?.data?.id || "";
-    const orderJsonData = resOrder?.data?.data || {};
+    if (resOrder?.data?.data?.id) {
+      for (const item of selectedCart) {
+        // console.log("TODOS: ", item.id);
 
-    console.log("resOrder: ", resOrder);
-    console.log("orderJsonData: ", orderJsonData);
-
-    showModalStore(
-      "INFO",
-      "SUCCESS",
-      "Pesanan / Order Berhasil Dibuat",
-      // "Pastikan kamu membayar pesanan / order ini",
-      null,
-      "Lanjutkan",
-      () => {
-        hideModalStore();
-        window.location.href = `/order/order-detail?orderId=${orderId}&orderJson=${JSON.stringify(
-          orderJsonData
-        )}`;
+        await cartApi.deleteCart(item.id);
       }
-    );
+
+      await getCarts();
+      handleSelectedCart([]);
+
+      const orderId = resOrder?.data?.data?.id || "";
+      const orderJsonData = resOrder?.data?.data || {};
+
+      // console.log("resOrder: ", resOrder);
+      // console.log("orderJsonData: ", orderJsonData);
+      setLoading(false)
+
+      showModalStore(
+        "INFO",
+        "SUCCESS",
+        "Pesanan / Order Berhasil Dibuat",
+        // "Pastikan kamu membayar pesanan / order ini",
+        null,
+        "Lanjutkan",
+        () => {
+          hideModalStore();
+          window.location.href = `/order/order-detail?orderId=${orderId}&orderJson=${JSON.stringify(
+            orderJsonData
+          )}`;
+        }
+      );
+    }
+    setLoading(false)
   };
 
   return (
@@ -578,6 +596,7 @@ export default function OrderPreview() {
                 size="lg"
                 className="rounded-lg w-full justify-center shadow-md hover:shadow-lg"
                 client:load
+                loading={loading}
               >
                 Buat Pesanan
               </MarineButton>
