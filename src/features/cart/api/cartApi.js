@@ -30,7 +30,7 @@ export const cartApi = {
 
   deleteCart: async (cartId) => {
     try {
-      const res = axiosInstance.delete(`/cart/${cartId}`);
+      const res = await axiosInstance.delete(`/cart/${cartId}`);
       return res;
     } catch (error) {
       console.log("DELETE CART ERR: ", error);

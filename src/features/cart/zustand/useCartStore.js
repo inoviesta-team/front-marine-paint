@@ -18,7 +18,7 @@ const useCartStore = create(
         set({ selectedCart: carts });
       },
 
-      getCarts: async (request) => {
+      getCarts: async (request = { limit: 100 }) => {
         set({ loading: true, error: null });
         try {
           const res = await cartApi.getCarts(request);
