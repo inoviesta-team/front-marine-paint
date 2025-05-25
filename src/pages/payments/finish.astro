@@ -1,0 +1,27 @@
+---
+import MarineContactForm from "@components/contact/MarineContactForm";
+import MarineButton from "@components/ui/MarineButton";
+import MainLayout from "@layouts/MainLayout.astro";
+import { linkSocial } from "@utils/social";
+import AuthGuard from "src/middleware/AuthGuard";
+
+const pageTitle = "Kontak Kami - Toko Koko Lie";
+const pageDescription = "Kontak kami untuk mendapatkan informasi lebih lanjut tentang produk dan layanan kami. Kami siap membantu Anda dengan segala pertanyaan dan kebutuhan Anda.";
+---
+
+<MainLayout title={pageTitle} description={pageDescription}>
+    <AuthGuard client:only="react">
+        <section class="py-24 bg-white relative overflow-hidden">
+            <div class="grid place-items-center  gap-2">
+                <img 
+                src="/gif/payment-success.gif"
+                alt="Toko Koko Lie"
+                class="w-24"
+                >
+                <h1 class="text-xl text-marine-blue font-semibold">Pembayaran Berhasil</h1>
+                <MarineButton as="a" variant="tertiary" href="/order?statusDefault=PROCESSING" className="rounded-xl" >Lihat Transaksi</MarineButton>
+            </div>
+        </section>
+    </AuthGuard>
+</MainLayout>
+
