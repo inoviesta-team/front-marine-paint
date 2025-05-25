@@ -10,7 +10,6 @@ export const marineApi = {
    */
   getProducts: async (params = {}) => {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 800));
     
     let filteredProducts = [...marineProducts];
     
@@ -63,7 +62,6 @@ export const marineApi = {
    */
   getProductById: async (id) => {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
     
     const product = marineProducts.find(p => p.id === id);
     
@@ -89,7 +87,6 @@ export const marineApi = {
    */
   getProjectById: async (id) => {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
     
     const project = marineProjects.find(p => p.id === id);
     
@@ -105,7 +102,6 @@ export const marineApi = {
    */
   getArticles: async (params = {}) => {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 800));
     
     let filteredArticles = [...marineArticles];
     
@@ -122,7 +118,6 @@ export const marineApi = {
    */
   getArticleById: async (id) => {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
     
     const article = marineArticles.find(a => a.id === id);
     
@@ -138,7 +133,6 @@ export const marineApi = {
    */
   getTestimonials: async (params = {}) => {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
     
     let filteredTestimonials = [...marineTestimonials];
     
@@ -155,7 +149,6 @@ export const marineApi = {
    */
   getPartners: async () => {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
     
     return marinePartners;
   },
@@ -165,7 +158,6 @@ export const marineApi = {
    */
   sendContactForm: async (formData) => {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Validate required fields
     const requiredFields = ['name', 'email', 'phone', 'subject', 'message'];
