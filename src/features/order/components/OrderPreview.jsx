@@ -144,6 +144,18 @@ export default function OrderPreview() {
       return;
     }
 
+    if(selectedCart.length <= 0) {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Sepertinya keranjang anda kosong",
+        "Pastikan anda menambah produk terlebih dahulu",
+        "Tutup",
+        null
+      );
+      return;
+    }
+
     setLoading(true)
 
     const orderItems = selectedCart.map((item) => ({
