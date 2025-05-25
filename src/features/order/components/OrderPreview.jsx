@@ -598,7 +598,7 @@ export default function OrderPreview() {
                   Total
                 </span>
                 <span className="font-sans font-bold text-marine-darkBlue text-xl">
-                  Rp{subtotal.toLocaleString()}
+                  Rp {subtotal.toLocaleString()}
                 </span>
               </div>
 

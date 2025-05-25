@@ -31,22 +31,22 @@ try {
 
 
 let relatedProducts = [];
-try {
-  if (product.categoryId) {
-    const relatedResponse = await productApiStatic.getProducts({
-      page: 1,
-      limit: 4,
-      categoryId: "",
-      brandId: "",
-    });
-    relatedProducts = relatedResponse?.data?.products || [];
-    relatedProducts = relatedProducts.filter((p) => p.id !== product.id);
-  }
-} catch (error) {
-  console.error("Error fetching related products:", error);
-}
+// try {
+//   if (product.categoryId) {
+//     const relatedResponse = await productApiStatic.getProducts({
+//       page: 1,
+//       limit: 4,
+//       categoryId: "",
+//       brandId: "",
+//     });
+//     relatedProducts = relatedResponse?.data?.products || [];
+//     relatedProducts = relatedProducts.filter((p) => p.id !== product.id);
+//   }
+// } catch (error) {
+//   console.error("Error fetching related products:", error);
+// }
 
-console.log("asasa product: ", product);
+// console.log("asasa product: ", product);
 
 // const tabs = [
 //   { id: "details", label: "Details" },

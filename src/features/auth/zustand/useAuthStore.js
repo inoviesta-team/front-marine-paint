@@ -18,7 +18,25 @@ const useAuthStore = create(
         set({ loading: true });
         try {
           const res = await authApi.getCurrentUser();
-          set({ user: res?.data?.data, isAuthenticated: true, loading: false });
+
+          const user = res?.data?.data
+
+          const jwtToken = localStorage.getItem("jwtToken");
+          const payload = jwtToken ? JSON.parse(atob(jwtToken.split('.')[1])) : null;
+          console.log("payload: ", payload);
+          console.log("user: ", user);
+          
+
+          if(
+            payload?.id !== user?.id || 
+            payload?.email !== user?.email
+          ) {
+            useAuthStore.getState().logout();
+            return
+          }
+          
+
+          set({ user, isAuthenticated: true, loading: false });
           useAddressStore.getState().getAddress();
           useCartStore.getState().getCarts();
         } catch (err) {

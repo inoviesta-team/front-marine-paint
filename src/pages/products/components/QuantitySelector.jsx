@@ -87,13 +87,13 @@ export default function QuantitySelector({
       <button 
         type="button"
         className={`w-10 h-10 bg-white rounded-lg flex items-center justify-center border-2 border-gray-400 transition-colors ${
-          disabled || !cart?.id 
+          (!cart?.id && quantity <= min) || disabled
             ? 'cursor-not-allowed opacity-50' 
             : 'text-marine-darkBlue'
         }`}
         // className={`w-10 h-10 bg-white rounded-lg flex items-center justify-center border-2 border-gray-400 transition-colors text-marine-darkBlue`}
         onClick={handleDecrement}
-        disabled={disabled || !cart?.id}
+        disabled={(!cart?.id && quantity <= min) || disabled}
         aria-label="Decrease quantity"
       >
         <span className="text-xl font-bold"><Minus size={20} color='#15486b' /></span>
