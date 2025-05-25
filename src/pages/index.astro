@@ -22,36 +22,29 @@ let projects = [];
 let brands = [];
 let articles = [];
 let testimonials = [];
-let partners = [];
 
 try {
   // Fetch products
-  const responseProducts = await productApiStatic.getProducts({
-    limit: 10,
-  });
-  // console.log("responseProducts: ", responseProducts?.data?.products || []);
+  const [
+    responseProducts,
+    responseProjects,
+    responseBrands,
+    responseArticles,
+    responseTestimonials,
+  ] = await Promise.all([
+    productApiStatic.getProducts({ limit: 10 }),
+    marineApi.getProjects({ limit: 4 }),
+    brandApiStatic.getAllBrands({ limit: 100 }),
+    articleApiStatic.getArtciles(),
+    marineApi.getTestimonials(),
+  ]);
+
   products = (await responseProducts?.data?.products) || [];
-
-  // Fetch projects
-  projects = await marineApi.getProjects({ limit: 4 });
-
-  // Fetch brands
-  const responseBrands = await brandApiStatic.getAllBrands({
-    limit: 100,
-  });
+  projects = await responseProjects;
   brands = (await responseBrands?.data?.brands) || [];
-  console.log("brands: ", brands);
-
-  // Fetch articles
-  const responseArticles = await articleApiStatic.getArtciles();
-  // console.log("responseArticles: ", responseArticles || []);
   articles = await responseArticles;
+  testimonials = await responseTestimonials;
 
-  // Fetch testimonials
-  testimonials = await marineApi.getTestimonials();
-
-  // Fetch partners
-  partners = await marineApi.getPartners();
 } catch (error) {
   console.error("Failed to fetch data:", error);
 }
