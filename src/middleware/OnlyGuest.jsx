@@ -8,9 +8,9 @@ export default function OnlyGuest({children}) {
     const backButtonRef = useRef();
 
     useEffect(() => {
-      const jwtToken = localStorage.getItem("jwtToken");
+      const accessToken = localStorage.getItem("accessToken");
 
-      if(isAuthenticated && user && jwtToken) {
+      if(isAuthenticated && user && accessToken) {
         backButtonRef.current.click();
       }
     }, [isAuthenticated, user]);

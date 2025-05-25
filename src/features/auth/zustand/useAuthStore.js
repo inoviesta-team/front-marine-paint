@@ -21,8 +21,8 @@ const useAuthStore = create(
 
           const user = res?.data?.data
 
-          const jwtToken = localStorage.getItem("jwtToken");
-          const payload = jwtToken ? JSON.parse(atob(jwtToken.split('.')[1])) : null;
+          const accessToken = localStorage.getItem("accessToken");
+          const payload = accessToken ? JSON.parse(atob(accessToken.split('.')[1])) : null;
           console.log("payload: ", payload);
           console.log("user: ", user);
           
@@ -36,14 +36,16 @@ const useAuthStore = create(
           }
           
 
-          set({ user, isAuthenticated: true, loading: false });
-          useAddressStore.getState().getAddress();
-          useCartStore.getState().getCarts();
+          if(user?.id) {
+            set({ user, isAuthenticated: true, loading: false });
+            useAddressStore.getState().getAddress();
+            useCartStore.getState().getCarts();
+          }
         } catch (err) {
           // console.error('Failed to load user:', err);
 
           // useAuthStore.getState().logout();
-          set({ user: null, isAuthenticated: false, loading: false });
+          set({ user: {}, isAuthenticated: false, loading: false });
           authApi.logout();
         }
       },
@@ -52,7 +54,8 @@ const useAuthStore = create(
         set({ loading: true, error: null });
         try {
           const res = await authApi.login(request);
-          await localStorage.setItem("jwtToken", res?.data?.data?.token);
+          await localStorage.setItem("accessToken", res?.data?.data?.accessToken);
+          await localStorage.setItem("refreshToken", res?.data?.data?.refreshToken);
           useAuthStore.getState().checkAuth();
           // useAddressStore.getState().getAddress()
         } catch (err) {
@@ -65,7 +68,7 @@ const useAuthStore = create(
         set({ loading: true, error: null });
         try {
           const res = await authApi.register(request);
-          await localStorage.setItem("jwtToken", res?.data?.data?.token);
+          await localStorage.setItem("accessToken", res?.data?.data?.token);
           useAuthStore.getState().checkAuth();
           // set({ user: res?.data?.data?.user, isAuthenticated: true, loading: false });
           // useAddressStore.getState().getAddress()
@@ -97,19 +100,17 @@ const useAuthStore = create(
         }
       },
 
-      // Logout user
       logout: async () => {
         set({ loading: true, error: null });
         authApi.logout();
-        await localStorage.removeItem("jwtToken");
-        set({ user: null, isAuthenticated: false, loading: false });
+        await localStorage.removeItem("accessToken");
+        set({ user: {}, isAuthenticated: false, loading: false });
       },
 
-      // Reset error state
       clearError: () => set({ error: null })
     }),
     {
-      name: 'token', // nama untuk local storage
+      name: 'user-auth',
       storage: createJSONStorage(() => localStorage)
     }
   )

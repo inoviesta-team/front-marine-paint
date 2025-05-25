@@ -23,7 +23,7 @@ const useAddressStore = create(
           a.isDefault === b.isDefault ? 0 : a.isDefault ? -1 : 1
         );
 
-        const mainAddress = sortAddressData.filter(
+        const mainAddress = sortAddressData?.filter(
           (address) => address.isDefault
         )[0];
 
