@@ -144,6 +144,18 @@ export default function OrderPreview() {
       return;
     }
 
+    if(selectedCart.length <= 0) {
+      showModalStore(
+        "INFO",
+        "DEFAULT",
+        "Sepertinya keranjang anda kosong",
+        "Pastikan anda menambah produk terlebih dahulu",
+        "Tutup",
+        null
+      );
+      return;
+    }
+
     setLoading(true)
 
     const orderItems = selectedCart.map((item) => ({
@@ -586,7 +598,7 @@ export default function OrderPreview() {
                   Total
                 </span>
                 <span className="font-sans font-bold text-marine-darkBlue text-xl">
-                  Rp{subtotal.toLocaleString()}
+                  Rp {subtotal.toLocaleString()}
                 </span>
               </div>
 

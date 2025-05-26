@@ -106,6 +106,31 @@ export default function CartPreview() {
     window.location.href = "/cart/checkout"
   }
 
+  const handleDeleteCart = async (cartId) => {
+    showModalStore(
+        "CONFIRM",
+        "DEFAULT",
+        "Apakah Anda yakin ingin menghapus produk?",
+        null,
+        "Tutup",
+        async () => {
+          if (!cartId) return;
+  
+          await deleteCart(cartId);
+  
+          hideModalStore()
+          // showModalStore(
+          //   "INFO",
+          //   "SUCCESS",
+          //   "Berhasil",
+          //   "Keranjang berhasil dihapus",
+          //   "Tutup",
+          //   null
+          // );
+        }
+      );
+  }
+
   useEffect(() => {
     const newSelectedCarts = carts.filter((cart) => selectedCarts.some((selected) => selected.id === cart.id));
     setSelectedCarts(newSelectedCarts);
@@ -173,7 +198,7 @@ export default function CartPreview() {
                             {item.product.name}
                           </h3>
                           <button
-                            onClick={() => deleteCart(item.id)}
+                            onClick={() => handleDeleteCart(item.id)}
                             className="font-sans text-sm text-red-500 hover:text-red-700 flex items-center mt-1"
                           >
                             <svg
@@ -315,7 +340,7 @@ export default function CartPreview() {
                   Total
                 </span>
                 <span className="font-sans font-bold text-marine-darkBlue text-xl">
-                  Rp{subtotal.toLocaleString()}
+                  Rp {subtotal.toLocaleString()}
                 </span>
               </div>
 

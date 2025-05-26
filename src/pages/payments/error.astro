@@ -3,7 +3,7 @@ import MarineButton from "@components/ui/MarineButton";
 import MainLayout from "@layouts/MainLayout.astro";
 import AuthGuard from "src/middleware/AuthGuard";
 
-const pageTitle = "Pembayaran Berhasil - Toko Koko Lie";
+const pageTitle = "Pembayaran Gagal - Toko Koko Lie";
 const pageDescription = "Temukan produk cat marine terbaik yang Anda butuhkan hanya di Toko Koko Lie. Kami menawarkan berbagai macam produk cat marine berkualitas dengan harga yang kompetitif.";
 ---
 
@@ -12,12 +12,12 @@ const pageDescription = "Temukan produk cat marine terbaik yang Anda butuhkan ha
         <section class="py-24 bg-white relative overflow-hidden">
             <div class="grid place-items-center  gap-2">
                 <img 
-                src="/gif/payment-success.gif"
+                src="/gif/payment-failed.gif"
                 alt="Toko Koko Lie"
-                class="w-24"
+                class="w-32"
                 >
-                <h1 class="text-xl text-marine-blue font-semibold">Pembayaran Berhasil !</h1>
-                <MarineButton as="a" variant="tertiary" href="/order?statusDefault=PROCESSING" className="rounded-xl" >Lihat Transaksi</MarineButton>
+                <h1 class="text-xl text-marine-blue font-semibold">Pembayaran Gagal !</h1>
+                <MarineButton as="a" variant="tertiary" href="/order" className="rounded-xl" >Lihat Transaksi</MarineButton>
             </div>
         </section>
     </AuthGuard>
