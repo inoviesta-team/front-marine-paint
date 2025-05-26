@@ -41,6 +41,7 @@ const useAuthStore = create(
             useAddressStore.getState().getAddress();
             useCartStore.getState().getCarts();
           }
+          set({ loading: false });
         } catch (err) {
           // console.error('Failed to load user:', err);
 
