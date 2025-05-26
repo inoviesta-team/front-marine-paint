@@ -13,8 +13,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    let token = localStorage.getItem('accessToken') || '';
-    const refreshToken = localStorage.getItem('refreshToken') || '';
+    let token = await localStorage.getItem('accessToken') || '';
+    const refreshToken = await localStorage.getItem('refreshToken') || '';
 
     // Check if the token is expired
     if (isTokenExpired(token) && refreshToken) {

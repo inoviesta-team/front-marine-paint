@@ -30,7 +30,7 @@ export const productApiStatic = {
       const brandId = filterRequest.brandId;
     
       // const response = await fetch(`${baseUrl}/products/?page=${page}&limit=${limit}&brandId=${brandId}&categoryId=${categoryId}`, {
-      const response = await fetch(`${baseUrl}/products/?${queryParams}`, {
+      const response = await fetch(`${baseUrl}/products?${queryParams}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json'

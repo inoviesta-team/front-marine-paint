@@ -3,7 +3,7 @@ import axiosInstance from "@api/axiosInstance";
 export const authApi = {
   login: async (request) => {
     try {
-      const res = axiosInstance.post("/auth/login", request);
+      const res = await axiosInstance.post("/auth/login", request);
       return res;
     } catch (error) {
       console.log("LOGIN ERR: ", error);
@@ -12,7 +12,7 @@ export const authApi = {
 
   register: async (request) => {
     try {
-      const res = axiosInstance.post("/auth/register", request);
+      const res = await axiosInstance.post("/auth/register", request);
       return res;
     } catch (error) {
       console.log("REGISTER ERR: ", error);
@@ -21,7 +21,7 @@ export const authApi = {
 
   getCurrentUser: async () => {
     try {
-      const res = axiosInstance.get("/auth/me");
+      const res = await axiosInstance.get("/auth/me");
       return res;
     } catch (error) {
       console.log("GET USER ERR: ", error);
@@ -30,7 +30,7 @@ export const authApi = {
 
   editProfile: async (data) => {
     try {
-      const res = axiosInstance.put("/auth/me", data);
+      const res = await axiosInstance.put("/auth/me", data);
 
       return res;
     } catch (error) {
@@ -40,7 +40,7 @@ export const authApi = {
 
   changePassword: async (data) => {
     try {
-      const res = axiosInstance.put("/auth/me", data);
+      const res = await axiosInstance.put("/auth/me", data);
 
       return res;
     } catch (error) {
@@ -48,5 +48,13 @@ export const authApi = {
     }
   },
 
-  logout: async () => {},
+  logout: async () => {
+    // try {
+    //   const res = await axiosInstance.put("/auth/logout-all", data);
+
+    //   return res;
+    // } catch (error) {
+    //   console.log("LOGOUT ERR: ", error);
+    // }
+  },
 };
