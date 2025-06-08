@@ -1,29 +1,31 @@
 ---
-import MainLayout from "@layouts/MainLayout.astro";
 import MarineProjectCard from "@components/project/MarineProjectCard";
-import { marineApi } from "@api/marineApi";
+import { projectApiStatic } from "@features/project/api/projectApiStatic";
+import MainLayout from "@layouts/MainLayout.astro";
 
-// Fetch projects
 let projects = [];
 try {
-  projects = await marineApi.getProjects();
+  const responseProjects = await projectApiStatic.getProjects();
+  console.log("responseProjects: ", responseProjects || []);
+  projects = await responseProjects;
 } catch (error) {
-  console.error('Failed to fetch projects:', error);
-  // We'll use an empty array as a fallback
+    console.error('Failed to fetch projects:', error);
+    // We'll use an empty array as a fallback
 }
+const pageTitle = "Projek Terbaru - Toko Koko Lie";
+const pageDescription = "Lihat berbagai projek yang telah kami kerjakan dengan kualitas cat marine terbaik";
 ---
 
-<MainLayout
-  title="Projek | Toko Koko Lie"
-  description="Berikut adalah beberapa projek yang pernah Toko Koko Lie kerjakan"
->
-  <div class="container mx-auto py-8 px-4 md:px-14">
-    <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl mb-8" transition:animate="fade">Projek Kami</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {projects.map(project => (
-        <MarineProjectCard key={project.id} project={project} client:load />
+<MainLayout title={pageTitle} description={pageDescription}>
+  <main class="container mx-auto py-8 px-4 md:px-14">
+    <div class="relative z-10 text-center max-w-3xl mx-auto mb-16">
+      <h2 class="font-sans font-bold text-marine-darkBlue text-4xl mb-4">Projek Terbaru</h2>
+      <p class="font-sans text-gray-600 text-lg">Lihat berbagai projek yang telah kami kerjakan dengan kualitas cat marine terbaik</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      {projects.map((project) => (
+        <MarineProjectCard key={project.id} project={project} />
       ))}
     </div>
-  </div>
-
+  </main>
 </MainLayout>
