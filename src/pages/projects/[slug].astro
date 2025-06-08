@@ -1,20 +1,32 @@
 ---
-import MainLayout from "@layouts/MainLayout.astro";
-import ProjectGallery from "./components/ProjectGallery";
+import MainLayout from '@layouts/MainLayout.astro';
+import { wpJsonUrl } from '@utils/url';
+import { valueUtil } from '@utils/valueUtil';
+import { Clock } from 'lucide-react';
 
+
+const { slug } = Astro.params;
+
+let res = await fetch(`${wpJsonUrl}/v2/project?slug=${slug}`);
+let [project] = await res.json();
+
+// The getStaticPaths() is required for static Astro sites.
+// If using SSR, you will not need this function.
 export async function getStaticPaths() {
-  const projects = [{ id: 1, slug: 'project-1' }];
-  
-  return projects.map(project => ({
+  let data = await fetch(`${wpJsonUrl}/v2/project`);
+  let projects = await data.json();
+
+  return projects.map((project) => ({
     params: { slug: project.slug },
-    props: { project },
+    props: { project: project },
   }));
 }
 ---
-
-<MainLayout
-  title="Toko Koko Lie - Marine Paint Solutions"
-  description="Toko Koko Lie menyediakan cat marine terpercaya untuk ketahanan maksimal. Official partner of Ashdaq Paint."
->
-    <ProjectGallery client:load/>
+<MainLayout title={project?.title?.rendered ?? 'No title'} description={project?.excerpt?.rendered ?? ''}>
+  <article class="wp-article min-h-screen">
+    <p class="flex items-center gap-1"><Clock size={16} color='#155da2' /> <span>{valueUtil.calculateTimeDistance(project.date)}</span></p>
+    <h1 set:html={project.title.rendered} />
+    <Fragment set:html={project.content.rendered} />
+  </article>
 </MainLayout>
+

@@ -1,50 +1,58 @@
-import MarineButton from '@components/ui/MarineButton';
 import React from 'react';
+import MarineButton from '@components/ui/MarineButton';
+import { valueUtil } from '@utils/valueUtil';
+import { Clock } from 'lucide-react';
 
-export default function MarineProjectCard({ project = {
-  id: "1",
-  name: "KM BUANA",
-  type: "Ship",
-  description:
-    "Pengecatan ulang kapal nelayan tradisional di Pelabuhan Muara Baru.",
-  // image: "/images/projects/project_1.png",
-  image:
-    "https://ashdaq.com/wp-content/uploads/2025/02/PHOTO-2024-09-05-17-28-35.jpg",
-  date: "2023-10-15",
-}, isShrink = false }) {
+export default function MarineProjectCard({ 
+  project = {
+    title: 'Sample Project',
+    excerpt: 'Lorem ipsum dolor sit amet...',
+    date: '2024-01-01'
+  },
+  isShrink = false
+}) {
+  const image = project?.yoast_head_json?.schema?.["@graph"].find((item) => item["@type"] === "ImageObject");
+  
   return (
-    <div className={`${isShrink && "flex-shrink-0 max-w-80"} marine-card overflow-hidden group`}>
-      <div className="relative h-48 overflow-hidden">
-        <div className="absolute inset-0 bg-marine-darkBlue/20 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
-        {project.image ? (
+    <div className={`${isShrink && "flex-shrink-0 min-w-72 max-w-72"} group h-full`}>
+      <div className="marine-card overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-all duration-300">
+        {/* Enhanced image section with hover effect */}
+        <div className="relative h-52 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-marine-darkBlue/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+
           <img
-            src={project.image}
-            alt={project.name}
-            className="h-full w-full object-cover object-center transition-transform group-hover:scale-105"
-          />
-        ) : (
-          <div className="h-full w-full flex items-center justify-center bg-gray-200">
-            <span className="text-gray-400">Project Image</span>
-          </div>
-        )}
-      </div>
-      <div className="px-4 pt-4 flex justify-between items-center">
-        <div>
-          <h3 className="font-sans font-bold text-marine-darkBlue text-xl mb-1">{project.name}</h3>
-          {/* <p className="font-sans font-bold text-marine-blue">{project.type}</p> */}
-          <p className="font-sans text-neutral-600/90 line-clamp-1">{project.description}</p>
+              src={image?.url ?? "/images/no-image.png"}
+              alt={project.title?.rendered || project.title}
+              className="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+              onError={(e) => {
+                e.target.src = "/images/no-image.png"
+              }}
+            />
         </div>
-      </div>
-      <div className="px-4 py-4">
-      <MarineButton
-          // as="a" 
-          // href="/products" 
-          variant="tertiary"
-          size="md"
-          className="border-marine-blue/50 text-marine-blue/85 font-sans w-full text-center  rounded-xl py-2 transition-all duration-300"
-        >
-          Detail
-        </MarineButton>
+        
+        {/* Enhanced content section */}
+        <div className="p-6 flex-1 flex flex-col">
+          <p className='flex items-center gap-1 font-sans text-marine-accent text-sm mb-2'>
+            <Clock size={16} color='#155da2' /><span>{valueUtil.calculateTimeDistance(project.date)}</span>
+          </p>
+          <h3 className="font-sans font-bold text-marine-darkBlue text-xl mb-2.5 group-hover:text-marine-blue transition-colors duration-300 line-clamp-1">
+            {project?.title?.rendered || project.title}
+          </h3>   
+          
+          <div className="font-sans text-marine-blue text-sm mb-5 line-clamp-1" dangerouslySetInnerHTML={{__html: project?.excerpt?.rendered || project.excerpt}} />
+          
+          {/* Enhanced button with better positioning */}
+          <div>
+            <MarineButton 
+              as="a" 
+              href={`/projects/${project.slug}`} 
+              variant="tertiary" 
+              className="border w-full text-center rounded-xl"
+            >
+              Lihat Detail
+            </MarineButton>
+          </div>
+        </div>
       </div>
     </div>
   );
