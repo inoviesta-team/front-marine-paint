@@ -7,6 +7,7 @@ export const authApi = {
       return res;
     } catch (error) {
       console.log("LOGIN ERR: ", error);
+      return error;
     }
   },
 
@@ -16,6 +17,7 @@ export const authApi = {
       return res;
     } catch (error) {
       console.log("REGISTER ERR: ", error);
+      return error;
     }
   },
 

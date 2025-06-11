@@ -253,6 +253,12 @@ function UserDropdown() {
     }
   };
 
+  const handleLogout = async () => {
+    logout()
+    await localStorage.removeItem("accessToken");
+    await localStorage.removeItem("refreshToken");
+  }
+
   useEffect(() => {
     window.addEventListener('click', handleClickOutside);
     return () => {
@@ -315,7 +321,7 @@ function UserDropdown() {
             </a>
 
             <button
-              onClick={logout}
+              onClick={handleLogout}
               className='flex w-full rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer'
               role='menuitem'
             >

@@ -1,4 +1,3 @@
-import useAuthStore from '@features/auth/zustand/useAuthStore';
 import { beApiUrl } from '@utils/url';
 import axios from 'axios';
 
@@ -17,7 +16,7 @@ axiosInstance.interceptors.request.use(
     const refreshToken = await localStorage.getItem('refreshToken') || '';
 
     // Check if the token is expired
-    if (isTokenExpired(token) && refreshToken) {
+    if (token && refreshToken && isTokenExpired(token)) {
       // Refresh the token
       token = await refreshAccessToken(refreshToken);
     }
@@ -35,26 +34,32 @@ axiosInstance.interceptors.request.use(
 async function refreshAccessToken(refreshToken) {
   try {
     const response = await axios.post(`${beApiUrl}/auth/refresh`, { refreshToken });
-    const newAccessToken = res?.data?.data?.accessToken;
+    const newAccessToken = response?.data?.data?.accessToken;
     if (newAccessToken) {
-      await localStorage.setItem("accessToken", res?.data?.data?.accessToken);
-      await localStorage.setItem("refreshToken", res?.data?.data?.refreshToken);
+      await localStorage.setItem("accessToken", response?.data?.data?.accessToken);
+      await localStorage.setItem("refreshToken", response?.data?.data?.refreshToken);
     }
     return newAccessToken;
   } catch (error) {
     console.error('Failed to refresh access token:', error);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    window.location.href = '/account/login';
+    // localStorage.removeItem('accessToken');
+    // localStorage.removeItem('refreshToken');
+    // window.location.href = '/account/login';
     return '';
   }
 }
 
-function isTokenExpired(token) {
-  if (!token) return true;
-  const [, payload] = token.split('.');
-  const { exp } = JSON.parse(atob(payload));
-  return Date.now() >= exp * 1000;
+async function isTokenExpired(token) {
+  try {
+    if (!token) return true;
+  
+    const [, payload] = token.split('.');
+    const { exp } = JSON.parse(payload);
+    return Date.now() >= exp * 1000;
+  } catch (error) {
+    // await localStorage.removeItem("accessToken");
+    // await localStorage.removeItem("refreshToken");
+  }
 }
 
 export default axiosInstance;
