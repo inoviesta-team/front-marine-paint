@@ -159,7 +159,7 @@ export default function RegisterForm() {
                       value={registerPhoneNumber}
                       onChange={(e) => setRegisterPhoneNumber(e.target.value)}
                       className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-marine-blue focus:border-transparent"
-                      placeholder="your@email.com"
+                      placeholder="08xxxxxxxxx"
                     />
                   </div>
                 </div>

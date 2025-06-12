@@ -55,6 +55,12 @@ const useAuthStore = create(
         set({ loading: true, error: null });
         try {
           const res = await authApi.login(request);
+          console.log("res: ", res);
+          console.log("res: ", res.status);
+          
+          
+          if(res?.status != 200 && res?.status != 201) throw res
+          
           await localStorage.setItem("accessToken", res?.data?.data?.accessToken);
           await localStorage.setItem("refreshToken", res?.data?.data?.refreshToken);
           useAuthStore.getState().checkAuth();
@@ -69,7 +75,11 @@ const useAuthStore = create(
         set({ loading: true, error: null });
         try {
           const res = await authApi.register(request);
-          await localStorage.setItem("accessToken", res?.data?.data?.token);
+
+          if(res?.status != 200 && res?.status != 201) throw res
+          
+          await localStorage.setItem("accessToken", res?.data?.data?.accessToken);
+          await localStorage.setItem("refreshToken", res?.data?.data?.refreshToken);
           useAuthStore.getState().checkAuth();
           // set({ user: res?.data?.data?.user, isAuthenticated: true, loading: false });
           // useAddressStore.getState().getAddress()
@@ -104,7 +114,6 @@ const useAuthStore = create(
       logout: async () => {
         set({ loading: true, error: null });
         authApi.logout();
-        await localStorage.removeItem("accessToken");
         set({ user: {}, isAuthenticated: false, loading: false });
       },
 
