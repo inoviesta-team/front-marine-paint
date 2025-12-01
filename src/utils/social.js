@@ -14,7 +14,7 @@ export const linkSocial = {
         value: "https://api.whatsapp.com/send?phone=6285211199968&text=Hallo%20Admin%20Ashdaq%20Paint"
     },
     address: {
-        key: "PT. Berkat Bersama Paint. Agung Perkasa Street 8 K1, Kav. Numb. 41, RT.10/ RW. 11 | 14350 South Jakarta",
+        key: "Wisma SMR 6th floor No. 62\nJl. Yos Sudarso Kav 89 Sunter Jaya\nTanjung Priok Jakarta Utara 14350",
         value: "https://maps.app.goo.gl/bQCgtcTfGHYdtBwo8"
     },
     shopee: "https://shopee.co.id/",
