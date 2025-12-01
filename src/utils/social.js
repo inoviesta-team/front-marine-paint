@@ -1,5 +1,5 @@
 export const linkSocial = {
-    whatsapp: "https://web.whatsapp.com/send?phone=6285716457103&text=Hallo!%20Ashdaq%20Paint",
+    whatsapp: "https://web.whatsapp.com/send?phone=6285211199968&text=Hallo!%20Ashdaq%20Paint",
     instagram: "https://www.instagram.com/",
     facebook: "https://www.facebook.com/",
     twitter: "https://twitter.com/",
@@ -10,11 +10,11 @@ export const linkSocial = {
         value: "admin@ashdaq.com"
     },
     phone: {
-        key: "+62 857-1645-7103",
-        value: "https://api.whatsapp.com/send?phone=6285716457103&text=Hallo%20Admin%20Ashdaq%20Paint"
+        key: "+62 852-1119-9968",
+        value: "https://api.whatsapp.com/send?phone=6285211199968&text=Hallo%20Admin%20Ashdaq%20Paint"
     },
     address: {
-        key: "PT. Berkat Bersama Paint. Agung Perkasa Street 8 K1, Kav. Numb. 41, RT.10/ RW. 11 | 14350 South Jakarta",
+        key: "Wisma SMR 6th floor No. 62\nJl. Yos Sudarso Kav 89 Sunter Jaya\nTanjung Priok Jakarta Utara 14350",
         value: "https://maps.app.goo.gl/bQCgtcTfGHYdtBwo8"
     },
     shopee: "https://shopee.co.id/",

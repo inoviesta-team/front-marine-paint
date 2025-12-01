@@ -11,7 +11,7 @@ export default function MarineFooter() {
           <div>
             <img src="/images/logo-white.png" alt="Koko Lie" className='w-24' />
             <h3 className="font-sans font-bold text-white text-2xl mt-3 mb-2">Koko Lie</h3>
-            <a href={linkSocial.address.value} target='_blank' className="font-sans text-white hover:text-white">
+            <a href={linkSocial.address.value} target='_blank' className="font-sans text-white hover:text-white whitespace-pre-line">
               {linkSocial.address.key}
             </a>
           </div>
